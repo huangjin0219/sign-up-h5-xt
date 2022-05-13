@@ -39,7 +39,8 @@ const routes = [
 
 const createRouter = () =>
   new Router({
-    // mode: 'history', // require service support
+    mode: 'history', // require service support
+    base: '/bim', // 模式为 history 时，必须设置根路径
     scrollBehavior: () => ({ x: 0, y: 0 }),
     routes
   })
