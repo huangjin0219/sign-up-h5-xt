@@ -1,0 +1,44 @@
+@mixin bg-url($url) {
+	background-image: url($url);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
+
+@mixin box-shadow() {
+  box-shadow: 0 2px 7px 0 rgba(0,0,0,0.07);
+}
+
+@mixin ellipsis() {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@mixin text-ellipsis($n: 1){
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: $n;
+  -webkit-box-orient: vertical;
+}
+
+// 渐变的字体图标
+@mixin iconfont-linear-gradient($bg, $top: $primary-color-light, $bottom: $primary-color, $direction: bottom) {
+	@if $bg {
+		background: $bg;
+	}@else {
+		background: linear-gradient(to $direction, $top, $bottom);
+	}
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+// 主体颜色
+$bimPrimary: #527DFF;
+
+// 行内间隔
+.space {
+	width: 100%;
+	height: 10px;
+	background: #F4F5F9;
+}

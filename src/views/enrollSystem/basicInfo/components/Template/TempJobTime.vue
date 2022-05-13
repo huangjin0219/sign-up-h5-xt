@@ -1,0 +1,103 @@
+<template>
+  <div class='app-container'>
+    <Title
+      :tipTitle="tipTitle"
+      label="参加工作时间"
+    />
+    <van-field
+      readonly
+      clickable
+      class="info-space"
+      name="datetimePicker"
+      placeholder="请选择参加工作时间"
+      :rules="[{ required: couldEdit, message: '请选择参加工作时间' }]"
+      :value="templateValue"
+      :right-icon="couldEdit ? 'arrow' : ''"
+      @click="handleShowPop"
+    />
+    <van-popup v-model="showPicker" position="bottom">
+      <van-datetime-picker
+        v-model="currentDate"
+        type="date"
+        title="选择年月日"
+        :min-date="minDate"
+        @confirm="handleConfrimJobTime"
+        @cancel="showPicker = false"
+      />
+    </van-popup>
+  </div>
+</template>
+
+<script>
+import { Field, Popup, DatetimePicker } from 'vant'
+import Title from '../Title'
+import dayjs from 'dayjs'
+
+export default {
+  props: {
+    value: {
+      type: [String, Number, Date],
+      default: ''
+    },
+    tipTitle: {
+      type: String,
+      default: ''
+    },
+    // 能否编辑
+    couldEdit: {
+      type: Boolean,
+      default: true
+    }
+  },
+  components: {
+    Title,
+    'van-field': Field,
+    'van-popup': Popup,
+    'van-datetime-picker': DatetimePicker
+  },
+  data () {
+    return {
+      showPicker: false,
+      currentDate: this.value ? new Date(this.value) : new Date(),
+      minDate: new Date(1970, 0, 1)
+      // maxDate: new Date()
+    }
+  },
+  computed: {
+    templateValue: {
+      get () {
+        if (!this.value) return ''
+        return dayjs(this.value).format('YYYY-MM-DD')
+      },
+      set (val) {
+        this.$emit('input', dayjs(val).valueOf())
+      }
+    }
+  },
+  watch: {
+    value (val) {
+      if (val) {
+        this.currentDate = new Date(this.value)
+      }
+    }
+  },
+  created () {},
+  mounted () {},
+  methods: {
+    // 确认选择毕业日期
+    handleConfrimJobTime (value) {
+      console.log('handleConfrimJobTime -> value', value)
+      this.templateValue = value
+      this.showPicker = false
+    },
+    handleShowPop () {
+      if (!this.couldEdit) return
+      this.showPicker = true
+    }
+  }
+}
+</script>
+
+<style scoped lang="scss">
+
+</style>

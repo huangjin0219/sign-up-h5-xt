@@ -1,0 +1,77 @@
+<!--
+ * @Author: HuZhangjie
+ * @Date: 2020-07-11 13:01:04
+ * @LastEditors: HuZhangjie
+ * @LastEditTime: 2020-07-16 10:25:00
+ * @Description: 模板-资格证书
+-->
+<template>
+  <div class='app-container'>
+    <Title
+      :tipTitle="tipTitle"
+      label="资格证书"
+    />
+    <tab-module
+      v-model="templateValue"
+      :tab-type="true"
+      :list="list"
+      :couldEdit="couldEdit"
+    ></tab-module>
+  </div>
+</template>
+
+<script>
+import Title from '../Title'
+import TabModule from '../TabModule'
+
+export default {
+  props: {
+    value: {
+      type: [String, Number],
+      default: ''
+    },
+    tipTitle: {
+      type: String,
+      default: ''
+    },
+    // 能否编辑
+    couldEdit: {
+      type: Boolean,
+      default: true
+    }
+  },
+  components: {
+    Title,
+    TabModule
+  },
+  data () {
+    return {
+      list: [
+        '一级建造师',
+        '二级建造师',
+        '造价工程师',
+        '监理工程师',
+        '一级注册建筑师',
+        '二级注册建筑师',
+        '注册结构工程师',
+        '注册设备工程师',
+        '暂无证书'
+      ]
+    }
+  },
+  computed: {
+    templateValue: {
+      get () {
+        return this.value
+      },
+      set (val) {
+        this.$emit('input', val)
+      }
+    }
+  }
+}
+</script>
+
+<style scoped lang="scss">
+
+</style>
