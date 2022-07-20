@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-25 17:22:03
  * @LastEditors: huangjin
- * @LastEditTime: 2022-05-13 11:12:44
+ * @LastEditTime: 2022-07-20 10:43:55
  * @Description: 权限校验，id变更后需要重新登录
  */
 
@@ -52,13 +52,14 @@ export function _validPermissionRouter (to, from, next) {
   }
   // 带pid进入--销售进入修改信息，无需登录
   if (pid) {
-    const personId = Cookies.get('personId') || ''
+    const personId = Cookies.get('staffId') || ''
+    console.log('🚀 hj ~ file: permission.js ~ line 56 ~ _validPermissionRouter ~ personId', personId)
 
     if (personId && md5(personId) === pid) {
       next()
     } else {
       // 去掉pid参数
-      Toast({ message: '需在登录crm账户的浏览器下访问该链接!' })
+      Toast({ message: '需在登录后台系统的浏览器下访问该链接!' })
       // if (to.path !== '/enrollSystem/addInfo') {
       //   next({
       //     path: '/enrollSystem/home',
