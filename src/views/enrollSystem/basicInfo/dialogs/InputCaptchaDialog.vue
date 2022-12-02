@@ -1,8 +1,8 @@
 <!--
  * @Author: HuZhangjie
  * @Date: 2020-07-02 09:55:22
- * @LastEditors: HuZhangjie
- * @LastEditTime: 2020-07-23 15:11:51
+ * @LastEditors: huangjin
+ * @LastEditTime: 2022-12-02 11:44:52
  * @Description: 填写信息与下单信息不一致时的提示弹窗
 -->
 
@@ -11,26 +11,31 @@
     <div class="tip-dialog">
       <div class="tip-dialog__header">请输入验证码</div>
       <div class="tip-dialog__text">验证码已经发送至你的手机</div>
-      <div class="tip-dialog__text">{{mobile}}</div>
+      <div class="tip-dialog__text">{{ mobile }}</div>
       <div class="tip-dialog__captcha">
         <div>6位数字验证码</div>
-        <div
-          class="captch-btn"
-          :disabled='captchaDisabled'
-          @click="getCaptcha"
-        >{{captchaText}}</div>
+        <div class="captch-btn" :disabled="captchaDisabled" @click="getCaptcha">
+          {{ captchaText }}
+        </div>
       </div>
-      <!-- 验证码输入框 -->
-      <van-password-input
-        :value="captcha"
-        :mask="false"
-        :gutter="7"
-        @focus="showKeyboard = true"
-      />
+      <template v-if="ish5">
+        <!-- 验证码输入框 -->
+        <van-password-input
+          :value="captcha"
+          :mask="false"
+          :gutter="7"
+          :focused="showKeyboard"
+          @focus="showKeyboard = true"
+        />
+      </template>
+      <template v-else>
+        <!-- 验证码输入框 -->
+        <van-field clickable v-model="captcha" />
+        <!-- @touchstart.native.stop="showKeyboard = true" -->
+      </template>
       <div class="btn-wrapper">
         <div class="tip-dialog__btn" @click="handleConfirm">确定</div>
       </div>
-
     </div>
 
     <!-- 数字键盘 -->
@@ -40,20 +45,36 @@
       @delete="handleDelete"
       @blur="showKeyboard = false"
     />
-
   </BaseDialog>
 </template>
 
 <script>
 import BaseDialog from '@/components/base/Dialog.vue'
-import { PasswordInput, NumberKeyboard } from 'vant'
+import { PasswordInput, NumberKeyboard, Field } from 'vant'
 import { sendVerifyDxdkCode } from '@/api/user'
 
+const isH5 = () => {
+  // // 判断是不是微信端打开的
+  // if (/(micromessenger)/i.test(userAgent)) {
+  //   console.log('微信')
+  // }
+  const { userAgent } = navigator
+  console.log('普通浏览器')
+  // 判断h5还是pc true就是h5
+  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) {
+    console.log('h5')
+    return true
+  } else {
+    console.log('pc')
+  }
+  return false
+}
 export default {
   components: {
     BaseDialog,
     'van-password-input': PasswordInput,
-    'van-number-keyboard': NumberKeyboard
+    'van-number-keyboard': NumberKeyboard,
+    'van-field': Field
   },
   props: {
     show: {
@@ -71,7 +92,7 @@ export default {
       captchaText: '获取验证码',
       // 输入的验证码
       captcha: '',
-      showKeyboard: true
+      showKeyboard: false
     }
   },
   computed: {
@@ -82,6 +103,9 @@ export default {
       set (val) {
         this.$emit('update:show', val)
       }
+    },
+    ish5 () {
+      return isH5()
     }
   },
   created () {
