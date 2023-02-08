@@ -14,13 +14,6 @@ export function getEnvUrl (path) {
 
 const server = {
   // ===================普通域名 start===============
-
-  // 业务线域名
-  business: {
-    development: 'https://devservicecenterapi.xuetian.cn',
-    testing: 'https://testservicecenterapi.xuetian.cn',
-    production: 'https://servicecenterapi.xuetian.cn'
-  },
   // 配置中心
   setting: {
     development: 'https://devdataconfigapi.xuetian.cn',
@@ -39,28 +32,6 @@ const server = {
     testing: 'https://testxtapi.xuetian.cn/data-service',
     production: 'https://dsw.xuetian.cn'
   },
-  // 新网校
-  rhea: {
-    development: 'https://devrhea.xuetian.cn',
-    testing: 'https://testrhea.xuetian.cn',
-    production: 'https://rhea.xuetian.cn'
-  },
-  // admin - finance里面用到
-  crmadmin: {
-    development: 'https://devcrmadminj.xuetian.cn',
-    testing: 'https://testcrmadminj.xuetian.cn',
-    production: 'https://crmadminj.xuetian.cn'
-  },
-  zeus: {
-    development: 'https://devxtapi.xuetian.cn/zeus',
-    testing: 'https://testxtapi.xuetian.cn/zeus',
-    production: 'https://xtapi.xuetian.cn/zeus'
-  },
-  // servicecenterboss: {
-  //   development: 'https://devservicecenterboss.xuetian.cn',
-  //   testing: 'https://devservicecenterboss.xuetian.cn',
-  //   production: 'https://servicecenterboss.xuetian.cn'
-  // }
   // ===================普通域名 end===============
   // ===================统一域名 start===============
   // 报名C端
@@ -72,8 +43,4 @@ const server = {
 
 export const getBaseUrl = (system = 'business') => {
   return server[system][env]
-}
-
-export const getServerDomain = () => {
-  return server.crmadmin[env]
 }
