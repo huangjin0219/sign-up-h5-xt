@@ -9,7 +9,7 @@
 <template>
     <div class="stpebar-wrap">
       <div class="stpebar-wrap-num">
-        <img src="@/assets/images/basicInfo/bim_answer_lable1_sel.png" alt="">
+        <img src="@/assets/images/signUp/basicInfo/bim_answer_lable1_sel.png" alt="">
         <div :class="[{line2 : infoType},'line1']"></div>
         <img :src="imgSrc" alt="">
       </div>
@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     imgSrc () {
-      return !this.infoType ? require('@/assets/images/basicInfo/bim_answer_lable2_nor.png') : require('@/assets/images/basicInfo/bim_answer_lable2_sel.png')
+      return !this.infoType ? require('@/assets/images/signUp/basicInfo/bim_answer_lable2_nor.png') : require('@/assets/images/signUp/basicInfo/bim_answer_lable2_sel.png')
     }
   },
   data () {

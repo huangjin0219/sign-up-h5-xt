@@ -12,13 +12,13 @@
       <!-- 身份证照 -->
       <!-- 身份证照片二合一时，反面的隐藏即可 -->
       <div
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_CARD_FRONT) || showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_CARD_BACK)"
+        v-if="
+          showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_CARD_FRONT) ||
+          showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_CARD_BACK)
+        "
         class="form-item"
       >
-        <Title
-          label="身份证照"
-          :tipTitle="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_CARD_FRONT).tips"
-        />
+        <Title label="身份证照" :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_CARD_FRONT).tips" />
         <div class="identity-card info-space">
           <!-- 身份证正面 -->
           <div>
@@ -29,7 +29,7 @@
             >
               <upload-slot
                 :text="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_CARD_FRONT).uploaderTips || '上传身份证国徽面'"
-                :uploadBg="identityFrontBg"
+                :upload-bg="identityFrontBg"
               ></upload-slot>
             </div>
             <van-uploader
@@ -43,7 +43,7 @@
             >
               <upload-slot
                 :text="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_CARD_FRONT).uploaderTips || '上传身份证国徽面'"
-                :uploadBg="identityFrontBg"
+                :upload-bg="identityFrontBg"
               ></upload-slot>
             </van-uploader>
           </div>
@@ -57,7 +57,7 @@
             >
               <upload-slot
                 :text="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_CARD_BACK).uploaderTips || '上传身份证人像面'"
-                :uploadBg="identityBackBg"
+                :upload-bg="identityBackBg"
               ></upload-slot>
             </div>
             <van-uploader
@@ -71,20 +71,17 @@
             >
               <upload-slot
                 :text="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_CARD_BACK).uploaderTips || '上传身份证人像面'"
-                :uploadBg="identityBackBg"
+                :upload-bg="identityBackBg"
               ></upload-slot>
             </van-uploader>
           </div>
         </div>
       </div>
       <!-- 身份证word文档 -->
-      <div
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_FRONT_AND_BACK_IDCARD_DOCFILE)"
-        class="form-item"
-      >
+      <div v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_FRONT_AND_BACK_IDCARD_DOCFILE)" class="form-item">
         <Title
           label="身份证正反面word"
-          :tipTitle="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_FRONT_AND_BACK_IDCARD_DOCFILE).tips"
+          :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_FRONT_AND_BACK_IDCARD_DOCFILE).tips"
         />
         <div class="info-space">
           <van-uploader
@@ -101,7 +98,8 @@
               v-if="!fileForm.idCardFrontBackDocFile || !fileForm.idCardFrontBackDocFile.length"
               icon="plus"
               type="primary"
-            >上传文件</van-button>
+              >上传文件</van-button
+            >
             <div v-else slot="preview-cover" class="upload-file__preview">
               <a :href="fileForm.idCardFrontBackDocFile[0]" download>点击下载查看</a>
             </div>
@@ -112,7 +110,7 @@
       <div v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_PHOTO)" class="form-item">
         <Title
           :label="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_PHOTO).label || '证件照'"
-          :tipTitle="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_PHOTO).tips"
+          :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_PHOTO).tips"
         />
         <div class="info-space">
           <van-uploader
@@ -122,16 +120,13 @@
             :deletable="couldEdit"
             :after-read="(file) => handleAfterRead(file, 'photoImage')"
           >
-            <upload-slot :uploadBg="oneInchBg"></upload-slot>
+            <upload-slot :upload-bg="oneInchBg"></upload-slot>
           </van-uploader>
         </div>
       </div>
       <!-- 学历照片 -->
       <div v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_EDUCATION)" class="form-item">
-        <Title
-          label="学历照片"
-          :tipTitle="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_EDUCATION).tips"
-        />
+        <Title label="学历照片" :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_EDUCATION).tips" />
         <div class="info-space">
           <van-uploader
             v-model="photoForm.educationImage"
@@ -140,16 +135,13 @@
             :deletable="couldEdit"
             :after-read="(file) => handleAfterRead(file, 'educationImage')"
           >
-            <upload-slot :uploadBg="educationBg"></upload-slot>
+            <upload-slot :upload-bg="educationBg"></upload-slot>
           </van-uploader>
         </div>
       </div>
       <!-- 前置学历照片 -->
       <div v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_PREEDUCATION)" class="form-item">
-        <Title
-          label="前置学历照片"
-          :tipTitle="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_PREEDUCATION).tips"
-        />
+        <Title label="前置学历照片" :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_PREEDUCATION).tips" />
         <div class="info-space">
           <van-uploader
             v-model="photoForm.preEducationImage"
@@ -158,19 +150,13 @@
             :deletable="couldEdit"
             :after-read="(file) => handleAfterRead(file, 'preEducationImage')"
           >
-            <upload-slot :uploadBg="educationBg"></upload-slot>
+            <upload-slot :upload-bg="educationBg"></upload-slot>
           </van-uploader>
         </div>
       </div>
       <!-- 学历扫描件文档 -->
-      <div
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_EDUCATION_DOCFILE)"
-        class="form-item"
-      >
-        <Title
-          label="学历扫描件文档"
-          :tipTitle="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_EDUCATION_DOCFILE).tips"
-        />
+      <div v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_EDUCATION_DOCFILE)" class="form-item">
+        <Title label="学历扫描件文档" :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_EDUCATION_DOCFILE).tips" />
         <div class="info-space">
           <van-uploader
             v-model="fileForm.educationDocFile"
@@ -186,25 +172,25 @@
               v-if="!fileForm.educationDocFile || !fileForm.educationDocFile.length"
               icon="plus"
               type="primary"
-            >上传文件</van-button>
+              >上传文件</van-button
+            >
             <div
               v-else
               slot="preview-cover"
               class="upload-file__preview"
               @click="handlePreviewPdf(fileForm.educationDocFile)"
-            >点击下载查看</div>
+            >
+              点击下载查看
+            </div>
           </van-uploader>
         </div>
       </div>
       <!-- 学历备案表 和 学历验证报告 二选一 -->
       <!-- 学历备案表pdf文档 -->
-      <div
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_EDUCATION_PREPARE_DOCFILE)"
-        class="form-item"
-      >
+      <div v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_EDUCATION_PREPARE_DOCFILE)" class="form-item">
         <Title
           label="学历备案表pdf文档"
-          :tipTitle="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_EDUCATION_PREPARE_DOCFILE).tips"
+          :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_EDUCATION_PREPARE_DOCFILE).tips"
         />
         <div class="info-space">
           <van-uploader
@@ -221,24 +207,24 @@
               v-if="!fileForm.educationPrepareDocFile || !fileForm.educationPrepareDocFile.length"
               icon="plus"
               type="primary"
-            >上传文件</van-button>
+              >上传文件</van-button
+            >
             <div
               v-else
               slot="preview-cover"
               class="upload-file__preview"
               @click="handlePreviewPdf(fileForm.educationPrepareDocFile)"
-            >点击下载查看</div>
+            >
+              点击下载查看
+            </div>
           </van-uploader>
         </div>
       </div>
       <!-- 学历验证报告pdf文档 -->
-      <div
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_EDUCATION_CHECK_REPORT_DOCFILE)"
-        class="form-item"
-      >
+      <div v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_EDUCATION_CHECK_REPORT_DOCFILE)" class="form-item">
         <Title
           label="学历验证报告pdf文档"
-          :tipTitle="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_EDUCATION_CHECK_REPORT_DOCFILE).tips"
+          :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_EDUCATION_CHECK_REPORT_DOCFILE).tips"
         />
         <div class="info-space">
           <van-uploader
@@ -255,23 +241,23 @@
               v-if="!fileForm.educationCheckReportDocFile || !fileForm.educationCheckReportDocFile.length"
               icon="plus"
               type="primary"
-            >上传文件</van-button>
+              >上传文件</van-button
+            >
             <div
               v-else
               slot="preview-cover"
               class="upload-file__preview"
               @click="handlePreviewPdf(fileForm.educationCheckReportDocFile)"
-            >点击下载查看</div>
+            >
+              点击下载查看
+            </div>
           </van-uploader>
         </div>
       </div>
 
       <!-- 中国建设教育协会-BIM所需 职业资格证书 -->
       <div v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_QUALIFICATION)" class="form-item">
-        <Title
-          label="资格证书"
-          :tipTitle="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_QUALIFICATION).tips"
-        />
+        <Title label="资格证书" :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_QUALIFICATION).tips" />
         <div class="info-space">
           <van-uploader
             v-model="photoForm.qualificationImage"
@@ -280,16 +266,13 @@
             :deletable="couldEdit"
             :after-read="(file) => handleAfterRead(file, 'qualificationImage')"
           >
-            <upload-slot :uploadBg="educationBg"></upload-slot>
+            <upload-slot :upload-bg="educationBg"></upload-slot>
           </van-uploader>
         </div>
       </div>
       <!-- 中国建设教育协会-BIM所需 BIM从业证明 -->
       <div v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_EMPLOYMENT)" class="form-item">
-        <Title
-          label="从业证书"
-          :tipTitle="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_EMPLOYMENT).tips"
-        />
+        <Title label="从业证书" :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_EMPLOYMENT).tips" />
         <div class="info-space">
           <van-uploader
             v-model="photoForm.employmentImage"
@@ -298,17 +281,14 @@
             :deletable="couldEdit"
             :after-read="(file) => handleAfterRead(file, 'employmentImage')"
           >
-            <upload-slot :uploadBg="educationBg"></upload-slot>
+            <upload-slot :upload-bg="educationBg"></upload-slot>
           </van-uploader>
         </div>
       </div>
 
       <!-- 工作证明 -->
       <div v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_WORK_IMAGE)" class="form-item">
-        <Title
-          label="工作证明"
-          :tipTitle="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_WORK_IMAGE).tips"
-        />
+        <Title label="工作证明" :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_WORK_IMAGE).tips" />
         <div class="info-space">
           <van-uploader
             v-model="photoForm.workImage"
@@ -317,7 +297,7 @@
             :deletable="couldEdit"
             :after-read="(file) => handleAfterRead(file, 'workImage')"
           >
-            <upload-slot :uploadBg="workProofBg"></upload-slot>
+            <upload-slot :upload-bg="workProofBg"></upload-slot>
           </van-uploader>
         </div>
       </div>
@@ -326,9 +306,9 @@
       <div v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_APPLY_CHECK_IMAGE)" class="form-item">
         <Title
           :label="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_APPLY_CHECK_IMAGE).aliasLabelName || '报名审核表'"
-          :tipTitle="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_APPLY_CHECK_IMAGE).tips"
+          :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_APPLY_CHECK_IMAGE).tips"
         />
-        <div class="info-template" v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_APPLY_CHECK_IMAGE).templateUrl">
+        <div v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_APPLY_CHECK_IMAGE).templateUrl" class="info-template">
           <a :href="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_APPLY_CHECK_IMAGE).templateUrl" download>点击下载模板</a>
         </div>
         <div class="info-space">
@@ -339,18 +319,15 @@
             :deletable="couldEdit"
             :after-read="(file) => handleAfterRead(file, 'applyCheckImage')"
           >
-            <upload-slot :uploadBg="workProofBg"></upload-slot>
+            <upload-slot :upload-bg="workProofBg"></upload-slot>
           </van-uploader>
         </div>
       </div>
       <!-- 带模板的报名表 -->
-      <div
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_TEMPLATE_DOCFILE)"
-        class="form-item"
-      >
+      <div v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_TEMPLATE_DOCFILE)" class="form-item">
         <Title
           :label="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_TEMPLATE_DOCFILE).aliasLabelName || '报名表(有模板)'"
-          :tipTitle="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_TEMPLATE_DOCFILE).tips"
+          :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_TEMPLATE_DOCFILE).tips"
         />
         <div v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_TEMPLATE_DOCFILE).templateUrl" class="info-template">
           <a :href="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_TEMPLATE_DOCFILE).templateUrl" download>点击下载模板</a>
@@ -358,19 +335,23 @@
         <div class="info-space">
           <van-uploader
             v-model="fileForm.templateDocFile"
-            :accept="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_TEMPLATE_DOCFILE).format || UPLOAD_PARAM_ACCEPT_MAP.templateDocFile"
+            :accept="
+              showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_TEMPLATE_DOCFILE).format ||
+              UPLOAD_PARAM_ACCEPT_MAP.templateDocFile
+            "
             class="upload-file"
             :max-count="1"
             :deletable="couldEdit"
-            :after-read="(file) => handleUploadFile(file, 'templateDocFile',showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_TEMPLATE_DOCFILE))"
+            :after-read="
+              (file) =>
+                handleUploadFile(file, 'templateDocFile', showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_TEMPLATE_DOCFILE))
+            "
             :max-size="4 * 1024 * 1024"
             @oversize="handleOverSize"
           >
-            <van-button
-              v-if="!fileForm.templateDocFile || !fileForm.templateDocFile.length"
-              icon="plus"
-              type="primary"
-            >上传文件</van-button>
+            <van-button v-if="!fileForm.templateDocFile || !fileForm.templateDocFile.length" icon="plus" type="primary"
+              >上传文件</van-button
+            >
             <div v-else slot="preview-cover" class="upload-file__preview">
               <a :href="fileForm.templateDocFile[0]" download>点击下载查看</a>
             </div>
@@ -382,7 +363,7 @@
       <div v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_FIRE_CONFIRMATION_IMAGE)" class="form-item">
         <Title
           label="智慧消防确认书"
-          :tipTitle="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_FIRE_CONFIRMATION_IMAGE).tips"
+          :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_FIRE_CONFIRMATION_IMAGE).tips"
         />
         <div class="info-space">
           <van-uploader
@@ -392,19 +373,24 @@
             :deletable="couldEdit"
             :after-read="(file) => handleAfterRead(file, 'fireConfirmationImage')"
           >
-            <upload-slot :uploadBg="workProofBg"></upload-slot>
+            <upload-slot :upload-bg="workProofBg"></upload-slot>
           </van-uploader>
         </div>
       </div>
 
-        <!-- 人社专技术、中国人事人才网所需 培训确认书 -->
+      <!-- 人社专技术、中国人事人才网所需 培训确认书 -->
       <div v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_TRAINING_CONFIRM_IMAGE)" class="form-item">
         <Title
           label="培训确认书"
-          :tipTitle="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_TRAINING_CONFIRM_IMAGE).tips"
+          :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_TRAINING_CONFIRM_IMAGE).tips"
         />
-        <div class="info-template" v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_TRAINING_CONFIRM_IMAGE).templateUrl">
-          <a :href="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_TRAINING_CONFIRM_IMAGE).templateUrl" download>点击下载模板</a>
+        <div
+          v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_TRAINING_CONFIRM_IMAGE).templateUrl"
+          class="info-template"
+        >
+          <a :href="showFormItem(BASIS_TEMPLATE_KEY_MAP.UPLOAD_TRAINING_CONFIRM_IMAGE).templateUrl" download
+            >点击下载模板</a
+          >
         </div>
         <div class="info-space">
           <van-uploader
@@ -414,18 +400,15 @@
             :deletable="couldEdit"
             :after-read="(file) => handleAfterRead(file, 'trainingConfirmationImage')"
           >
-            <upload-slot :uploadBg="workProofBg"></upload-slot>
+            <upload-slot :upload-bg="workProofBg"></upload-slot>
           </van-uploader>
         </div>
       </div>
 
-      <template v-for="item in extfieldList" >
+      <template v-for="item in extfieldList">
         <!-- 上传照片模板 -->
         <div v-if="/IMAGE/.test(item.type)" :key="item.inputParameter" class="form-item">
-          <Title
-            :label="item.aliasLabelName"
-            :tipTitle="item.tips"
-          />
+          <Title :label="item.aliasLabelName" :tip-title="item.tips" />
           <div class="info-space">
             <van-uploader
               v-model="photoForm[item.inputParameter]"
@@ -434,16 +417,13 @@
               :deletable="couldEdit"
               :after-read="(file) => handleUploadImage(file, item.inputParameter)"
             >
-              <upload-slot :uploadBg="educationBg"></upload-slot>
+              <upload-slot :upload-bg="educationBg"></upload-slot>
             </van-uploader>
           </div>
         </div>
         <!-- 上传文件的模板 -->
         <div v-if="/DOC/.test(item.type)" :key="item.inputParameter" class="form-item">
-          <Title
-            :label="item.aliasLabelName"
-            :tipTitle="item.tips"
-          />
+          <Title :label="item.aliasLabelName" :tip-title="item.tips" />
           <div v-if="item.templateUrl" class="info-template">
             <a :href="item.templateUrl" download>点击下载模板</a>
           </div>
@@ -455,7 +435,7 @@
               class="upload-file"
               :max-count="1"
               :deletable="couldEdit"
-              :after-read="(file) => handleUploadFile(file, item.inputParameter ,item)"
+              :after-read="(file) => handleUploadFile(file, item.inputParameter, item)"
               :max-size="4 * 1024 * 1024"
               @oversize="handleOverSize"
             >
@@ -463,7 +443,8 @@
                 v-if="!fileForm[item.inputParameter] || !fileForm[item.inputParameter].length"
                 icon="plus"
                 type="primary"
-              >上传文件</van-button>
+                >上传文件</van-button
+              >
               <div v-else slot="preview-cover" class="upload-file__preview">
                 <a :href="fileForm[item.inputParameter][0]" download>点击下载查看</a>
               </div>
@@ -471,26 +452,21 @@
           </div>
         </div>
       </template>
-
     </van-form>
 
-    <IdentityTipDialog
-      v-if="showIdentityDialog"
-      :show.sync="showIdentityDialog"
-      :isFront="isFrontDialog"
-    />
+    <IdentityTipDialog v-if="showIdentityDialog" v-model:show="showIdentityDialog" :is-front="isFrontDialog" />
   </div>
 </template>
 
 <script>
-import Title from './components/Title'
-import UploadSlot from './components/UploadSlot'
 import { Form, Uploader, Button } from 'vant'
-import IdentityTipDialog from './dialogs/IdentityTipDialog.vue'
 import { uploadImage } from '@/utils/request'
 import { BASIS_TEMPLATE_KEY_MAP, ID_PHOTO_ORGAN_SIZE_MAP, PDF_VIEWER_HOST } from '@/constant'
-import { handleCompressImg } from './upload'
 import { isStrImageEnd, isStrFileEnd } from '@/utils'
+import Title from './components/Title'
+import UploadSlot from './components/UploadSlot'
+import IdentityTipDialog from './dialogs/IdentityTipDialog.vue'
+import { handleCompressImg } from './upload'
 
 // 文件类型和参数的map
 const UPLOAD_PARAM_ACCEPT_MAP = {
@@ -521,7 +497,7 @@ export default {
     },
     templateList: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     // 能否编辑
     couldEdit: {
@@ -533,7 +509,7 @@ export default {
       default: ''
     }
   },
-  data () {
+  data() {
     return {
       UPLOAD_PARAM_ACCEPT_MAP,
       BASIS_TEMPLATE_KEY_MAP,
@@ -545,22 +521,22 @@ export default {
       aleradyShowIdentityForntDialog: false,
       aleradyShowIdentityBackDialog: false,
 
-      identityFrontBg: require('../../../assets/images/bim_answer_lldcard_back@2x.png'),
-      identityBackBg: require('../../../assets/images/bim_answer_lidcard_front@2x.png'),
-      oneInchBg: require('../../../assets/images/bim_answer_lphoto@2x.png'),
-      educationBg: require('../../../assets/images/bim_answer_lDiploma@2x.png'),
-      workProofBg: require('../../../assets/images/bim_answer_work_proof.png')
+      identityFrontBg: require('../../../assets/images/signUp/bim_answer_lldcard_back@2x.png'),
+      identityBackBg: require('../../../assets/images/signUp/bim_answer_lidcard_front@2x.png'),
+      oneInchBg: require('../../../assets/images/signUp/bim_answer_lphoto@2x.png'),
+      educationBg: require('../../../assets/images/signUp/bim_answer_lDiploma@2x.png'),
+      workProofBg: require('../../../assets/images/signUp/bim_answer_work_proof.png')
     }
   },
   computed: {
-    extfieldList () {
-      return this.templateList.filter(tem => {
+    extfieldList() {
+      return this.templateList.filter((tem) => {
         return /UPLOAD_EXTFIELD/.test(tem.key)
       })
     }
   },
   methods: {
-    getFileAccept (type) {
+    getFileAccept(type) {
       if (!type) return false
       let acceptType
       switch (type.toLocaleLowerCase()) {
@@ -577,7 +553,7 @@ export default {
       return acceptType
     },
     // 点击弹窗展示身份证的提示弹窗
-    handleClickIdentity (type) {
+    handleClickIdentity(type) {
       // 未展示过提示弹窗
       if (type === 'front' && !this.aleradyShowIdentityForntDialog) {
         this.showIdentityDialog = true
@@ -590,7 +566,7 @@ export default {
       }
     },
     // 上传图片后的回调函数
-    handleAfterRead (file, urlType) {
+    handleAfterRead(file, urlType) {
       if (isStrImageEnd(urlType)) {
         this.handleUploadImage(file, urlType)
       } else if (isStrFileEnd(urlType)) {
@@ -598,16 +574,16 @@ export default {
       }
     },
     // 上传图片-压缩图片
-    async handleUploadImage (file, urlType) {
+    async handleUploadImage(file, urlType) {
       const type = file.file.name.split('.')[1]
       // templateList中增加format字段的处理
-      const tempItem = this.templateList.find(item => item.inputParameter === urlType)
-      if (tempItem.format && tempItem.format.split(',').every(item => item !== type.toLocaleLowerCase())) {
+      const tempItem = this.templateList.find((item) => item.inputParameter === urlType)
+      if (tempItem.format && tempItem.format.split(',').every((item) => item !== type.toLocaleLowerCase())) {
         this.photoForm[urlType] = []
         this.$toast(`请上传${tempItem.format}格式的图片`)
         return false
       }
-      if (!type || ['png', 'jpg'].every(item => item !== type.toLocaleLowerCase())) {
+      if (!type || ['png', 'jpg'].every((item) => item !== type.toLocaleLowerCase())) {
         this.photoForm[urlType] = []
         this.$toast('请上传jpg或png格式的图片')
         return false
@@ -629,43 +605,45 @@ export default {
         this.$toast('文件大小不能超过 - 200K')
         return false
       }
-      uploadImage(fileCompress).then(res => {
-        this.photoForm[urlType] = [{ url: res }]
-      }).catch(err => {
-        console.log('handleAfterRead -> err', err)
-        this.photoForm[urlType] = []
-      })
+      uploadImage(fileCompress)
+        .then((res) => {
+          this.photoForm[urlType] = [{ url: res }]
+        })
+        .catch((err) => {
+          console.log('handleAfterRead -> err', err)
+          this.photoForm[urlType] = []
+        })
     },
     // 上传word或者pdf文件
-    async handleUploadFile (file, urlType, item = {}) {
+    async handleUploadFile(file, urlType, item = {}) {
       const str = file.file.name
       const type = str.substring(str.lastIndexOf('.') + 1, str.length)
       console.log('🚀 ~ file: PhotoInfoForm.vue ~ line 493 ~ handleUploadFile ~ type', type)
       const accept = item.format || UPLOAD_PARAM_ACCEPT_MAP[urlType]
-      if (!type || accept.split(',').every(item => item !== `.${type.toLocaleLowerCase()}`)) {
+      if (!type || accept.split(',').every((item) => item !== `.${type.toLocaleLowerCase()}`)) {
         this.fileForm[urlType] = []
         this.$toast(`请上传${accept}格式的文件`)
         return false
       }
       console.log('🚀 ~ file: PhotoInfoForm. ~ file, urlType', file, urlType)
-      uploadImage(file.file).then(res => {
-        this.fileForm[urlType] = [res]
-      }).catch(err => {
-        console.log('handleAfterRead -> err', err)
-        this.fileForm[urlType] = []
-      })
+      uploadImage(file.file)
+        .then((res) => {
+          this.fileForm[urlType] = [res]
+        })
+        .catch((err) => {
+          console.log('handleAfterRead -> err', err)
+          this.fileForm[urlType] = []
+        })
     },
-    handlePreviewPdf (fileUrl) {
+    handlePreviewPdf(fileUrl) {
       window.open(`${PDF_VIEWER_HOST}?file=${encodeURIComponent(fileUrl)}`)
     },
-    handleOverSize () {
+    handleOverSize() {
       this.$toast('文件大小不能超过 - 4M')
     },
     // 判断是否展示对应的输入项
-    showFormItem (prop) {
-      return this.templateList.find(
-        template => template.key === prop
-      )
+    showFormItem(prop) {
+      return this.templateList.find((template) => template.key === prop)
     }
   }
 }
@@ -707,26 +685,27 @@ export default {
     .identity-card {
       display: flex;
       justify-content: space-between;
-      &__front, &__back {
+      &__front,
+      &__back {
         width: 156px;
         height: 115px;
-        border: 1px solid #ECECEC;
+        border: 1px solid #ececec;
       }
     }
     .upload-one-inch {
       width: 85px;
       height: 120px;
-      border: 1px solid #ECECEC;
+      border: 1px solid #ececec;
     }
     .upload-education {
       width: 165px;
       height: 120px;
-      border: 1px solid #ECECEC;
+      border: 1px solid #ececec;
     }
   }
   // 文件类型的 不展示icon
   .upload-file {
-    /deep/ .van-uploader__file-icon{
+    /deep/ .van-uploader__file-icon {
       display: none;
     }
     .upload-file__preview {

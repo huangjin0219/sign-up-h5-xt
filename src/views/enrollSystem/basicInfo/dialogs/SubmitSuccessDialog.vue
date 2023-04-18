@@ -10,7 +10,7 @@
   <BaseDialog :show="showDialog" @close="handleClose">
     <img
       class="success-dialog__img"
-      src="~@/assets/images/bim_home_check@2x.png"
+      src="@/assets/images/signUp/bim_home_check@2x.png"
     />
     <div class="success-dialog__text">
       提交成功
@@ -68,7 +68,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/styles/var.scss";
+@import "@/styles/var.scss";
 
 .success-dialog {
   &__img {

@@ -1,20 +1,24 @@
 <!--
  * @Author: HuZhangjie
  * @Date: 2020-07-02 13:08:56
- * @LastEditors: HuZhangjie
- * @LastEditTime: 2020-10-17 12:17:19
+ * @LastEditors: huangjin
+ * @LastEditTime: 2023-04-18 17:41:16
  * @Description: 个人承诺书页面
 -->
 <template>
   <div class="page-promise">
-    <!-- <img class="promise-letter__back" src="~@/assets/images/bim_commitment_envelope_bottom@2x.png" /> -->
+    <!-- <img class="promise-letter__back" src="@/assets/images/signUp/bim_commitment_envelope_bottom@2x.png" /> -->
     <div class="promise-letter__content">
       <div class="promise-header">个人承诺书</div>
-      <p class="promise-detail">1、本人确认以下填写的个人报名信息准确无误，否则因此导致的考试或证书信息有误，后果由本人承担。</p>
-      <p class="promise-detail">2、本人确认为报名手机号用于考试报名注册，未借于他人注册使用，若因手机号注册产生问题，后果由本人承担</p>
+      <p class="promise-detail">
+        1、本人确认以下填写的个人报名信息准确无误，否则因此导致的考试或证书信息有误，后果由本人承担。
+      </p>
+      <p class="promise-detail">
+        2、本人确认为报名手机号用于考试报名注册，未借于他人注册使用，若因手机号注册产生问题，后果由本人承担
+      </p>
       <div class="confrim-btn" @click="handleConfirm">确认</div>
     </div>
-      <!-- <div class="promise-letter__btn" @click="handleConfirm">确认</div> -->
+    <!-- <div class="promise-letter__btn" @click="handleConfirm">确认</div> -->
     <!-- <div class="promise-letter__front"></div> -->
   </div>
 </template>
@@ -24,17 +28,16 @@ export default {
   name: 'EnrollSystemPromise',
   components: {},
   props: {},
-  data () {
-    return {
-    }
+  data() {
+    return {}
   },
   computed: {},
   methods: {
-    handleConfirm () {
+    handleConfirm() {
       const { query } = this.$route
       this.$router.push({
         name: 'BasicInfo',
-        query: query
+        query
       })
     }
   }
@@ -42,7 +45,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~@/styles/mixin.scss";
+@import '@/styles/mixin.scss';
 
 .page-promise {
   position: absolute;
@@ -53,7 +56,7 @@ export default {
   display: flex;
   justify-content: center;
   padding: 52px 12px 24px 12px;
-  @include bg-url('~@/assets/images/bim_commitment_bg@2x.png');
+  @include bg-url('@/assets/images/signUp/bim_commitment_bg@2x.png');
 
   .promise-letter {
     &__back {
@@ -64,7 +67,7 @@ export default {
     }
     &__btn {
       position: absolute;
-      bottom: 156px;  // 142 + 12 + 2
+      bottom: 156px; // 142 + 12 + 2
       width: 285px;
       height: 45px;
       line-height: 45px;
@@ -79,7 +82,7 @@ export default {
       position: absolute;
       bottom: 12px;
       z-index: 101;
-      @include bg-url('~@/assets/images/bim_commitment_envelope@2x.png');
+      @include bg-url('@/assets/images/signUp/bim_commitment_envelope@2x.png');
       background-size: 107%;
       background-position: center;
     }

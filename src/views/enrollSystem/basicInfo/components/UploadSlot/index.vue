@@ -9,7 +9,7 @@
   <div class="upload-slot" :style="{ width }">
     <div class="upload-img">
       <img :src="uploadBg" style="width: 100%" />
-      <img class="upload-img__add" src="~@/assets/images/bim_answer_add@2x.png" />
+      <img class="upload-img__add" src="@/assets/images/signUp/bim_answer_add@2x.png" />
     </div>
     <div class="upload-text">{{text}}</div>
   </div>
@@ -26,7 +26,7 @@ export default {
     // 底图
     uploadBg: {
       type: String,
-      default: require('../../../../../assets/images/bim_answer_lidcard_front@2x.png')
+      default: require('../../../../../assets/images/signUp/bim_answer_lidcard_front@2x.png')
     },
     text: {
       type: String,

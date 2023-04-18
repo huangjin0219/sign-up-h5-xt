@@ -8,16 +8,9 @@
 
 <template>
   <BaseDialog :show="showDialog" @close="handleClose">
-    <img
-      class="success-dialog__img"
-      src="~@/assets/images/bim_home_sucess@2x.png"
-    />
-    <div class="success-dialog__text">
-      恭喜！审核已通过
-    </div>
-    <div class="success-dialog__btn" @click="handleConfirm">
-      确定
-    </div>
+    <img class="success-dialog__img" src="@/assets/images/signUp/bim_home_sucess@2x.png" />
+    <div class="success-dialog__text">恭喜！审核已通过</div>
+    <div class="success-dialog__btn" @click="handleConfirm">确定</div>
   </BaseDialog>
 </template>
 
@@ -34,25 +27,24 @@ export default {
       default: false
     }
   },
-  data () {
-    return {
-    }
+  data() {
+    return {}
   },
   computed: {
     showDialog: {
-      get () {
+      get() {
         return this.show
       },
-      set (val) {
+      set(val) {
         this.$emit('update:show', val)
       }
     }
   },
   methods: {
-    handleClose () {
+    handleClose() {
       this.showDialog = false
     },
-    handleConfirm () {
+    handleConfirm() {
       const { query } = this.$route
       this.$router.push({
         name: 'BasicInfo',
@@ -64,7 +56,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/styles/var.scss";
+@import '@/styles/var.scss';
 
 .success-dialog {
   &__img {

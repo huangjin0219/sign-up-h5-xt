@@ -6,11 +6,8 @@
  * @Description: 模板-报考省市
 -->
 <template>
-  <div class='app-container'>
-    <Title
-      :title="templateItem.tips"
-      :label="titleLabel"
-    />
+  <div class="app-container">
+    <Title :title="templateItem.tips" :label="titleLabel" />
     <van-field
       readonly
       clickable
@@ -23,22 +20,23 @@
       @click="handleShowPop"
     />
     <van-popup v-model="showArea" position="bottom">
-      <van-area
-        :area-list="areaList"
-        :columns-num="2"
-        @confirm="onConfirmArea"
-        @cancel="showArea = false"
-      />
+      <van-area :area-list="areaList" :columns-num="2" @confirm="onConfirmArea" @cancel="showArea = false" />
     </van-popup>
   </div>
 </template>
 
 <script>
-import { getAreaList } from '@/api/common'
+import { getAreaList } from '@/common/api/signUp/common'
 import { Field, Popup, Area } from 'vant'
 import Title from '../Title'
 
 export default {
+  components: {
+    Title,
+    'van-field': Field,
+    'van-popup': Popup,
+    'van-area': Area
+  },
   props: {
     // 省份id
     provinceId: {
@@ -64,13 +62,7 @@ export default {
       default: 0
     }
   },
-  components: {
-    Title,
-    'van-field': Field,
-    'van-popup': Popup,
-    'van-area': Area
-  },
-  data () {
+  data() {
     return {
       loading: true,
       showArea: false,
@@ -83,36 +75,36 @@ export default {
       areaList: []
     }
   },
-  created () {
-    this.getList()
-  },
   computed: {
     areaName: {
-      get () {
+      get() {
         const { provinceId, areaId, provinceTotalList, cityTotalList } = this
         if (!provinceTotalList.length || !cityTotalList.length || !provinceId || !areaId) return ''
-        const _findProvince = provinceTotalList.find(item => item.id === provinceId) || {}
-        const _findCity = cityTotalList.find(item => item.id === areaId) || {}
+        const _findProvince = provinceTotalList.find((item) => item.id === provinceId) || {}
+        const _findCity = cityTotalList.find((item) => item.id === areaId) || {}
         const provinceName = _findProvince.name
         const cityName = _findCity.name
 
         // return `${provinceName && cityName ? '' : ''}/${_findCity.name}`
         return provinceName && cityName ? `${provinceName}/${cityName}` : ''
       },
-      set (val) {
+      set(val) {
         this.$emit('input', val)
       }
     },
-    titleLabel () {
+    titleLabel() {
       if (this.templateItem.aliasLabelName) {
         return this.templateItem.aliasLabelName
       }
       return this.educationType === 7 ? '考试地点' : '报考省市'
     }
   },
+  created() {
+    this.getList()
+  },
   methods: {
     // 查询省和市的数据
-    async getList () {
+    async getList() {
       const provinceList = {}
       const cityList = {}
       const params = {
@@ -120,7 +112,7 @@ export default {
       }
       const res = await getAreaList(params)
       console.log('getList -> getareaList', res)
-      res.forEach(item => {
+      res.forEach((item) => {
         if (item.layer === 2) {
           this.provinceTotalList.push(item)
           provinceList[item.code] = item.name
@@ -136,14 +128,14 @@ export default {
       }
       console.log('getList -> this.areaList', this.areaList)
     },
-    handleShowPop () {
+    handleShowPop() {
       if (!this.couldEdit) return
       this.showArea = true
     },
-    onConfirmArea (values) {
+    onConfirmArea(values) {
       const [province, city] = values
-      const _findProvinceId = this.provinceTotalList.find(item => +item.code === +province.code)
-      const _findCity = this.cityTotalList.find(item => +item.code === +city.code)
+      const _findProvinceId = this.provinceTotalList.find((item) => +item.code === +province.code)
+      const _findCity = this.cityTotalList.find((item) => +item.code === +city.code)
 
       this.$emit('change', { provinceId: _findProvinceId.id, areaId: _findCity.id })
       this.showArea = false
@@ -152,6 +144,4 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

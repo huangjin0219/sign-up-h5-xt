@@ -8,16 +8,9 @@
 
 <template>
   <BaseDialog :show="showDialog" @close="handleClose">
-    <img
-      class="fail-dialog__img"
-      src="~@/assets/images/bim_home_failure_color@2x.png"
-    />
-    <div class="fail-dialog__text">
-      审核不通过！
-    </div>
-    <div class="fail-dialog__btn" @click="handleReSubmit">
-      重新提交
-    </div>
+    <img class="fail-dialog__img" src="@/assets/images/signUp/bim_home_failure_color@2x.png" />
+    <div class="fail-dialog__text">审核不通过！</div>
+    <div class="fail-dialog__btn" @click="handleReSubmit">重新提交</div>
   </BaseDialog>
 </template>
 
@@ -34,25 +27,24 @@ export default {
       default: false
     }
   },
-  data () {
-    return {
-    }
+  data() {
+    return {}
   },
   computed: {
     showDialog: {
-      get () {
+      get() {
         return this.show
       },
-      set (val) {
+      set(val) {
         this.$emit('update:show', val)
       }
     }
   },
   methods: {
-    handleClose () {
+    handleClose() {
       this.showDialog = false
     },
-    handleReSubmit () {
+    handleReSubmit() {
       const { query } = this.$route.query
       console.log('handleReSubmit -> handleReSubmit')
       this.$router.push({
@@ -65,7 +57,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/styles/var.scss";
+@import '@/styles/var.scss';
 
 .fail-dialog {
   &__img {

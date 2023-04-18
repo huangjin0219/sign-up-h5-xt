@@ -51,7 +51,7 @@
 <script>
 import BaseDialog from '@/components/base/Dialog.vue'
 import { PasswordInput, NumberKeyboard, Field } from 'vant'
-import { sendVerifyDxdkCode } from '@/api/user'
+import { sendVerifyDxdkCode } from '@/common/api/signUp/user'
 
 const isH5 = () => {
   // // 判断是不是微信端打开的
@@ -166,7 +166,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/styles/var.scss";
+@import "@/styles/var.scss";
 
 .tip-dialog {
   display: flex;

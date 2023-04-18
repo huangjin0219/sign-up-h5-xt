@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { getNationList } from '@/api/common'
+import { getNationList } from '@/common/api/signUp/common'
 import { Field, Popup, Picker } from 'vant'
 import Title from '../Title'
 

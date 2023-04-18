@@ -3,8 +3,8 @@
 /*
  * @Author: jiangruohui
  * @Date: 2022-03-15 16:52:54
- * @LastEditors: jiangruohui
- * @LastEditTime: 2023-02-20 14:47:21
+ * @LastEditors: huangjin
+ * @LastEditTime: 2023-04-18 17:03:47
  * @Description:
  */
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
@@ -44,6 +44,7 @@ export interface RequestConfigOptions {
   sucMsg?: string // 请求成功提示文字，默认显示返回的message
   hideErrMsg?: boolean // 是否隐藏请求失败提示，默认不隐藏
   errMsg?: string // 请求失败提示文字，默认显示返回的message
+  domain?: string // 域名
 }
 
 interface RequestConfig extends AxiosRequestConfig {
@@ -72,6 +73,9 @@ const genHeader = () => {
 // request interceptor
 service.interceptors.request.use(
   (config: RequestConfig) => {
+    if (config.options && config.options.domain) {
+      config.baseURL = `${baseURL}/${config.options.domain}`
+    }
     const mainStore = useMainStore()
     const userStore = useUserStore()
     if (config.options && config.options.login && userStore.user && !config.data.userToken) {

@@ -61,7 +61,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import "~@/styles/mixin.scss";
+@import "@/styles/mixin.scss";
 .tab-wrap {
     padding: 14px 15px 14px 14px;
     display: flex;

@@ -3,45 +3,43 @@
  * @version: 1.0.0
  * @Author: 刘帅楠
  * @Date: 2020-07-09 14:31:37
- * @LastEditors: 刘帅楠
- * @LastEditTime: 2021-06-11 18:30:10
+ * @LastEditors: huangjin
+ * @LastEditTime: 2023-04-18 17:36:56
 -->
 <template>
   <div class="page-home__bg">
     <div class="page-home">
       <div class="enroll-time">
-        报名开放时间：{{enrollInfo.startTime | date('YY/MM/dd hh:mm')}}-{{enrollInfo.endTime | date('YY/MM/dd hh:mm')}}
+        报名开放时间：{{ enrollInfo.startTime | date('YY/MM/dd hh:mm') }}-{{
+          enrollInfo.endTime | date('YY/MM/dd hh:mm')
+        }}
       </div>
       <div class="enroll-content__bg">
         <div class="enroll-content">
-
           <!-- 已经登录，显示客户信息面板 -->
           <div class="info-panel">
             <div class="form-item disabled">
               <span class="form-item-label">姓名：</span>
-              <span>{{enrollInfo.customerName}}</span>
+              <span>{{ enrollInfo.customerName }}</span>
             </div>
             <div class="form-item disabled">
               <span class="form-item-label">身份证号：</span>
-              <span>{{enrollInfo.cardNo}}</span>
+              <span>{{ enrollInfo.cardNo }}</span>
             </div>
             <div class="form-item disabled">
               <span class="form-item-label">报考项目：</span>
-              <span>{{enrollInfo.majorName}}</span>
+              <span>{{ enrollInfo.majorName }}</span>
             </div>
             <div class="form-item disabled">
               <span class="form-item-label">报考等级：</span>
-              <span>{{enrollInfo.gradeName}}</span>
+              <span>{{ enrollInfo.gradeName }}</span>
             </div>
             <div class="form-item disabled">
               <span class="form-item-label">报考单位：</span>
-              <span>{{enrollInfo.organizationName}}</span>
+              <span>{{ enrollInfo.organizationName }}</span>
             </div>
-            <div
-              class="confirm-btn login-btn"
-              @click="handleNext"
-            >{{isDataStatusWaitWrite ? '确认' : '下一页'}}</div>
-            <div class="sureTips" v-if="isDataStatusWaitWrite">请确认以上申请资料确认无误哦</div>
+            <div class="confirm-btn login-btn" @click="handleNext">{{ isDataStatusWaitWrite ? '确认' : '下一页' }}</div>
+            <div v-if="isDataStatusWaitWrite" class="sureTips">请确认以上申请资料确认无误哦</div>
           </div>
 
           <!-- 底部的销售信息列表 -->
@@ -52,28 +50,24 @@
               <div class="saleman-header__right"></div>
             </div>
             <div class="saleman-content">
-              <div class="saleman-content__name">
-                招生老师：{{enrollInfo.saleName}}
-              </div>
-              <div class="saleman-content__tel">
-                联系电话：{{enrollInfo.saleMobile}}
-              </div>
+              <div class="saleman-content__name">招生老师：{{ enrollInfo.saleName }}</div>
+              <div class="saleman-content__tel">联系电话：{{ enrollInfo.saleMobile }}</div>
             </div>
           </div>
         </div>
       </div>
     </div>
     <!-- 审核成功弹窗 -->
-    <AuditSuccessDialog v-if="showAuditSuccess" :show.sync="showAuditSuccess" />
-    <AuditFailDialog v-if="showAuditFail" :show.sync="showAuditFail" />
+    <AuditSuccessDialog v-if="showAuditSuccess" v-model:show="showAuditSuccess" />
+    <AuditFailDialog v-if="showAuditFail" v-model:show="showAuditFail" />
   </div>
 </template>
 
 <script>
+import { acquireConfirmInfo, cmdConfirm, queryCustomerInfo } from '@/common/api/signUp/enrollSys'
+import { AUDIT_STATUS_MAP, DATA_WRITE_STATUS_MAP } from '@/constant'
 import AuditFailDialog from './components/AuditFailDialog.vue'
 import AuditSuccessDialog from './components/AuditSuccessDialog.vue'
-import { acquireConfirmInfo, cmdConfirm, queryCustomerInfo } from '@/api/enrollSys'
-import { AUDIT_STATUS_MAP, DATA_WRITE_STATUS_MAP } from '@/constant'
 
 export default {
   name: 'EnrollSystemUserInfo',
@@ -81,7 +75,7 @@ export default {
     AuditFailDialog,
     AuditSuccessDialog
   },
-  data () {
+  data() {
     return {
       signUpRecordId: null,
       enrollInfo: {
@@ -103,11 +97,11 @@ export default {
   },
   computed: {
     // 填写状态为待填写
-    isDataStatusWaitWrite () {
+    isDataStatusWaitWrite() {
       return this.customerInfo.dataStatus === DATA_WRITE_STATUS_MAP.WAIT_WRITE
     }
   },
-  mounted () {
+  mounted() {
     const { signUpRecordId } = this.$route.query
     this.signUpRecordId = signUpRecordId
     this.getInfo(signUpRecordId)
@@ -115,7 +109,7 @@ export default {
   },
   methods: {
     // 获取用户表单信息和审核信息
-    async getCustomerInfo () {
+    async getCustomerInfo() {
       const data = await queryCustomerInfo({ signUpRecordId: this.signUpRecordId })
       this.customerInfo = data
       const { dataCheckStatus } = this.customerInfo
@@ -127,9 +121,9 @@ export default {
       }
     },
     // 为待填写状态-> 承诺书页，其他状态-> 填写资料页
-    async handleNext () {
+    async handleNext() {
       const { query } = this.$route
-      const signUpRecordId = this.signUpRecordId
+      const { signUpRecordId } = this
       if (query.source) {
         this.$router.push({
           name: 'AddInfo',
@@ -150,7 +144,7 @@ export default {
         query
       })
     },
-    async getInfo (signUpRecordId) {
+    async getInfo(signUpRecordId) {
       const params = {
         signUpRecordId
       }
@@ -162,10 +156,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/styles/mixin.scss";
-@import "~@/styles/var.scss";
+@import '@/styles/mixin.scss';
+@import '@/styles/var.scss';
 $disabledTextColor: #999;
-$borderColor: #DCDFE6;
+$borderColor: #dcdfe6;
 
 .page-home__bg {
   position: fixed;
@@ -173,7 +167,7 @@ $borderColor: #DCDFE6;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #1B36AB;
+  background-color: #1b36ab;
   overflow: auto;
 }
 .page-home {
@@ -181,22 +175,22 @@ $borderColor: #DCDFE6;
   flex-direction: column;
   align-items: center;
   color: #fff;
-  @include bg-url('~@/assets/images/bim_home_bg@2x.png');
+  @include bg-url('@/assets/images/signUp/bim_home_bg@2x.png');
   background-size: contain;
   background-repeat: no-repeat;
   .enroll-time {
     margin-top: 142px;
     padding: 0 20px;
     text-align: center;
-    opacity: .6;
+    opacity: 0.6;
     font-size: 14px;
-    font-family: PingFangSC-Regular,PingFang SC;
+    font-family: PingFangSC-Regular, PingFang SC;
   }
   .enroll-content__bg {
     width: 329px;
     margin: 28px 0;
     padding: 8px;
-    background: #4E6AE4;
+    background: #4e6ae4;
     border-radius: 8px;
     color: #333;
     @include box-shadow();
@@ -211,7 +205,7 @@ $borderColor: #DCDFE6;
       padding: 20px 22px;
       border-radius: 8px;
       background: #fff;
-     .info-panel {
+      .info-panel {
         width: 100%;
         .form-item {
           display: flex;
@@ -240,7 +234,7 @@ $borderColor: #DCDFE6;
             line-height: 24px;
             color: $bimPrimary;
             font-size: 13px;
-            border-left: .5px solid $borderColor;
+            border-left: 0.5px solid $borderColor;
             &[disabled] {
               color: $disabledTextColor;
             }
@@ -257,7 +251,7 @@ $borderColor: #DCDFE6;
           margin-top: 10px;
           text-align: center;
           font-size: 12px;
-          color: #FF325C;
+          color: #ff325c;
         }
       }
 
@@ -269,7 +263,7 @@ $borderColor: #DCDFE6;
         height: 70px;
         margin-top: 20px;
         padding: 10px 16px;
-        background: #F8FAFF;
+        background: #f8faff;
         border-radius: 4px;
         box-sizing: border-box;
         font-size: 12px;
@@ -278,7 +272,8 @@ $borderColor: #DCDFE6;
           justify-content: space-between;
           padding: 0 20px;
           color: $bimPrimary;
-          &__left, &__right {
+          &__left,
+          &__right {
             position: relative;
             width: 1px;
             height: 1px;
@@ -287,7 +282,7 @@ $borderColor: #DCDFE6;
               position: absolute;
               top: 4px;
               width: 26px;
-              height: .5px;
+              height: 0.5px;
               background-color: $bimPrimary;
             }
             &::after {
@@ -295,7 +290,7 @@ $borderColor: #DCDFE6;
               position: absolute;
               top: 8px;
               width: 18.5px;
-              height: .5px;
+              height: 0.5px;
               background-color: $bimPrimary;
             }
           }
@@ -333,7 +328,7 @@ $borderColor: #DCDFE6;
 
       .disabled {
         color: $disabledTextColor;
-        background: #F4F4F4;
+        background: #f4f4f4;
       }
 
       .error-page {

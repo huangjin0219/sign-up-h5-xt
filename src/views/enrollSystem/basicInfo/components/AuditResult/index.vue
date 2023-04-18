@@ -150,7 +150,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "~@/styles/mixin.scss";
+@import "@/styles/mixin.scss";
 
 .audit-result-wrapper {
   margin-bottom: 10px;

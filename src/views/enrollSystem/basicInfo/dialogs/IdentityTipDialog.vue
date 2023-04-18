@@ -21,8 +21,8 @@
 
 <script>
 import BaseDialog from '@/components/base/Dialog.vue'
-import frontSrc from '@/assets/images/pbim_answer_ldcardback@2x.png'
-import backSrc from '@/assets/images/pbim_answer_ldcardpositive@2x.png'
+import frontSrc from '@/assets/images/signUp/pbim_answer_ldcardback@2x.png'
+import backSrc from '@/assets/images/signUp/pbim_answer_ldcardpositive@2x.png'
 
 export default {
   components: {
@@ -71,7 +71,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/styles/var.scss";
+@import "@/styles/var.scss";
 
 .tip-dialog {
   &__header {
