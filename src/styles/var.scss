@@ -1,2 +1,32 @@
+// Color Palette
+$primary: #3075FF;
+$orange: #FF6F30;
+$fuchsin: #F73265;
+$red: #FB4747;
+$green: #34DB89;
+// $assistant1: #ffbb64; // 不同项目设计稿同个位置的辅助色色调不同，所以没有用颜色名称命名
+// $assistant2: #ff7723;
+// $assistant3: #b0e16b;
 
-$bimPrimary: #527DFF;
+$bg-color: #f7f7f7;
+$border-color: #eee;
+$font-color: #333333;
+$font-gray: #666666;
+$font-light-gray: #999999;
+/************ font-weight ***************/
+$font-bold: 500;
+
+// Gradient Colors
+// $icon-gradient-primary: linear-gradient(to bottom, #9ee8c2, $primary);
+// $icon-gradient-yellow: linear-gradient(to bottom, #ffcb38, #ff9231);
+$gradient-orange: linear-gradient(138deg, #ffbc2e, #ff7723);
+$gradient-fuchsin: linear-gradient(138deg, #FF532E, #F7245B);
+
+// $font-size-xs: 10px;
+// $font-size-sm: 12px;
+// $font-size-md: 14px;
+// $font-size-lg: 16px;
+
+$box-border-radius: 8px;
+$pic-border-radius: 4px;
+$submit-bar-height: 55px;

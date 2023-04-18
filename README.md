@@ -1,236 +1,124 @@
-## 项目介绍
+<!--
+ * @Author: jiangruohui
+ * @Date: 2022-03-14 14:42:23
+ * @LastEditors: jiangruohui
+ * @LastEditTime: 2022-11-15 16:38:35
+ * @Description: 
+-->
+# 运行项目
+yarn dev
+# 打包项目
+yarn build
 
-此项目是由原来的 crmh5 项目（包含报名c端、支付、企微，多入口项目）迁移过来的。
-现在项目是单一入口，只包含报名系统的h5页面。
+## 目录结构
 
-但是此项目是在m站下面的子路径部署的站点，需设置`publicPath`为:`/bim`
-线上域名地址为：https://m.xuetian.cn/bim
+├── publish/
+└── src/
+    ├── assets/                    // 静态资源目录
+    ├── common/                    // 通用类库目录
+    ├── components/                // 公共组件目录
+    ├── router/                    // 路由配置目录
+      ├── index.ts                    // 路由配置文件
+    ├── store/                     // 状态管理目录
+    ├── style/                     // 通用 CSS 目录
+    ├── utils/                     // 工具函数目录
+    ├── views/                     // 页面组件目录
+    ├── App.vue
+    ├── main.ts
+    ├── shims-vue.d.ts
+├── tests/                         // 单元测试目录
+├── index.html
+├── tsconfig.json                  // TypeScript 配置文件
+├── vite.config.ts                 // Vite 配置文件
+└── package.json
 
-并且此项目路由模式为 history ，需设置根路径
-```js
-const createRouter = () =>
-  new Router({
-    mode: 'history', // require service support
-    base: '/bim', // 模式为 history 时，必须设置根路径
-    scrollBehavior: () => ({ x: 0, y: 0 }),
-    routes
+
+-----
+### 开发规范：
+1. 页面组件不允许多根节点。vue3支持多根节点，但`<transition>`只能用于单元素/组件之上，为了保证路由切换正常，该项目的页面组件不允许多根节点。
+
+-----
+### SvgIcon使用
+```
+<SvgIcon name="user" color="#999" />
+```
+
+### router
+```以我的订单页为例
+{
+  path: '/order',
+  name: 'MyOrder',
+  component: () => import('@/views/order/my/index.vue'),
+  meta: { 
+    title: '我的订单',  // 页面标题
+    requireAuth: true, // 页面是否需要校验登陆
+    keepAlive: true    // 缓存页面
+  }
+}
+```
+
+### 全局过滤器的使用
+```template
+  <p>{{ $filters.currency(price) }}</p>
+```
+
+### unplugin-auto-import
+
+使用插件自动引入vue API， 无需在组件里手动引用
+
+vite.config.ts
+```
+export default defineConfig({
+  ...
+  AutoImport({
+    // 有新增的库加在这里，重启项目就会更新这个文件 src/auto-import.d.ts
+    imports: ['vue', 'vue-router', 'pinia'],
+    dts: 'src/auto-import.d.ts'
   })
-
-const router = createRouter()
-```
-### 项目内容
-
-此项目是学员和销售都可以操作的报名h5页面，学员操作时没有登录会跳h5页面的登录，
-销售进行操作时会从管理后台页面通过链接方式跳到此项目，
-会验证 链接中的 `pid` 和 管理后台登录后存在 cookie 的 `staffId` （存在一级域名下，因为需要共享） 是否相同，验证通过才可以进行操作。
-
-报名分两步，第一步是基本信息，第二步一般是上传图片和上传文件。
-第一步和第二步都包含很多很多的字段，要展示哪个不展示哪个是根据返回的模板来决定的，几乎每个专业都会有一个新的模板，也就是要求录入的信息是有差别的。
-
-一开始，如果新需求中有新字段（例如新需求需要录入学历，之前没有填过），就需要重新开发。
-后面使用大概十几个拓展字段来优化了此项目，前端把输入项、选择项、上传文件、上传图片都进行了组件化，只需要根据接口返回的模板文件进行展示即可。
-
-此项目在一年前用拓展字段优化后，前后端开发成本都几乎为0，后台进行配置即可。
-所以此项目维护成本也几乎为零。
-
-#### 拓展字段配置对象
-
-- key：字符串，所有拓展字段的key都要包含 `EXTFIELD` ，如果又包含 `INPUT` 说明是输入框， `LIST` 是选择项，其他为上传
-- type：字符串，`DOC`为文件，`IMAGE`为图片
-- format：字符串，例如 `".doc,.docx,.pdf"`
-- templateUrl：字符串，模板文件链接
-- aliasLabelName：字符串，字段的别名
-- tips：字符串，字段说明
-- inputParameter：该字段的key值
-- unnecessary：为true表示该字段选填
-
-### 项目存在的问题
-
-现在项目中使用的接口用到了四个域名，分别是：
-- `crm-business`：crm业务的c端接口
-- `uic`：登录相关
-- `ds`：上传文件
-- `setting`：配置系统（省份、民族）
-
-其中 `crm-business` 和 `uic` 都算是新系统下的统一域名的形式，无需更改。
-
-但是 `ds` 和 `setting` 是属于要废弃的域名，这些域名下的接口也非常少了，以后必然会更改的。
-上传文件更改时要考虑到：此项目销售和学员都是可以操作的，接口需要带token销售的情况是不满足的。
-
-## 使用
-
-```bash
-  # 安装依赖
-  npm install
-  
-  # 启动服务
-  npm run test        # 测试环境
-  npm run dev         # 开发环境
-  npm run prod        # 生产环境
+}
 ```
 
-## 发布
-```bash
-  npm run build:dev         # 开发环境
-  npm run build:test        # 测试环境
-  npm run build:prod        # 生产环境
+### vueUse
+
+### vscode扩展程序json2ts
+
+> 通过json自动生成ts的interface接口定义
+
+复制到剪贴板，快捷键cmd+alt+V or ctrl+alt+V
+
+### vscode配置用户代码片段
+设置 -> 用户代码片段 -> 新建一个全局脚本
+```json
+{
+	"Print to console": {
+		"prefix": "vue3",
+		"body": [
+      "<template>",
+      "  <div></div>",
+      "</template>",
+      "",
+      "<script lang='ts' setup></script>",
+			"<script lang='ts'>",
+			"export default {",
+			"  name: 'ComponentName'",
+			"}",
+      "</script>",
+      "",
+			"<style lang='scss' scoped>",
+			"</style>",
+			""
+		],
+		"description": "vue3模板"
+	}
+}
 ```
+---
 
-## 分支管理
-```bash
-  - master          # 生产分支
-  - test            # 测试分支
-  - develop         # 开发分支
-  - feature_*       # 功能开发分支
+###开发约定
+1. 公共路由参数： 
 ```
-
-## 项目架构
-
-- 安装 tree-node-cli ：`npm install -g tree-node-cli`
-- 生成目录树：`treee -I "node_modules|dist" > list.txt`
-
-```
-bim-h5
-├── README.md
-├── babel.config.js
-├── jest.config.js
-├── package-lock.json
-├── package.json
-├── public                    // 入口页面
-│   ├── favicon.ico
-│   └── index.html
-├── src
-│   ├── App.vue
-│   ├── api
-│   │   ├── common.js
-│   │   ├── enrollSys.js
-│   │   └── user.js
-│   ├── assets                // 静态资源
-│   │   └── ...
-│   ├── components
-│   │   └── base
-│   │       └── Dialog.vue
-│   ├── config
-│   │   ├── envUrl.js
-│   │   └── index.js
-│   ├── constant
-│   │   └── index.js
-│   ├── filters
-│   │   ├── currency.js
-│   │   ├── date.js
-│   │   ├── index.js
-│   │   ├── num.js
-│   │   ├── phone.js
-│   │   └── time.js
-│   ├── main.js
-│   ├── permission.js
-│   ├── router
-│   │   ├── index.js
-│   │   └── modules
-│   │       └── demo.js
-│   ├── store
-│   │   ├── getters.js
-│   │   ├── index.js
-│   │   └── modules
-│   │       ├── demo.js
-│   │       └── user.js
-│   ├── styles
-│   │   ├── iconfont.css
-│   │   ├── index.scss
-│   │   ├── layout.scss
-│   │   ├── mixin.scss
-│   │   ├── reset.css
-│   │   ├── vant-theme.less
-│   │   └── var.scss
-│   ├── utils
-│   │   ├── auth.js
-│   │   ├── index.js
-│   │   ├── request.js
-│   │   └── store.js
-│   └── views
-│       └── enrollSystem
-│           ├── addInfo
-│           │   ├── components
-│           │   │   └── Template
-│           │   │       └── TempTime.vue
-│           │   └── index.vue
-│           ├── basicInfo
-│           │   ├── PhotoInfoForm.vue
-│           │   ├── area.js
-│           │   ├── components
-│           │   │   ├── AuditResult
-│           │   │   │   └── index.vue
-│           │   │   ├── Stepbar
-│           │   │   │   └── index.vue
-│           │   │   ├── TabModule
-│           │   │   │   └── index.vue
-│           │   │   ├── Template
-│           │   │   │   ├── TempAccount.vue
-│           │   │   │   ├── TempAdditional.vue
-│           │   │   │   ├── TempAddress.vue
-│           │   │   │   ├── TempArea.vue
-│           │   │   │   ├── TempBirthday.vue
-│           │   │   │   ├── TempCardNo.vue
-│           │   │   │   ├── TempCertNo.vue
-│           │   │   │   ├── TempEmail.vue
-│           │   │   │   ├── TempExamRoom.vue
-│           │   │   │   ├── TempGender.vue
-│           │   │   │   ├── TempGraduateSchool.vue
-│           │   │   │   ├── TempGraduateTime.vue
-│           │   │   │   ├── TempInputExtField.vue
-│           │   │   │   ├── TempJobTime.vue
-│           │   │   │   ├── TempListDirection.vue
-│           │   │   │   ├── TempListEducation.vue
-│           │   │   │   ├── TempListExamArea.vue
-│           │   │   │   ├── TempListLevel.vue
-│           │   │   │   ├── TempListQualification.vue
-│           │   │   │   ├── TempListStudyMajor.vue
-│           │   │   │   ├── TempListUnitPosiiton.vue
-│           │   │   │   ├── TempListextField.vue
-│           │   │   │   ├── TempMobile.vue
-│           │   │   │   ├── TempName.vue
-│           │   │   │   ├── TempNameSpell.vue
-│           │   │   │   ├── TempNation.vue
-│           │   │   │   ├── TempPassword.vue
-│           │   │   │   ├── TempStudyMajor.vue
-│           │   │   │   ├── TempWorkUnit.vue
-│           │   │   │   └── TempWorkYear.vue
-│           │   │   ├── Title
-│           │   │   │   └── index.vue
-│           │   │   └── UploadSlot
-│           │   │       └── index.vue
-│           │   ├── dialogs
-│           │   │   ├── CheckDiffInfoTipDialog.vue
-│           │   │   ├── IdentityTipDialog.vue
-│           │   │   ├── InputCaptchaDialog.vue
-│           │   │   └── SubmitSuccessDialog.vue
-│           │   ├── index.vue
-│           │   ├── upload.js
-│           │   └── validate.js
-│           ├── error
-│           │   └── index.vue
-│           ├── home
-│           │   └── index.vue
-│           ├── promise
-│           │   └── index.vue
-│           └── userInfo
-│               ├── components
-│               │   ├── AuditFailDialog.vue
-│               │   └── AuditSuccessDialog.vue
-│               └── index.vue
-├── tests
-│   └── unit
-│       └── example.spec.js
-├── vue.config.js
-└── yarn.lock
-```
-
-
-### REM适配
-
-注意单位！基于375px的设计稿
-main.js文件需要引入`flexible.js`
-
-```
-import 'lib-flexible/flexible.js
+{
+  token: '' , // 用户token
+  env: 'minipro' // 浏览器环境类型 'minipro' | 'app' | 'h5'
+}
 ```

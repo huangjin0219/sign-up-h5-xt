@@ -1,3 +1,130 @@
 @import './reset.css';
-@import './iconfont.css';
-@import './layout.scss';
+@import './var.scss';
+@import './mixin.scss';
+
+:root {
+  --van-primary-color: #3075FF;
+  // Tab
+  --van-tab-text-color: #999 !important;
+  --van-tab-active-text-color: var(--van-primary-color) !important;
+  --van-tab-font-size: 14px !important;
+  // // Tabs
+  --van-tabs-default-color: var(--van-primary-color) !important;
+  --van-tabs-line-height: 44px !important;
+  --van-tabs-bottom-bar-height: 3px !important;
+  --van-tabs-bottom-bar-color: var(--van-primary-color) !important;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+  font-size: 37.5px;
+}
+
+body {
+  margin: 0 auto !important;
+  width: 10rem;
+  height: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: PingFangSC-Regular,PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+  word-spacing: 1px;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: #333;
+  background: $bg-color;
+}
+
+#app { height: 100%; }
+
+*, *::before, *::after {
+  box-sizing: inherit;
+  margin: 0;
+  outline: none;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+.align-center {
+  display: flex;
+  align-items: center;
+}
+.no-select{
+  user-select: none;
+}
+
+/* 带圆角和阴影的块 */
+.xt-block {
+	margin: 0 15px 15px;
+	width: 345px;
+  border-radius: $box-border-radius;
+  background: #fff;
+	@include box-shadow();
+}
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.fl::after, .fr::after{
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.clearfix{
+  clear: both;
+}
+
+.clearfix:before,
+.clearfix:after {
+	display: table;
+	line-height: 0;
+	content: "";
+}
+
+.clearfix:after {
+	clear: both;
+}
+
+/* 按钮 */
+$colors: (
+  'primary': $primary,
+  'orange': $orange,
+  'fuchsin': $fuchsin,
+  'green': $green
+);
+@each $name, $color in $colors {
+  .btn--#{$name} {
+    color: #fff;
+    background: $color;
+    border-color: $color;
+    &.btn--plain {
+      color: $color;
+    }
+  }
+}
+.btn--plain {
+  background: #fff;
+}
+.btn--large--center {
+  margin: 0 15px;
+  width: 345px;
+  height: 44px;
+  font-size: 18px;
+  line-height: 44px;
+}

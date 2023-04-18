@@ -1,11 +1,12 @@
-@mixin bg-url($url) {
-	background-image: url($url);
-	background-repeat: no-repeat;
-	background-size: 100% 100%;
-}
+@import './var.scss';
 
+// @mixin bg-url($url) {
+// 	background-image: url($url);
+// 	background-repeat: no-repeat;
+// 	background-size: 100% 100%;
+// }
 @mixin box-shadow() {
-  box-shadow: 0 2px 7px 0 rgba(0,0,0,0.07);
+  box-shadow: 0px -2px 13px -1px rgba(19, 25, 37, 0.12);
 }
 
 @mixin ellipsis() {
@@ -22,8 +23,14 @@
   -webkit-box-orient: vertical;
 }
 
+@mixin font($fontSize, $lineHeight, $fontWeight: 500) {
+  font-size: $fontSize;
+  line-height: $lineHeight;
+  font-weight: $fontWeight;
+}
+
 // 渐变的字体图标
-@mixin iconfont-linear-gradient($bg, $top: $primary-color-light, $bottom: $primary-color, $direction: bottom) {
+@mixin iconfont-linear-gradient($bg, $top: '#9ee8c2', $bottom: $primary, $direction: bottom) {
 	@if $bg {
 		background: $bg;
 	}@else {
@@ -33,12 +40,48 @@
 	background-clip: text;
 	color: transparent;
 }
-// 主体颜色
-$bimPrimary: #527DFF;
 
-// 行内间隔
-.space {
-	width: 100%;
-	height: 10px;
-	background: #F4F5F9;
+// 移动端1px问题
+@mixin hairline-common() {
+  position: absolute;
+  box-sizing: border-box;
+  content: ' ';
+  pointer-events: none;
+}
+
+@mixin hairline($color: $border-color) {
+  @include hairline-common();
+
+  top: -50%;
+  right: -50%;
+  bottom: -50%;
+  left: -50%;
+  border: 1px solid $color;
+  transform: scale(0.5);
+}
+
+@mixin hairline-top($color: $border-color, $left: 0, $right: 0) {
+  @include hairline-common();
+
+  top: 0;
+  right: $right;
+  left: $left;
+  border-top: 1px solid $color;
+  transform: scaleY(0.5);
+}
+
+@mixin hairline-bottom($color: $border-color, $left: 0, $right: 0) {
+  @include hairline-common();
+
+  right: $right;
+  bottom: 0;
+  left: $left;
+  border-bottom: 1px solid $color;
+  transform: scaleY(0.5);
+}
+
+@mixin plain-btn ($color) {
+	background: #fff;
+	border: 1px solid $color;
+	color: $color;
 }
