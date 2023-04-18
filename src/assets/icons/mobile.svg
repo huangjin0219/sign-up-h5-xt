@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63 (92445) - https://sketch.com -->
+    <title>xtqb_sign_phone</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="6.91080122e-17 0 14.9736134 0 14.9736134 19.9920777 6.91080122e-17 19.9920777"></polygon>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="0801弹窗" transform="translate(-128.000000, -200.000000)">
+            <g id="编组-13备份-3" transform="translate(108.000000, 190.000000)">
+                <g id="编组-6" transform="translate(20.000000, 10.000000)">
+                    <g id="icon_phone" transform="translate(2.500000, 0.000000)">
+                        <g id="编组">
+                            <mask id="mask-2" fill="white">
+                                <use xlink:href="#path-1"></use>
+                            </mask>
+                            <g id="Clip-2"></g>
+                            <path d="M3,0 L12,0 C13.6568542,0 15,1.34314575 15,3 L15,17 C15,18.6568542 13.6568542,20 12,20 L3,20 C1.34314575,20 0,18.6568542 0,17 L0,3 C0,1.34314575 1.34314575,0 3,0 Z M3,1.2 C2.00588745,1.2 1.2,2.00588745 1.2,3 L1.2,17 C1.2,17.9941125 2.00588745,18.8 3,18.8 L12,18.8 C12.9941125,18.8 13.8,17.9941125 13.8,17 L13.8,3 C13.8,2.00588745 12.9941125,1.2 12,1.2 L3,1.2 Z" id="矩形" fill="#000000" fill-rule="nonzero" mask="url(#mask-2)"></path>
+                        </g>
+                        <path d="M9.47917965,17.5 L4.27085151,17.5 C3.9843972,17.5 3.75,17.2187621 3.75,16.8750187 C3.75,16.5312379 3.9843972,16.25 4.27085151,16.25 L9.47917965,16.25 C9.76563396,16.25 10,16.5312379 10,16.8750187 C10,17.2187621 9.76563396,17.5 9.47917965,17.5 Z" id="Fill-3" fill="#3075FF"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

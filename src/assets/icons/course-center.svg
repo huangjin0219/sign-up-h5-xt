@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="21px" height="20px" viewBox="0 0 21 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>xt_home_class_selected</title>
+    <desc>Created with Sketch.</desc>
+    <g id="ios" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="画板" transform="translate(-239.000000, -434.000000)">
+            <g id="Group-4备份" transform="translate(61.000000, 426.000000)">
+                <g id="底部tab" transform="translate(51.500000, 7.500000)">
+                    <g id="编组-17" transform="translate(121.000000, 0.500000)">
+                        <g id="xtjy_home_class_selected" transform="translate(6.000000, 2.000000)">
+                            <path d="M6.38130928,0 L12.6764653,0 C12.9798996,-2.05414143e-15 13.2669213,0.137773765 13.4567113,0.374527215 L18.423864,6.57080153 C18.7494222,6.97691912 18.7090112,7.56486221 18.3309497,7.92261798 L10.1808081,15.6350153 C9.79510093,16.0000061 9.19137623,15.9998745 8.80582818,15.6347157 L0.671645468,7.9306989 C0.292548496,7.57164999 0.253501522,6.98137372 0.581999739,6.57551715 L5.60401539,0.370862329 C5.79387965,0.136286763 6.07952437,-4.99674524e-16 6.38130928,0 Z" id="Rectangle" stroke="#3075FF" stroke-width="1.35714286" fill="#3075FF"></path>
+                            <polyline id="Path-3" stroke="#FFFFFF" stroke-width="1.5" points="6.59414856 8.57360954 9.5 11.6743261 12.7340426 8.57360954"></polyline>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
