@@ -2,18 +2,15 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
  * @LastEditors: huangjin
- * @LastEditTime: 2021-12-27 09:49:57
+ * @LastEditTime: 2023-04-19 15:02:45
  * @Description: 模板-input
 -->
 <template>
-  <div class='app-container'>
-    <Title
-      :tipTitle="templateItem.tips"
-      :label="templateItem.aliasLabelName"
-    />
+  <div class="app-container">
+    <Title :tip-title="templateItem.tips" :label="templateItem.aliasLabelName" />
     <van-field
-      class="info-space"
       v-model="templateValue"
+      class="info-space"
       :placeholder="`请输入${templateItem.aliasLabelName}`"
       :readonly="!couldEdit"
       :disabled="disabled"
@@ -24,9 +21,13 @@
 
 <script>
 import { Field } from 'vant'
-import Title from '../Title'
+import Title from '../Title/index.vue'
 
 export default {
+  components: {
+    Title,
+    'van-field': Field
+  },
   props: {
     value: {
       type: String,
@@ -46,33 +47,24 @@ export default {
       default: false
     }
   },
-  components: {
-    Title,
-    'van-field': Field
-  },
-  data () {
+  emits: ['input'],
+  data() {
     return {
       // basisValidator
     }
   },
   computed: {
     templateValue: {
-      get () {
+      get() {
         return this.value
       },
-      set (val) {
+      set(val) {
         this.$emit('input', val)
       }
     }
   },
-  created () {},
-  mounted () {},
-  methods: {
-
-  }
+  methods: {}
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

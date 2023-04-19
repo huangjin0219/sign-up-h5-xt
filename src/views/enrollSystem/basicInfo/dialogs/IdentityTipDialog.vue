@@ -1,26 +1,21 @@
 <!--
  * @Author: HuZhangjie
  * @Date: 2020-07-02 09:55:22
- * @LastEditors: HuZhangjie
- * @LastEditTime: 2020-07-25 10:55:59
+ * @LastEditors: huangjin
+ * @LastEditTime: 2023-04-19 13:39:44
  * @Description: 提示上传身份证格式弹窗
 -->
 
 <template>
   <BaseDialog :show="showDialog" @close="handleClose">
     <div class="tip-dialog__header">证件上传示例</div>
-    <img
-      class="tip-dialog__img"
-      :src="contentSrc"
-    />
-    <div class="tip-dialog__btn" @click="handleReSubmit">
-      确定
-    </div>
+    <img class="tip-dialog__img" :src="contentSrc" />
+    <div class="tip-dialog__btn" @click="handleReSubmit">确定</div>
   </BaseDialog>
 </template>
 
 <script>
-import BaseDialog from '@/components/base/Dialog.vue'
+import BaseDialog from '@/components/SignUpDialog.vue'
 import frontSrc from '@/assets/images/signUp/pbim_answer_ldcardback@2x.png'
 import backSrc from '@/assets/images/signUp/pbim_answer_ldcardpositive@2x.png'
 
@@ -38,7 +33,8 @@ export default {
       default: true
     }
   },
-  data () {
+  emits: ['update:show'],
+  data() {
     return {
       // frontSrc: '/images/pbim_answer_ldcardback@2x.png',
       // backSrc: '/images/pbim_answer_ldcardpositive@2x.png'
@@ -48,22 +44,22 @@ export default {
   },
   computed: {
     showDialog: {
-      get () {
+      get() {
         return this.show
       },
-      set (val) {
+      set(val) {
         this.$emit('update:show', val)
       }
     },
-    contentSrc () {
+    contentSrc() {
       return this.isFront ? this.frontSrc : this.backSrc
     }
   },
   methods: {
-    handleClose () {
+    handleClose() {
       this.showDialog = false
     },
-    handleReSubmit () {
+    handleReSubmit() {
       this.showDialog = false
     }
   }
@@ -71,7 +67,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/var.scss";
+@import '@/styles/var.scss';
 
 .tip-dialog {
   &__header {

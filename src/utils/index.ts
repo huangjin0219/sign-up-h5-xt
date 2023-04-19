@@ -1,8 +1,8 @@
 /*
  * @Author: jiangruohui
  * @Date: 2022-03-29 19:34:42
- * @LastEditors: 曹双双
- * @LastEditTime: 2023-03-16 14:19:51
+ * @LastEditors: huangjin
+ * @LastEditTime: 2023-04-19 14:38:54
  * @Description:
  */
 import wx from 'weixin-js-sdk'
@@ -228,4 +228,16 @@ export const getWeekRange = () => {
     start,
     end
   }
+}
+
+// 以 image 为几位
+export const isStrImageEnd = (str: any) => {
+  if (!str) return false
+  return /image$/.test(str.toLocaleLowerCase())
+}
+
+// 以 file 为几位
+export const isStrFileEnd = (str: any) => {
+  if (!str) return false
+  return /file$/.test(str.toLocaleLowerCase())
 }

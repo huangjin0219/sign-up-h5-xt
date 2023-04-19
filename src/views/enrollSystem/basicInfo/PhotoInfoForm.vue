@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-02 16:06:49
  * @LastEditors: huangjin
- * @LastEditTime: 2021-12-27 16:02:46
+ * @LastEditTime: 2023-04-19 14:37:38
  * @Description: 照片信息表单
 -->
 <template>
@@ -463,8 +463,8 @@ import { Form, Uploader, Button } from 'vant'
 import { uploadImage } from '@/utils/request'
 import { BASIS_TEMPLATE_KEY_MAP, ID_PHOTO_ORGAN_SIZE_MAP, PDF_VIEWER_HOST } from '@/constant'
 import { isStrImageEnd, isStrFileEnd } from '@/utils'
-import Title from './components/Title'
-import UploadSlot from './components/UploadSlot'
+import Title from './components/Title/index.vue'
+import UploadSlot from './components/UploadSlot/index.vue'
 import IdentityTipDialog from './dialogs/IdentityTipDialog.vue'
 import { handleCompressImg } from './upload'
 
@@ -521,11 +521,11 @@ export default {
       aleradyShowIdentityForntDialog: false,
       aleradyShowIdentityBackDialog: false,
 
-      identityFrontBg: require('../../../assets/images/signUp/bim_answer_lldcard_back@2x.png'),
-      identityBackBg: require('../../../assets/images/signUp/bim_answer_lidcard_front@2x.png'),
-      oneInchBg: require('../../../assets/images/signUp/bim_answer_lphoto@2x.png'),
-      educationBg: require('../../../assets/images/signUp/bim_answer_lDiploma@2x.png'),
-      workProofBg: require('../../../assets/images/signUp/bim_answer_work_proof.png')
+      identityFrontBg: new URL('@/assets/images/signUp/bim_answer_lldcard_back@2x.png', import.meta.url).href,
+      identityBackBg: new URL('@/assets/images/signUp/bim_answer_lidcard_front@2x.png', import.meta.url).href,
+      oneInchBg: new URL('@/assets/images/signUp/bim_answer_lphoto@2x.png', import.meta.url).href,
+      educationBg: new URL('@/assets/images/signUp/bim_answer_lDiploma@2x.png', import.meta.url).href,
+      workProofBg: new URL('@/assets/images/signUp/bim_answer_work_proof@2x.png', import.meta.url).href
     }
   },
   computed: {
@@ -651,7 +651,7 @@ export default {
 
 <style lang="scss" scoped>
 .photo-info {
-  /deep/ .van-uploader__wrapper {
+  :deep(.van-uploader__wrapper) {
     width: 100%;
     height: 100%;
     .van-uploader__preview,
@@ -705,7 +705,7 @@ export default {
   }
   // 文件类型的 不展示icon
   .upload-file {
-    /deep/ .van-uploader__file-icon {
+    :deep(.van-uploader__file-icon) {
       display: none;
     }
     .upload-file__preview {

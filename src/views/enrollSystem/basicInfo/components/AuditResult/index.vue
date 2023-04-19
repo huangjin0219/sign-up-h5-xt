@@ -1,32 +1,23 @@
 <!--
  * @Author: HuZhangjie
  * @Date: 2020-07-14 10:15:33
- * @LastEditors: HuZhangjie
- * @LastEditTime: 2020-08-11 20:36:03
+ * @LastEditors: huangjin
+ * @LastEditTime: 2023-04-19 13:59:53
  * @Description: 审核结果展示
 -->
 <template>
-  <div class='audit-result-wrapper'>
-    <div
-      v-show="!isReWrite"
-      class="audit-result"
-      :class="getResultClass()"
-    >
+  <div class="audit-result-wrapper">
+    <div v-show="!isReWrite" class="audit-result" :class="getResultClass()">
       <div>{{ getResultStatusText() }}</div>
       <div class="audit-result__split">|</div>
       <div>报名编号：{{ signNo }}</div>
     </div>
-    <div v-show="showRemark" class="audit-remark">
-      原因：{{ remark }}
-    </div>
+    <div v-show="showRemark" class="audit-remark">原因：{{ remark }}</div>
   </div>
 </template>
 
-<script>
-import {
-  AUDIT_STATUS_MAP,
-  EXAM_STATUS_MAP
-} from '@/constant'
+<script lang="ts" setup>
+import { AUDIT_STATUS_MAP, EXAM_STATUS_MAP } from '@/constant'
 
 // 审核结果不通，样式不同
 const RESULT_CLASS_MAP = {
@@ -64,93 +55,79 @@ const EXAM_STATUS_DESC_MAP = {
     className: 'result-success'
   }
 }
-export default {
-  props: {
-    // 报名编号
-    signNo: {
-      type: String,
-      default: ''
-    },
-    // 审核结果状态
-    dataCheckStatus: {
-      type: [String, Number],
-      required: true
-    },
-    // 填写状态
-    dataStatus: {
-      type: [String, Number],
-      required: true
-    },
-    // 报名状态 1.初始化 2.待报名 3.已报名 4.废弃
-    status: {
-      type: [String, Number],
-      required: true
-    },
-    // 考试状态 1.未知 2.未通过 3.通过
-    examStatus: {
-      type: [String, Number],
-      required: true
-    },
-    // 不通过原因
-    remark: {
-      type: String,
-      default: ''
-    },
-    // 重新填写状态
-    isReWrite: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data () {
+
+interface Props {
+  signNo?: string
+  remark?: string
+  isReWrite?: boolean
+  dataCheckStatus: string | number
+  dataStatus: string | number
+  status: string | number
+  examStatus: string | number
+}
+const props = withDefaults(defineProps<Props>(), {
+  signNo: '',
+  remark: '',
+  isReWrite: false
+})
+
+const {
+  signNo, // 报名编号
+  // 审核结果状态
+  dataCheckStatus,
+  // 填写状态
+  dataStatus,
+  // 报名状态 1.初始化 2.待报名 3.已报名 4.废弃
+  status,
+  // 考试状态 1.未知 2.未通过 3.通过
+  examStatus,
+  // 不通过原因
+  remark,
+  // 重新填写状态
+  isReWrite
+} = toRefs(props)
+
+// 不通过原因
+const showRemark = computed(() => {
+  return (
+    [AUDIT_STATUS_MAP.FIRST_AUDIT_FAIL, AUDIT_STATUS_MAP.SECOND_AUDIT_FAIL].includes(dataCheckStatus.value as number) &&
+    remark.value
+  )
+})
+
+// 文案
+const getResultStatusText = () => {
+  const correntStatus = getCorrectStatusObj()
+
+  return correntStatus.text
+}
+// class 类名
+const getResultClass = () => {
+  const correntStatus = getCorrectStatusObj()
+
+  return correntStatus.className
+}
+// 获取正确的text 和 className
+const getCorrectStatusObj = () => {
+  // 优先根据考试状态展示
+  console.log('getCorrectStatusObj -> this.examStatus', examStatus.value)
+  if ([EXAM_STATUS_MAP.FAIL, EXAM_STATUS_MAP.PASS].includes(examStatus.value as number)) {
+    return EXAM_STATUS_DESC_MAP[examStatus.value]
+  }
+
+  // 已报名
+  if (status.value === 3) {
     return {
-    }
-  },
-  computed: {
-    // 不通过原因
-    showRemark () {
-      return [
-        AUDIT_STATUS_MAP.FIRST_AUDIT_FAIL,
-        AUDIT_STATUS_MAP.SECOND_AUDIT_FAIL
-      ].includes(this.dataCheckStatus) && this.remark
-    }
-  },
-  methods: {
-    // 文案
-    getResultStatusText () {
-      const correntStatus = this._getCorrectStatusObj()
-
-      return correntStatus.text
-    },
-    // class 类名
-    getResultClass () {
-      const correntStatus = this._getCorrectStatusObj()
-
-      return correntStatus.className
-    },
-    // 获取正确的text 和 className
-    _getCorrectStatusObj () {
-      // 优先根据考试状态展示
-      console.log('_getCorrectStatusObj -> this.examStatus', this.examStatus)
-      if ([EXAM_STATUS_MAP.FAIL, EXAM_STATUS_MAP.PASS].includes(this.examStatus)) {
-        return EXAM_STATUS_DESC_MAP[this.examStatus]
-      }
-
-      // 已报名
-      if (this.status === 3) {
-        return {
-          text: '已上报，请于官网查看考试信息',
-          className: 'result-success'
-        }
-      }
-      return RESULT_CLASS_MAP[this.dataCheckStatus]
+      text: '已上报，请于官网查看考试信息',
+      className: 'result-success'
     }
   }
+  return RESULT_CLASS_MAP[dataCheckStatus.value]
 }
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/mixin.scss";
+@import '@/styles/mixin.scss';
 
 .audit-result-wrapper {
   margin-bottom: 10px;
@@ -179,16 +156,16 @@ export default {
   }
 
   .result-wait {
-    background-color: #E4EAFF;
+    background-color: #e4eaff;
     color: $bimPrimary;
   }
   .result-fail {
-    background-color: #FFE6EB;
-    color: #FF325C;
+    background-color: #ffe6eb;
+    color: #ff325c;
   }
   .result-success {
-    background-color: #E4FBEF;
-    color: #3CBD7B;
+    background-color: #e4fbef;
+    color: #3cbd7b;
   }
 }
 </style>

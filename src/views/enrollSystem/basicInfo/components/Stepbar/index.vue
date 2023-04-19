@@ -3,54 +3,50 @@
  * @version: 1.0.0
  * @Author: 刘帅楠
  * @Date: 2020-07-01 11:35:54
- * @LastEditors: HuZhangjie
- * @LastEditTime: 2020-08-11 20:36:26
+ * @LastEditors: huangjin
+ * @LastEditTime: 2023-04-19 15:16:48
 -->
 <template>
-    <div class="stpebar-wrap">
-      <div class="stpebar-wrap-num">
-        <img src="@/assets/images/signUp/basicInfo/bim_answer_lable1_sel.png" alt="">
-        <div :class="[{line2 : infoType},'line1']"></div>
-        <img :src="imgSrc" alt="">
-      </div>
-      <div class="stpebar-wrap-size">
-        <span>基本信息</span>
-        <span>报名材料</span>
-      </div>
+  <div class="stpebar-wrap">
+    <div class="stpebar-wrap-num">
+      <img src="@/assets/images/signUp/basicInfo/bim_answer_lable1_sel.png" alt="" />
+      <div :class="[{ line2: infoType }, 'line1']"></div>
+      <img :src="imgSrc" alt="" />
     </div>
+    <div class="stpebar-wrap-size">
+      <span>基本信息</span>
+      <span>报名材料</span>
+    </div>
+  </div>
 </template>
-<script>
-export default {
-  props: {
-    infoType: { // 步骤条进度
-      type: Boolean,
-      default: false
-    }
-  },
-  computed: {
-    imgSrc () {
-      return !this.infoType ? require('@/assets/images/signUp/basicInfo/bim_answer_lable2_nor.png') : require('@/assets/images/signUp/basicInfo/bim_answer_lable2_sel.png')
-    }
-  },
-  data () {
-    return {
-    }
-  }
+<script lang="ts" setup>
+interface Props {
+  infoType?: boolean
 }
+const props = withDefaults(defineProps<Props>(), {
+  infoType: false
+})
+
+const { infoType } = toRefs(props)
+const imgSrc = computed(() => {
+  return !infoType.value
+    ? new URL('@/assets/images/signUp/basicInfo/bim_answer_lable2_nor.png', import.meta.url).href
+    : new URL('@/assets/images/signUp/basicInfo/bim_answer_lable2_sel.png', import.meta.url).href
+})
 </script>
 <style lang="scss" scoped>
-$line1: #ECECEC;
-.stpebar-wrap{
+$line1: #ececec;
+.stpebar-wrap {
   width: 100%;
   margin-bottom: 10px;
   padding-top: 21px;
   background: #fff;
 
   &-num {
-   padding:0 56px;
-   height: 30px;
-   display: flex;
-   align-items: center;
+    padding: 0 56px;
+    height: 30px;
+    display: flex;
+    align-items: center;
 
     .line1 {
       width: 100%;
@@ -58,7 +54,7 @@ $line1: #ECECEC;
       background: $line1;
     }
     .line2 {
-      background: #D2DDFF;
+      background: #d2ddff;
     }
     img {
       width: 30px;
@@ -72,10 +68,9 @@ $line1: #ECECEC;
     display: flex;
     justify-content: space-between;
 
-    span:nth-of-type(2){
-      color:#666;
+    span:nth-of-type(2) {
+      color: #666;
     }
   }
 }
-
 </style>

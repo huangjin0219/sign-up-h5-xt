@@ -2,7 +2,7 @@
  * @Author: jiangruohui
  * @Date: 2022-03-24 14:33:19
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-18 16:03:38
+ * @LastEditTime: 2023-04-19 14:42:13
  * @Description:
  */
 
@@ -53,6 +53,13 @@ const baseUrlMap = {
   development: 'https://devxtapi.xuetian.cn'
 }
 export const baseURL = baseUrlMap[apiEnv]
+
+const dataServiceUrlMap = {
+  development: 'https://devxtapi.xuetian.cn/data-service',
+  test: 'https://testxtapi.xuetian.cn/data-service',
+  production: 'https://dsw.xuetian.cn'
+}
+export const dataServiceUrl = dataServiceUrlMap[apiEnv]
 /** ***************************  接口请求地址 end  ****************************** */
 
 /** ***************************  Cookie相关 start  ****************************** */

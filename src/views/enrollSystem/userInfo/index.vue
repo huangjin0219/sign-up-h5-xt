@@ -4,14 +4,14 @@
  * @Author: 刘帅楠
  * @Date: 2020-07-09 14:31:37
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-18 17:36:56
+ * @LastEditTime: 2023-04-19 11:39:17
 -->
 <template>
   <div class="page-home__bg">
     <div class="page-home">
       <div class="enroll-time">
-        报名开放时间：{{ enrollInfo.startTime | date('YY/MM/dd hh:mm') }}-{{
-          enrollInfo.endTime | date('YY/MM/dd hh:mm')
+        报名开放时间：{{ $filters.date(enrollInfo.startTime, 'YY/MM/dd hh:mm') }}-{{
+          $filters.date(enrollInfo.endTime, 'YY/MM/dd hh:mm')
         }}
       </div>
       <div class="enroll-content__bg">
@@ -63,95 +63,76 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import { acquireConfirmInfo, cmdConfirm, queryCustomerInfo } from '@/common/api/signUp/enrollSys'
 import { AUDIT_STATUS_MAP, DATA_WRITE_STATUS_MAP } from '@/constant'
 import AuditFailDialog from './components/AuditFailDialog.vue'
 import AuditSuccessDialog from './components/AuditSuccessDialog.vue'
 
-export default {
-  name: 'EnrollSystemUserInfo',
-  components: {
-    AuditFailDialog,
-    AuditSuccessDialog
-  },
-  data() {
-    return {
-      signUpRecordId: null,
-      enrollInfo: {
-        startTime: '',
-        endTime: '',
-        mobile: '',
-        salemanName: '',
-        salemanMobile: '',
-        customerName: '',
-        idNo: '',
-        level: '',
-        directoryName: '',
-        unit: ''
-      },
-      customerInfo: {},
-      showAuditSuccess: false, // 审核通过的弹窗
-      showAuditFail: false // 审核不通过的弹窗
-    }
-  },
-  computed: {
-    // 填写状态为待填写
-    isDataStatusWaitWrite() {
-      return this.customerInfo.dataStatus === DATA_WRITE_STATUS_MAP.WAIT_WRITE
-    }
-  },
-  mounted() {
-    const { signUpRecordId } = this.$route.query
-    this.signUpRecordId = signUpRecordId
-    this.getInfo(signUpRecordId)
-    this.getCustomerInfo()
-  },
-  methods: {
-    // 获取用户表单信息和审核信息
-    async getCustomerInfo() {
-      const data = await queryCustomerInfo({ signUpRecordId: this.signUpRecordId })
-      this.customerInfo = data
-      const { dataCheckStatus } = this.customerInfo
-      if (dataCheckStatus === AUDIT_STATUS_MAP.AUDIT_SUCCESS) {
-        this.showAuditSuccess = true
-      }
-      if (dataCheckStatus === AUDIT_STATUS_MAP.AUDIT_FAIL) {
-        this.showAuditFail = true
-      }
-    },
-    // 为待填写状态-> 承诺书页，其他状态-> 填写资料页
-    async handleNext() {
-      const { query } = this.$route
-      const { signUpRecordId } = this
-      if (query.source) {
-        this.$router.push({
-          name: 'AddInfo',
-          query
-        })
-        return
-      }
-      if (!this.isDataStatusWaitWrite) {
-        this.$router.push({
-          name: 'BasicInfo',
-          query
-        })
-        return
-      }
-      await cmdConfirm({ signUpRecordId })
-      this.$router.push({
-        path: '/enrollSystem/promise',
-        query
-      })
-    },
-    async getInfo(signUpRecordId) {
-      const params = {
-        signUpRecordId
-      }
-      const res = await acquireConfirmInfo(params)
-      this.enrollInfo = res
-    }
+const route = useRoute()
+const router = useRouter()
+
+const signUpRecordId = ref<any>(null)
+const enrollInfo = ref<any>({})
+
+const customerInfo = ref<any>({})
+const showAuditSuccess = ref<boolean>(false) // 审核通过的弹窗
+const showAuditFail = ref<boolean>(false) // 审核不通过的弹窗
+// 填写状态为待填写
+const isDataStatusWaitWrite = computed(() => {
+  return customerInfo.value.dataStatus === DATA_WRITE_STATUS_MAP.WAIT_WRITE
+})
+onMounted(() => {
+  signUpRecordId.value = route.query.signUpRecordId as string
+  getInfo(signUpRecordId.value)
+  getCustomerInfo()
+})
+// 获取用户表单信息和审核信息
+const getCustomerInfo = async () => {
+  const data = await queryCustomerInfo({ signUpRecordId: signUpRecordId.value })
+  customerInfo.value = data
+  const { dataCheckStatus } = customerInfo.value
+  if (dataCheckStatus === AUDIT_STATUS_MAP.AUDIT_SUCCESS) {
+    showAuditSuccess.value = true
   }
+  if (dataCheckStatus === AUDIT_STATUS_MAP.AUDIT_FAIL) {
+    showAuditFail.value = true
+  }
+}
+// 为待填写状态-> 承诺书页，其他状态-> 填写资料页
+const handleNext = async () => {
+  const { query } = route
+  if (route.query.source) {
+    router.push({
+      name: 'AddInfo',
+      query
+    })
+    return
+  }
+  if (!isDataStatusWaitWrite) {
+    router.push({
+      name: 'BasicInfo',
+      query
+    })
+    return
+  }
+  await cmdConfirm({ signUpRecordId: signUpRecordId.value })
+  router.push({
+    path: '/enrollSystem/promise',
+    query
+  })
+}
+const getInfo = async (signUpRecordId: string) => {
+  const params = {
+    signUpRecordId
+  }
+  const res = await acquireConfirmInfo(params)
+  enrollInfo.value = res
+}
+</script>
+<script lang="ts">
+export default {
+  name: 'EnrollSystemUserInfo'
 }
 </script>
 
@@ -175,7 +156,8 @@ $borderColor: #dcdfe6;
   flex-direction: column;
   align-items: center;
   color: #fff;
-  @include bg-url('@/assets/images/signUp/bim_home_bg@2x.png');
+  background: url('@/assets/images/signUp/bim_home_bg@2x.png');
+  // @include bg-url('@/assets/images/signUp/bim_home_bg@2x.png');
   background-size: contain;
   background-repeat: no-repeat;
   .enroll-time {

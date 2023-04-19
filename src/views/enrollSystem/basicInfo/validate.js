@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2020-07-04 10:50:50
- * @LastEditTime: 2020-09-29 18:16:36
- * @LastEditors: HuZhangjie
+ * @LastEditTime: 2023-04-19 16:27:53
+ * @LastEditors: huangjin
  * @Description: 填写基础信息的校验文件
  */
 
@@ -35,14 +35,14 @@ export const basisValidator = {
 // https://blog.csdn.net/gqzydh/article/details/90295842
 // 函数参数必须是字符串，因为二代身份证号码是十八位，而在javascript中，十八位的数值会超出计算范围，造成不精确的结果，导致最后两位和计算的值不一致，从而该函数出现错误。
 // 详情查看javascript的数值范围
-export function checkIDCard (idcode) {
+export function checkIDCard(idcode) {
   // 加权因子
   const weightFactor = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
   // 校验码
   const checkCode = ['1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2']
 
-  const code = idcode + ''
-  const last = idcode[17]// 最后一位
+  const code = `${idcode}`
+  const last = idcode[17] // 最后一位
 
   const seventeen = code.substring(0, 17)
 
@@ -52,7 +52,7 @@ export function checkIDCard (idcode) {
   const len = arr.length
   let num = 0
   for (let i = 0; i < len; i++) {
-    num = num + arr[i] * weightFactor[i]
+    num += arr[i] * weightFactor[i]
   }
 
   // 获取余数
@@ -70,7 +70,8 @@ export function checkIDCard (idcode) {
   十五，十六，十七都是数字0-9
   十八位可能是数字0-9，也可能是X
   */
-  const idcardPatter = /^[1-9][0-9]{5}([1][9][0-9]{2}|[2][0][0|1][0-9])([0][1-9]|[1][0|1|2])([0][1-9]|[1|2][0-9]|[3][0|1])[0-9]{3}([0-9]|[X|x])$/
+  const idcardPatter =
+    /^[1-9][0-9]{5}([1][9][0-9]{2}|[2][0][0|1][0-9])([0][1-9]|[1][0|1|2])([0][1-9]|[1|2][0-9]|[3][0|1])[0-9]{3}([0-9]|[X|x])$/
 
   // 判断格式是否正确
   const format = idcardPatter.test(idcode)
@@ -79,7 +80,7 @@ export function checkIDCard (idcode) {
   return !!(last === lastNo && format)
 }
 
-function isMobielPhone (phone) {
+function isMobielPhone(phone) {
   const reg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(17[0-9]{1})|(19[0-9]{1})|(14[0-9]{1})|(16[0-9]{1}))+\d{8})$/
   return reg.test(phone)
 }

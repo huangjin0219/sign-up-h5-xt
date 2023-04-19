@@ -6,25 +6,21 @@
  * @Description: 模板-方向
 -->
 <template>
-  <div class='app-container'>
-    <Title
-      :tipTitle="tipTitle"
-      label="方向"
-    />
-    <tab-module
-      v-model="templateValue"
-      :tab-type="true"
-      :list="list"
-      :couldEdit="couldEdit"
-    ></tab-module>
+  <div class="app-container">
+    <Title :tip-title="tipTitle" label="方向" />
+    <tab-module v-model="templateValue" :tab-type="true" :list="list" :could-edit="couldEdit"></tab-module>
   </div>
 </template>
 
 <script>
-import Title from '../Title'
-import TabModule from '../TabModule'
+import Title from '../Title/index.vue'
+import TabModule from '../TabModule/index.vue'
 
 export default {
+  components: {
+    Title,
+    TabModule
+  },
   props: {
     value: {
       type: [String, Number],
@@ -40,27 +36,18 @@ export default {
       default: true
     }
   },
-  components: {
-    Title,
-    TabModule
-  },
-  data () {
+  emits: ['input'],
+  data() {
     return {
-      list: [
-        '建筑设计BIM应用',
-        '结构工程BIM应用',
-        '设备工程BIM应用',
-        'BIM建模',
-        '综合BIM应用'
-      ]
+      list: ['建筑设计BIM应用', '结构工程BIM应用', '设备工程BIM应用', 'BIM建模', '综合BIM应用']
     }
   },
   computed: {
     templateValue: {
-      get () {
+      get() {
         return this.value
       },
-      set (val) {
+      set(val) {
         this.$emit('input', val)
       }
     }
@@ -68,6 +55,4 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

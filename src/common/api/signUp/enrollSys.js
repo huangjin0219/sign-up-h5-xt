@@ -1,8 +1,26 @@
 /*
  * @Description: 报名C端接口
  */
-import request from '@/utils/request'
+import service from '@/utils/request'
 
+/**
+ * @method: request
+ * @description: 这里直接返回 res.data
+ * @param {Object}
+ * @return: Promise
+ */
+function request(config) {
+  return new Promise((resolve, reject) => {
+    service(config)
+      .then((res) => {
+        res = res.data || null
+        resolve(res)
+      })
+      .catch((err) => {
+        reject(err)
+      })
+  })
+}
 // 报名链接检查
 export function enrollCheck(params) {
   return request({

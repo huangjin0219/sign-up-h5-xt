@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-06-30 17:33:53
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-19 09:44:20
+ * @LastEditTime: 2023-04-19 10:52:55
  * @Description: bim报名系统-首页登录页和信息确认页
 -->
 <template>

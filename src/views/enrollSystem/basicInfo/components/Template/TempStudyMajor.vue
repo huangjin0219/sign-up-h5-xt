@@ -2,18 +2,15 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
  * @LastEditors: huangjin
- * @LastEditTime: 2021-07-20 20:39:36
+ * @LastEditTime: 2023-04-19 14:56:38
  * @Description: 模板-所学专业
 -->
 <template>
-  <div class='app-container'>
-    <Title
-      :tipTitle="templateItem.tips"
-      label="所学专业"
-    />
+  <div class="app-container">
+    <Title :tip-title="templateItem.tips" label="所学专业" />
     <van-field
-      class="info-space"
       v-model="templateValue"
+      class="info-space"
       placeholder="请输入所学专业"
       maxlength="32"
       :readonly="!couldEdit"
@@ -24,9 +21,13 @@
 
 <script>
 import { Field } from 'vant'
-import Title from '../Title'
+import Title from '../Title/index.vue'
 
 export default {
+  components: {
+    Title,
+    'van-field': Field
+  },
   props: {
     value: {
       type: String,
@@ -42,33 +43,22 @@ export default {
       default: true
     }
   },
-  components: {
-    Title,
-    'van-field': Field
-  },
-  data () {
-    return {
-
-    }
+  emits: ['input'],
+  data() {
+    return {}
   },
   computed: {
     templateValue: {
-      get () {
+      get() {
         return this.value
       },
-      set (val) {
+      set(val) {
         this.$emit('input', val)
       }
     }
   },
-  created () {},
-  mounted () {},
-  methods: {
-
-  }
+  methods: {}
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

@@ -6,32 +6,35 @@
  * @Description: 模板-手机号
 -->
 <template>
-  <div class='app-container'>
-    <Title
-      :tipTitle="tipTitle"
-      label="手机号"
-    />
+  <div class="app-container">
+    <Title :tip-title="tipTitle" label="手机号" />
     <van-field
-      class="info-space"
       v-model="templateValue"
+      class="info-space"
       placeholder="请输入手机号"
       :readonly="!couldEdit"
       :disabled="disabled"
-      :rules="[{
-        required: couldEdit,
-        validator: basisValidator.mobile,
-        message: '请输入正确的手机号'
-      }]"
+      :rules="[
+        {
+          required: couldEdit,
+          validator: basisValidator.mobile,
+          message: '请输入正确的手机号'
+        }
+      ]"
     />
   </div>
 </template>
 
 <script>
 import { Field } from 'vant'
-import Title from '../Title'
+import Title from '../Title/index.vue'
 import { basisValidator } from '../../validate'
 
 export default {
+  components: {
+    Title,
+    'van-field': Field
+  },
   props: {
     value: {
       type: String,
@@ -51,33 +54,24 @@ export default {
       default: false
     }
   },
-  components: {
-    Title,
-    'van-field': Field
-  },
-  data () {
+  emits: ['input'],
+  data() {
     return {
       basisValidator
     }
   },
   computed: {
     templateValue: {
-      get () {
+      get() {
         return this.value
       },
-      set (val) {
+      set(val) {
         this.$emit('input', val)
       }
     }
   },
-  created () {},
-  mounted () {},
-  methods: {
-
-  }
+  methods: {}
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

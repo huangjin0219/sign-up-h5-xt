@@ -6,47 +6,50 @@
  * @Description: 模板-民族
 -->
 <template>
-  <div class='app-container'>
-    <Title
-      :tipTitle="tipTitle"
-      label="民族"
-    />
+  <div class="app-container">
+    <Title :tip-title="tipTitle" label="民族" />
     <!-- <van-field
       class="info-space"
       v-model="templateValue"
       placeholder="请输入民族"
       :rules="[{ required: true, message: '请填写民族' }]"
     /> -->
-      <van-field
-        readonly
-        clickable
-        class="info-space"
-        :value="templateValue"
-        :rules="[{ required: couldEdit, message: '请选择民族' }]"
-        placeholder="请选择民族"
-        :right-icon="couldEdit ? 'arrow' : ''"
-        @click="handleShowPicker"
+    <van-field
+      readonly
+      clickable
+      class="info-space"
+      :value="templateValue"
+      :rules="[{ required: couldEdit, message: '请选择民族' }]"
+      placeholder="请选择民族"
+      :right-icon="couldEdit ? 'arrow' : ''"
+      @click="handleShowPicker"
+    />
+    <van-popup v-model="showPicker" round position="bottom">
+      <van-picker
+        title="民族"
+        show-toolbar
+        :loading="loading"
+        value-key="dictdataName"
+        :columns="nationList"
+        @cancel="showPicker = false"
+        @confirm="onConfirm"
       />
-      <van-popup v-model="showPicker" round position="bottom">
-        <van-picker
-          title="民族"
-          show-toolbar
-          :loading="loading"
-          value-key="dictdataName"
-          :columns="nationList"
-          @cancel="showPicker = false"
-          @confirm="onConfirm"
-        />
-      </van-popup>
+    </van-popup>
   </div>
 </template>
 
 <script>
 import { getNationList } from '@/common/api/signUp/common'
 import { Field, Popup, Picker } from 'vant'
-import Title from '../Title'
+import Title from '../Title/index.vue'
 
 export default {
+  components: {
+    Title,
+    'van-field': Field,
+    'van-popup': Popup,
+    'van-picker': Picker
+  },
   props: {
     // 传入民族的 id,key
     value: {
@@ -63,37 +66,30 @@ export default {
       default: true
     }
   },
-  components: {
-    Title,
-    'van-field': Field,
-    'van-popup': Popup,
-    'van-picker': Picker
-  },
-  data () {
+  emits: ['input'],
+  data() {
     return {
       loading: true,
       showPicker: false,
       nationList: []
     }
   },
-  created () {
-    this.getList()
-  },
   computed: {
     templateValue: {
-      get () {
-        const currNation = this.nationList.find(
-          item => +item.dictdataValue === +this.value
-        ) || {}
+      get() {
+        const currNation = this.nationList.find((item) => +item.dictdataValue === +this.value) || {}
         return currNation.dictdataName
       },
-      set (val) {
+      set(val) {
         this.$emit('input', val)
       }
     }
   },
+  created() {
+    this.getList()
+  },
   methods: {
-    async getList () {
+    async getList() {
       const params = {
         dictKey: 'nation',
         pageNum: 1,
@@ -104,12 +100,12 @@ export default {
       this.loading = false
       this.nationList = res.list
     },
-    handleShowPicker () {
+    handleShowPicker() {
       if (this.couldEdit) {
         this.showPicker = true
       }
     },
-    onConfirm (value) {
+    onConfirm(value) {
       console.log('onConfirm -> value', value)
       this.templateValue = value.dictdataValue
       this.showPicker = false
@@ -118,6 +114,4 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

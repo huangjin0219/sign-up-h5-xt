@@ -4,7 +4,7 @@
  * @Author: 刘帅楠
  * @Date: 2020-07-01 09:25:35
  * @LastEditors: huangjin
- * @LastEditTime: 2022-02-28 18:05:51
+ * @LastEditTime: 2023-04-19 16:29:47
 -->
 <template>
   <div class="page-fill-info">
@@ -326,32 +326,27 @@
 import { Form, Field } from 'vant'
 import { BASIS_TEMPLATE_KEY_LIST, BASIS_TEMPLATE_KEY_MAP, AUDIT_STATUS_MAP, DATA_WRITE_STATUS_MAP } from '@/constant'
 import { isStrImageEnd, isStrFileEnd } from '@/utils'
-import dayjs from 'dayjs'
+import filters from '@/common/filters/index'
 import { queryTemplateList, queryCustomerInfo, saveCustomerInfo } from '@/common/api/signUp/enrollSys'
-import AuditResult from './components/AuditResult'
-import Stepbar from './components/Stepbar'
+import AuditResult from './components/AuditResult/index.vue'
+import Stepbar from './components/Stepbar/index.vue'
 import PhotoInfoForm from './PhotoInfoForm.vue'
 import CheckDiffInfoTipDialog from './dialogs/CheckDiffInfoTipDialog.vue'
 import InputCaptchaDialog from './dialogs/InputCaptchaDialog.vue'
 import SubmitSuccessDialog from './dialogs/SubmitSuccessDialog.vue'
-import Title from './components/Title'
+import Title from './components/Title/index.vue'
 
 import { basisValidator } from './validate'
 
 /**
  * 自动引入 templata中的所有vue 模板文件
- * require.context(directory, useSubdirectories = false, regExp = /^.//);
- * @param {String} directory 读取文件的路径
- * @param {Boolean} directory 匹配文件的正则表达式
- * @param {regExp} regExp 读取文件的路径
  */
-const modulesFiles = require.context('./components/Template', true, /.vue$/)
-const modules = modulesFiles.keys().reduce((modules, modulePath) => {
-  const moduleName = modulePath.replace(/^.\/(.*)\.vue/, '$1')
-  const value = modulesFiles(modulePath)
-  modules[moduleName] = value.default
-  return modules
-}, {})
+const modulesFiles = import.meta.globEager('./components/Template/*.vue')
+const modules = {}
+Object.keys(modulesFiles).forEach((modulePath) => {
+  const moduleName = modulePath.replace(/^.\/components\/Template\/(.*)\.vue/, '$1')
+  modules[moduleName] = modulesFiles[modulePath].default
+})
 
 // 审核相关的key
 const AUDIT_STATUS_KEYS = [
@@ -405,7 +400,7 @@ export default {
         nation: '',
         mobile: '',
         education: '',
-        birthday: dayjs().format('YYYY-MM-DD'),
+        birthday: filters.date(new Date(), 'YY-MM-dd'),
         takeJobTime: '', // 参加工作时间
         workYear: '', // 工作年限
         certNo: '', // 注册证书编号
@@ -518,7 +513,6 @@ export default {
     await this.getTemplateList()
     this.getCustomerInfo()
   },
-  mounted() {},
   methods: {
     // 选择地区
     handleChangeArea({ provinceId, areaId }) {
@@ -636,10 +630,10 @@ export default {
     },
     // 保存草稿
     async handleSaveDraft() {
-      const _params = this.buildSaveParams()
-      console.log('handleSaveDraft -> _params', _params)
+      const cparams = this.buildSaveParams()
+      console.log('handleSaveDraft -> cparams', cparams)
       const data = await saveCustomerInfo({
-        ..._params,
+        ...cparams,
         action: 2 // 保存草稿
       })
       console.log('handleSaveDraft -> data', data)
@@ -667,7 +661,7 @@ export default {
       // 校验身份信息是否有变化
       const hasInfoChange = this.checkInfoChange()
       console.log('handleNextStep -> hasInfoChange', hasInfoChange)
-      if (!this._infoChangeFlag && hasInfoChange) {
+      if (!this.infoChangeFlag && hasInfoChange) {
         this.showCheckDiffDialog = true
         return
       }
@@ -678,7 +672,7 @@ export default {
       const { customerName: oldName, cardNo: oldCardNo } = this.oldBaseInfo
       console.log('checkInfoChange -> oldName', oldName)
       const { customerName, cardNo } = this.baseForm
-      console.log('checkInfoChange -> name', name)
+      console.log('checkInfoChange -> name', customerName)
       // 姓名变动过
       if (oldName !== customerName) {
         return true
@@ -696,25 +690,25 @@ export default {
     async handleSubmit() {
       await this.$refs.baseFormRef.validate()
 
-      const _params = this.buildSaveParams()
-      console.log('handleSubmit -> _params', _params)
+      const cparams = this.buildSaveParams()
+      console.log('handleSubmit -> cparams', cparams)
 
-      if (!this._checkSaveParams(_params)) return
+      if (!this.checkSaveParams(cparams)) return
 
       // 只有一个步骤时 信息改变需要弹窗提示
-      if (this.isOnlyOneStep && !this._infoChangeFlag && this.checkInfoChange()) {
+      if (this.isOnlyOneStep && !this.infoChangeFlag && this.checkInfoChange()) {
         this.showCheckDiffDialog = true
         return
       }
 
       // 检查手机号是否变更
-      if (!this._captchaFlag && this.hasMobileChange()) {
+      if (!this.captchaFlag && this.hasMobileChange()) {
         this.showInputCaptchaDialog = true
         return
       }
       try {
         const data = await saveCustomerInfo({
-          ..._params,
+          ...cparams,
           action: 3 // 提交
         })
         console.log('handleSubmit -> data', data)
@@ -722,8 +716,8 @@ export default {
         this.showSubmitSuccessDialog = true
       } catch {
         console.log('catch 1111111')
-        this._infoChangeFlag = false
-        this._captchaFlag = false
+        this.infoChangeFlag = false
+        this.captchaFlag = false
       }
     },
     // 手机号有变更
@@ -732,7 +726,7 @@ export default {
       return signUpMobile !== customerMobile
     },
     buildSaveParams() {
-      const _photoForm = Object.keys(this.photoForm).reduce((res, imageKey) => {
+      const cphotoForm = Object.keys(this.photoForm).reduce((res, imageKey) => {
         const imgObj = this.photoForm[imageKey][0]
         if (imgObj) {
           res[imageKey] = imgObj.url || ''
@@ -741,27 +735,27 @@ export default {
         }
         return res
       }, {})
-      const _fileForm = Object.keys(this.fileForm).reduce((res, fileKey) => {
+      const cfileForm = Object.keys(this.fileForm).reduce((res, fileKey) => {
         const fileValue = this.fileForm[fileKey][0]
         if (fileValue) {
           res[fileKey] = fileValue
         }
         return res
       }, {})
-      console.log('buildSaveParams -> _photoForm', _photoForm)
+      console.log('buildSaveParams -> cphotoForm', cphotoForm)
       return {
         ...this.baseForm,
-        ..._photoForm,
-        ..._fileForm,
+        ...cphotoForm,
+        ...cfileForm,
         signUpRecordId: this.queryInfo.signUpRecordId
       }
     },
     // 保存接口的必填校验
-    _checkSaveParams(params) {
+    checkSaveParams(params) {
       const { AREA_APPLYAREA } = BASIS_TEMPLATE_KEY_MAP
 
       // 不需要校验的参数(非必填) 智慧消防确认书
-      const NO_VALID_KEY_LIST = this._getNoValidKeyList()
+      const NO_VALID_KEY_LIST = this.getNoValidKeyList()
 
       // 1.得到总的templateList
       // 总表为6时，从业证书和资格证书 为选填，需特殊判断
@@ -769,9 +763,9 @@ export default {
         // 选填，无需校验 filter掉
         return !NO_VALID_KEY_LIST.includes(item.key) && !item.unnecessary
       })
-      console.log('_checkSaveParams -> this.templateList', this.templateList.length)
-      console.log('_checkSaveParams -> templateList', validTemplateList.length)
-      console.log('🚀 ~ file: index.vue ~ line 705 ~ _checkSaveParams ~ validTemplateList', validTemplateList)
+      console.log('checkSaveParams -> this.templateList', this.templateList.length)
+      console.log('checkSaveParams -> templateList', validTemplateList.length)
+      console.log('🚀 ~ file: index.vue ~ line 705 ~ checkSaveParams ~ validTemplateList', validTemplateList)
       // 2.找出未传值的模板
       const emptyValueTemp = validTemplateList.find((item) => {
         const { inputParameter, key } = item
@@ -786,8 +780,9 @@ export default {
           const val = params[inputParameter]
           return !val && val !== 0
         }
+        return false
       })
-      console.log('🚀 ~ file: index.vue ~ line 829 ~ _checkSaveParams ~ emptyValueTemp', emptyValueTemp)
+      console.log('🚀 ~ file: index.vue ~ line 829 ~ checkSaveParams ~ emptyValueTemp', emptyValueTemp)
       // 3.开始判断空值
       if (emptyValueTemp) {
         const sameKeyTemp = BASIS_TEMPLATE_KEY_LIST.find((item) => item.key === emptyValueTemp.key) || {}
@@ -805,21 +800,23 @@ export default {
       if (this.isElevenType) {
         let flag = true
 
-        for (const choosName in this.muliteTempData) {
+        const findItem = Object.keys(this.muliteTempData).find((choosName) => {
           const { inputParamArr, minChooseCount } = this.muliteTempData[choosName]
           // params 中传递的 inputParamArr(需要校验的) 中的参数的个数 < minChooseCount
-          if (inputParamArr.filter((_inputP) => params[_inputP]).length < minChooseCount) {
+          if (inputParamArr.filter((cinputP) => params[cinputP]).length < minChooseCount) {
             this.$toast(`${choosName}至少选择${minChooseCount}个保存`)
-            flag = false
-            break
+            // flag = false
+            return true
           }
-        }
+          return false
+        })
+        flag = !findItem
         return flag
       }
       return true
     },
     // 无需校验的模板
-    _getNoValidKeyList() {
+    getNoValidKeyList() {
       const {
         UPLOAD_EDUCATION,
         UPLOAD_EMPLOYMENT,
@@ -858,7 +855,7 @@ export default {
     },
     // 信息有修改
     handleConfirmChangeInfo() {
-      this._infoChangeFlag = true
+      this.infoChangeFlag = true
       // 只有一个步骤 confirm 事件后直接submit
       if (this.isOnlyOneStep) {
         this.handleSubmit()
@@ -869,7 +866,7 @@ export default {
     // 发送验证码
     handleConfirmInputCaptcha(captcha) {
       this.baseForm.captcha = captcha
-      this._captchaFlag = true
+      this.captchaFlag = true
       this.handleSubmit()
     },
     // 刷新页面
@@ -899,14 +896,14 @@ $input-border: #dadada;
   padding-top: 15px;
   background: #fff;
 
-  /deep/ .van-cell::after {
+  :deep(.van-cell::after) {
     border-bottom: 1px solid transparent;
   }
 
   .info-space {
     padding: 14px 24px 27px 24px;
     border: 0;
-    /deep/ .van-cell__value {
+    :deep(.van-cell__value) {
       // border-bottom: 1px solid $input-border;
       border-radius: 0;
       font-size: 15px;
@@ -919,10 +916,6 @@ $input-border: #dadada;
         margin-right: -2px;
       }
     }
-    // /deep/ .van-field__control {
-    //   border-bottom: 1px solid $input-border;
-    //   border-radius: 0;
-    // }
     .radio-sex {
       display: flex;
       align-items: center;
@@ -938,7 +931,7 @@ $input-border: #dadada;
   }
   .years {
     flex-direction: row-reverse;
-    /deep/ .van-field__label {
+    :deep(.van-field__label) {
       width: 15px;
       border-bottom: 1px solid #dadada;
     }

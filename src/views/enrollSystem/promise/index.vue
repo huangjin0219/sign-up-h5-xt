@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-02 13:08:56
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-18 17:41:16
+ * @LastEditTime: 2023-04-19 10:19:20
  * @Description: 个人承诺书页面
 -->
 <template>
@@ -23,24 +23,21 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
+const route = useRoute()
+const router = useRouter()
+
+const handleConfirm = () => {
+  const { query } = route
+  router.push({
+    name: 'BasicInfo',
+    query
+  })
+}
+</script>
+<script lang="ts">
 export default {
-  name: 'EnrollSystemPromise',
-  components: {},
-  props: {},
-  data() {
-    return {}
-  },
-  computed: {},
-  methods: {
-    handleConfirm() {
-      const { query } = this.$route
-      this.$router.push({
-        name: 'BasicInfo',
-        query
-      })
-    }
-  }
+  name: 'EnrollSystemPromise'
 }
 </script>
 
@@ -56,7 +53,8 @@ export default {
   display: flex;
   justify-content: center;
   padding: 52px 12px 24px 12px;
-  @include bg-url('@/assets/images/signUp/bim_commitment_bg@2x.png');
+  background: url('@/assets/images/signUp/bim_commitment_bg@2x.png');
+  // @include bg-url('@/assets/images/signUp/bim_commitment_bg@2x.png');
 
   .promise-letter {
     &__back {
@@ -82,7 +80,8 @@ export default {
       position: absolute;
       bottom: 12px;
       z-index: 101;
-      @include bg-url('@/assets/images/signUp/bim_commitment_envelope@2x.png');
+      background: url('@/assets/images/signUp/bim_commitment_envelope@2x.png');
+      // @include bg-url('@/assets/images/signUp/bim_commitment_envelope@2x.png');
       background-size: 107%;
       background-position: center;
     }

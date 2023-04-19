@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-06-30 17:33:53
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-18 17:36:41
+ * @LastEditTime: 2023-04-19 10:15:26
  * @Description: 线上报名系统-错误状态提示页
 -->
 <template>
@@ -30,44 +30,37 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import { PRE_ERR_CODE, ERR_CODE_MAP } from '@/constant'
 
+const route = useRoute()
+
+const errorCode = ref<string>('')
+
+onMounted(() => {
+  if (route.query.code) {
+    errorCode.value = route.query.code as string
+  }
+})
+// 链接不存在
+const isNotExist = computed(() => {
+  return errorCode.value === PRE_ERR_CODE + ERR_CODE_MAP.NOT_EXIST
+})
+// 为失效链接
+const isInvalidLink = computed(() => {
+  return errorCode.value === PRE_ERR_CODE + ERR_CODE_MAP.GIVE_UP
+})
+// 过报名时间
+const isFineshed = computed(() => {
+  return errorCode.value === PRE_ERR_CODE + ERR_CODE_MAP.TIME_ILLEGAL
+})
+const isErrorLink = computed(() => {
+  return isNotExist || isInvalidLink || isFineshed
+})
+</script>
+<script lang="ts">
 export default {
-  name: 'EnrollSystemErrorPage',
-  components: {},
-  props: {},
-  data() {
-    return {
-      errorCode: '',
-      enrollInfo: {}
-      // isNotExist: false, // 链接不存在
-      // isInvalidLink: false, // 为失效链接
-      // isFineshed: false, // 过报名时间
-    }
-  },
-  computed: {
-    isErrorLink() {
-      return this.isNotExist || this.isInvalidLink || this.isFineshed
-    },
-    // 链接不存在
-    isNotExist() {
-      return this.errorCode === PRE_ERR_CODE + ERR_CODE_MAP.NOT_EXIST
-    },
-    // 为失效链接
-    isInvalidLink() {
-      return this.errorCode === PRE_ERR_CODE + ERR_CODE_MAP.GIVE_UP
-    },
-    // 过报名时间
-    isFineshed() {
-      return this.errorCode === PRE_ERR_CODE + ERR_CODE_MAP.TIME_ILLEGAL
-    }
-  },
-  mounted() {
-    const { code } = this.$route.query
-    this.errorCode = code
-  },
-  methods: {}
+  name: 'EnrollSystemErrorPage'
 }
 </script>
 
@@ -91,7 +84,8 @@ $borderColor: #dcdfe6;
   flex-direction: column;
   align-items: center;
   color: #fff;
-  @include bg-url('@/assets/images/signUp/bim_home_bg@2x.png');
+  background: url('@/assets/images/signUp/bim_home_bg@2x.png');
+  // @include bg-url('@/assets/images/signUp/bim_home_bg@2x.png');
   background-size: contain;
   background-repeat: no-repeat;
   .enroll-time {

@@ -6,14 +6,11 @@
  * @Description: 模板-注册证书编号
 -->
 <template>
-  <div class='app-container'>
-    <Title
-      :tipTitle="templateItem.tips"
-      label="注册证书编号"
-    />
+  <div class="app-container">
+    <Title :tip-title="templateItem.tips" label="注册证书编号" />
     <van-field
-      class="info-space years"
       v-model="templateValue"
+      class="info-space years"
       placeholder="请输入注册证书编号"
       :readonly="!couldEdit"
       :rules="[{ required: couldEdit, message: '必填项' }]"
@@ -23,10 +20,14 @@
 
 <script>
 import { Field } from 'vant'
-import Title from '../Title'
+import Title from '../Title/index.vue'
 import { basisValidator } from '../../validate'
 
 export default {
+  components: {
+    Title,
+    'van-field': Field
+  },
   props: {
     value: {
       type: [String, Number],
@@ -42,33 +43,24 @@ export default {
       default: true
     }
   },
-  components: {
-    Title,
-    'van-field': Field
-  },
-  data () {
+  emits: ['input'],
+  data() {
     return {
       basisValidator
     }
   },
   computed: {
     templateValue: {
-      get () {
+      get() {
         return this.value
       },
-      set (val) {
+      set(val) {
         this.$emit('input', val)
       }
     }
   },
-  created () {},
-  mounted () {},
-  methods: {
-
-  }
+  methods: {}
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

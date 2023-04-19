@@ -6,11 +6,8 @@
  * @Description: 模板-出生日期
 -->
 <template>
-  <div class='app-container'>
-    <Title
-      :tipTitle="tipTitle"
-      label="出生日期"
-    />
+  <div class="app-container">
+    <Title :tip-title="tipTitle" label="出生日期" />
     <van-field
       readonly
       clickable
@@ -38,10 +35,16 @@
 
 <script>
 import { Field, Popup, DatetimePicker } from 'vant'
-import Title from '../Title'
 import dayjs from 'dayjs'
+import Title from '../Title/index.vue'
 
 export default {
+  components: {
+    Title,
+    'van-field': Field,
+    'van-popup': Popup,
+    'van-datetime-picker': DatetimePicker
+  },
   props: {
     value: {
       type: [String, Date, Number],
@@ -57,13 +60,8 @@ export default {
       default: true
     }
   },
-  components: {
-    Title,
-    'van-field': Field,
-    'van-popup': Popup,
-    'van-datetime-picker': DatetimePicker
-  },
-  data () {
+  emits: ['input'],
+  data() {
     return {
       showPicker: false,
       currentDate: this.value ? new Date(this.value) : new Date(),
@@ -73,23 +71,23 @@ export default {
   },
   computed: {
     templateValue: {
-      get () {
+      get() {
         if (!this.value) return ''
         return dayjs(this.value).format('YYYY-MM-DD')
       },
-      set (val) {
+      set(val) {
         this.$emit('input', dayjs(val).valueOf())
       }
     }
   },
   methods: {
     // 确认选择出生日期
-    handleConfirmBornDate (value) {
+    handleConfirmBornDate(value) {
       console.log('handleConfirmBornDate -> value', value)
       this.templateValue = value
       this.showPicker = false
     },
-    handleShowPop () {
+    handleShowPop() {
       if (!this.couldEdit) return
       this.showPicker = true
     }
@@ -97,6 +95,4 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

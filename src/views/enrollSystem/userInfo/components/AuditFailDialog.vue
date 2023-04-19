@@ -1,8 +1,8 @@
 <!--
  * @Author: HuZhangjie
  * @Date: 2020-07-02 09:55:22
- * @LastEditors: HuZhangjie
- * @LastEditTime: 2020-10-17 12:17:57
+ * @LastEditors: huangjin
+ * @LastEditTime: 2023-04-19 11:34:12
  * @Description: 审核不通过弹窗
 -->
 
@@ -14,45 +14,39 @@
   </BaseDialog>
 </template>
 
-<script>
-import BaseDialog from '@/components/base/Dialog.vue'
+<script lang="ts" setup>
+import BaseDialog from '@/components/SignUpDialog.vue'
 
-export default {
-  components: {
-    BaseDialog
+const route = useRoute()
+const router = useRouter()
+interface Props {
+  show?: boolean
+}
+const props = withDefaults(defineProps<Props>(), {
+  show: false
+})
+const { show } = toRefs(props)
+const emit = defineEmits(['update:show'])
+const handleClose = () => {
+  showDialog.value = false
+}
+
+const showDialog = computed({
+  get() {
+    return show.value
   },
-  props: {
-    show: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data() {
-    return {}
-  },
-  computed: {
-    showDialog: {
-      get() {
-        return this.show
-      },
-      set(val) {
-        this.$emit('update:show', val)
-      }
-    }
-  },
-  methods: {
-    handleClose() {
-      this.showDialog = false
-    },
-    handleReSubmit() {
-      const { query } = this.$route.query
-      console.log('handleReSubmit -> handleReSubmit')
-      this.$router.push({
-        name: 'BasicInfo',
-        query
-      })
-    }
+  set(val) {
+    emit('update:show', val)
   }
+})
+
+const handleReSubmit = () => {
+  const { query } = route.query
+  console.log('handleReSubmit -> handleReSubmit')
+  router.push({
+    name: 'BasicInfo',
+    query: { ...(query as object) }
+  })
 }
 </script>
 

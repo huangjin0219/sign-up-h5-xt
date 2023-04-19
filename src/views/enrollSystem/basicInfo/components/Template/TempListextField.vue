@@ -2,29 +2,25 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
  * @LastEditors: huangjin
- * @LastEditTime: 2021-12-27 09:45:12
+ * @LastEditTime: 2023-04-19 15:01:01
  * @Description: 模板-拓展列表
 -->
 <template>
-  <div class='app-container'>
-    <Title
-      :tipTitle="templateItem.tips"
-      :label="templateItem.aliasLabelName"
-    />
-    <tab-module
-      v-model="templateValue"
-      :tab-type="true"
-      :list="list"
-      :couldEdit="couldEdit"
-    ></tab-module>
+  <div class="app-container">
+    <Title :tip-title="templateItem.tips" :label="templateItem.aliasLabelName" />
+    <tab-module v-model="templateValue" :tab-type="true" :list="list" :could-edit="couldEdit"></tab-module>
   </div>
 </template>
 
 <script>
-import Title from '../Title'
-import TabModule from '../TabModule'
+import Title from '../Title/index.vue'
+import TabModule from '../TabModule/index.vue'
 
 export default {
+  components: {
+    Title,
+    TabModule
+  },
   props: {
     value: {
       type: [String, Number],
@@ -40,24 +36,20 @@ export default {
       default: true
     }
   },
-  components: {
-    Title,
-    TabModule
-  },
-  data () {
-    return {
-    }
+  emits: ['input'],
+  data() {
+    return {}
   },
   computed: {
     templateValue: {
-      get () {
+      get() {
         return this.value
       },
-      set (val) {
+      set(val) {
         this.$emit('input', val)
       }
     },
-    list () {
+    list() {
       if (this.templateItem.options) {
         return this.templateItem.options.split(',')
       }
@@ -67,6 +59,4 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

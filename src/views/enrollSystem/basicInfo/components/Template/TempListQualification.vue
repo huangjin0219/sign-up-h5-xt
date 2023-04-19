@@ -1,30 +1,26 @@
 <!--
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
- * @LastEditors: HuZhangjie
- * @LastEditTime: 2020-07-16 10:25:00
+ * @LastEditors: huangjin
+ * @LastEditTime: 2023-04-19 15:00:25
  * @Description: 模板-资格证书
 -->
 <template>
-  <div class='app-container'>
-    <Title
-      :tipTitle="tipTitle"
-      label="资格证书"
-    />
-    <tab-module
-      v-model="templateValue"
-      :tab-type="true"
-      :list="list"
-      :couldEdit="couldEdit"
-    ></tab-module>
+  <div class="app-container">
+    <Title :tip-title="tipTitle" label="资格证书" />
+    <tab-module v-model="templateValue" :tab-type="true" :list="list" :could-edit="couldEdit"></tab-module>
   </div>
 </template>
 
 <script>
-import Title from '../Title'
-import TabModule from '../TabModule'
+import Title from '../Title/index.vue'
+import TabModule from '../TabModule/index.vue'
 
 export default {
+  components: {
+    Title,
+    TabModule
+  },
   props: {
     value: {
       type: [String, Number],
@@ -40,11 +36,8 @@ export default {
       default: true
     }
   },
-  components: {
-    Title,
-    TabModule
-  },
-  data () {
+  emits: ['input'],
+  data() {
     return {
       list: [
         '一级建造师',
@@ -61,10 +54,10 @@ export default {
   },
   computed: {
     templateValue: {
-      get () {
+      get() {
         return this.value
       },
-      set (val) {
+      set(val) {
         this.$emit('input', val)
       }
     }
@@ -72,6 +65,4 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

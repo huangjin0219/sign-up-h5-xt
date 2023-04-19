@@ -1,8 +1,8 @@
 <!--
  * @Author: HuZhangjie
  * @Date: 2020-07-02 09:55:22
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-07-03 11:35:13
+ * @LastEditors: huangjin
+ * @LastEditTime: 2023-04-19 13:40:25
  * @Description: 填写信息与下单信息不一致时的提示弹窗
 -->
 
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import BaseDialog from '@/components/base/Dialog.vue'
+import BaseDialog from '@/components/SignUpDialog.vue'
 
 export default {
   components: {
@@ -32,25 +32,25 @@ export default {
       default: true
     }
   },
-  data () {
-    return {
-    }
+  emits: ['update:show', 'confirm'],
+  data() {
+    return {}
   },
   computed: {
     showDialog: {
-      get () {
+      get() {
         return this.show
       },
-      set (val) {
+      set(val) {
         this.$emit('update:show', val)
       }
     }
   },
   methods: {
-    handleClose () {
+    handleClose() {
       this.showDialog = false
     },
-    handleConfirm () {
+    handleConfirm() {
       this.$emit('confirm')
       this.showDialog = false
     }
@@ -59,7 +59,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/var.scss";
+@import '@/styles/var.scss';
 
 .tip-dialog {
   &__header {

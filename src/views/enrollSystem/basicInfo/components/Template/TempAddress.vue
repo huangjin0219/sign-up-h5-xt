@@ -6,26 +6,27 @@
  * @Description: 模板-通讯地址
 -->
 <template>
-  <div class='app-container'>
-    <Title
-      :tipTitle="templateItem.tips"
-      label="通讯地址"
-    />
+  <div class="app-container">
+    <Title :tip-title="templateItem.tips" label="通讯地址" />
     <van-field
-      class="info-space"
       v-model="templateValue"
+      class="info-space"
       placeholder="请输入通讯地址"
       :readonly="!couldEdit"
-      :rules="[{required: !templateItem.unnecessary,message: '请输入正确的通讯地址'}]"
+      :rules="[{ required: !templateItem.unnecessary, message: '请输入正确的通讯地址' }]"
     />
   </div>
 </template>
 
 <script>
 import { Field } from 'vant'
-import Title from '../Title'
+import Title from '../Title/index.vue'
 
 export default {
+  components: {
+    Title,
+    'van-field': Field
+  },
   props: {
     value: {
       type: String,
@@ -41,31 +42,22 @@ export default {
       default: true
     }
   },
-  components: {
-    Title,
-    'van-field': Field
-  },
-  data () {
+  emits: ['input'],
+  data() {
     return {}
   },
   computed: {
     templateValue: {
-      get () {
+      get() {
         return this.value
       },
-      set (val) {
+      set(val) {
         this.$emit('input', val)
       }
     }
   },
-  created () {},
-  mounted () {},
-  methods: {
-
-  }
+  methods: {}
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

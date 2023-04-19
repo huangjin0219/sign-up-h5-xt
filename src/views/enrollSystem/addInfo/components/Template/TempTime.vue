@@ -1,56 +1,61 @@
 <template>
-<div class="container">
-  <Title
-    :tipTitle="tipTitle"
-    :label="title"/>
-  <div class="subDiv">
-    <vant-field
-      readonly
-      clickable
-      :border="false"
-      :value="startTime"
-      :rules="[{ required: true},{ validator: verifyStartTime, message: '开始时间不能比结束时间晚' }]"
-      placeholder="选择开始时间"
-      @click="start_showPicker = true"
-    />
-    <div class="row"></div>
-    <vant-field
-      readonly
-      clickable
-      :border="false"
-      :value="endTime"
-      :rules="[{ required: true}]"
-      placeholder="选择结束时间"
-      @click="end_showPicker = true"
-    />
+  <div class="container">
+    <Title :tip-title="tipTitle" :label="title" />
+    <div class="subDiv">
+      <vant-field
+        readonly
+        clickable
+        :border="false"
+        :value="startTime"
+        :rules="[{ required: true }, { validator: verifyStartTime, message: '开始时间不能比结束时间晚' }]"
+        placeholder="选择开始时间"
+        @click="start_showPicker = true"
+      />
+      <div class="row"></div>
+      <vant-field
+        readonly
+        clickable
+        :border="false"
+        :value="endTime"
+        :rules="[{ required: true }]"
+        placeholder="选择结束时间"
+        @click="end_showPicker = true"
+      />
+    </div>
+    <vant-popup v-model="start_showPicker" position="bottom">
+      <vant-datetime-picker
+        v-model="startDate"
+        type="datetime"
+        title="选择时间"
+        :min-date="start_minDate"
+        @cancel="start_showPicker = false"
+        @confirm="handleStartDate"
+      />
+    </vant-popup>
+    <vant-popup v-model="end_showPicker" position="bottom">
+      <vant-datetime-picker
+        v-model="endDate"
+        type="datetime"
+        title="选择时间"
+        :min-date="end_minDate"
+        @cancel="end_showPicker = false"
+        @confirm="handleEndDate"
+      />
+    </vant-popup>
   </div>
-  <vant-popup v-model="start_showPicker" position="bottom">
-    <vant-datetime-picker
-      v-model="startDate"
-      type="datetime"
-      title="选择时间"
-      :min-date="start_minDate"
-      @cancel="start_showPicker = false"
-      @confirm="handleStartDate"
-    />
-  </vant-popup>
-  <vant-popup v-model="end_showPicker" position="bottom">
-    <vant-datetime-picker
-      v-model="endDate"
-      type="datetime"
-      title="选择时间"
-      :min-date="end_minDate"
-      @cancel="end_showPicker = false"
-      @confirm="handleEndDate"
-    />
-  </vant-popup>
-</div>
 </template>
 <script>
-import Title from '../../../basicInfo/components/Title'
 import { Field, Popup, DatetimePicker } from 'vant'
 import dayjs from 'dayjs'
+import Title from '../../../basicInfo/components/Title/index.vue'
+
 export default {
+  components: {
+    Title,
+    'vant-field': Field,
+    'vant-popup': Popup,
+    'vant-datetime-picker': DatetimePicker
+  },
   props: {
     tipTitle: {
       type: String,
@@ -65,13 +70,7 @@ export default {
       default: ''
     }
   },
-  components: {
-    Title,
-    'vant-field': Field,
-    'vant-popup': Popup,
-    'vant-datetime-picker': DatetimePicker
-  },
-  data () {
+  data() {
     return {
       startDate: this.value ? new Date(this.value.split(',')[0]) : new Date(),
       start_showPicker: false,
@@ -84,38 +83,38 @@ export default {
   },
   computed: {
     startTime: {
-      get () {
+      get() {
         console.log('value', this.value)
         if (!this.value) return ''
         const arr = this.value.split(',')
         return arr[0] || ''
       },
-      set (val) {
+      set(val) {
         this.$emit('input', [val, this.endTime || ''].join(','))
       }
     },
     endTime: {
-      get () {
+      get() {
         if (!this.value) return ''
         const arr = this.value.split(',')
         return arr[1] || ''
       },
-      set (val) {
+      set(val) {
         this.$emit('input', [this.startTime || '', val].join(','))
       }
     }
   },
   methods: {
-    handleStartDate (val) {
+    handleStartDate(val) {
       this.start_showPicker = false
       console.log(val)
       this.startTime = dayjs(val).format('YYYY-MM-DD HH:mm')
     },
-    handleEndDate (val) {
+    handleEndDate(val) {
       this.end_showPicker = false
       this.endTime = dayjs(val).format('YYYY-MM-DD HH:mm')
     },
-    verifyStartTime (val) {
+    verifyStartTime(val) {
       if (!this.endTime) return true
       const start = dayjs(val).valueOf()
       const end = dayjs(this.endTime).valueOf()
@@ -123,7 +122,6 @@ export default {
     }
   }
 }
-
 </script>
 <style lang="scss">
 .subDiv {

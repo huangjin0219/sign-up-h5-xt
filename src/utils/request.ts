@@ -4,7 +4,7 @@
  * @Author: jiangruohui
  * @Date: 2022-03-15 16:52:54
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-18 17:03:47
+ * @LastEditTime: 2023-04-19 14:43:12
  * @Description:
  */
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
@@ -14,7 +14,7 @@ import { Toast } from 'vant'
 import { useUserStore, useMainStore } from '@/store/index'
 import { encrypt, decrypt } from '@/utils/aes'
 import { removeUserInfo } from '@/utils/store'
-import { baseURL } from '@/config'
+import { baseURL, dataServiceUrl } from '@/config'
 
 const needEncrypt = import.meta.env.PROD && import.meta.env?.VITE_APP_ENV === 'production'
 const LOGIN_ERROR_CODE = 2
@@ -343,6 +343,41 @@ export const uploader = (file: any) => {
       })
       .catch((error) => {
         reject(error)
+      })
+  })
+}
+
+// 上传图片
+export const uploadImage = (file: any, options = {}) => {
+  // new 一个FormData格式的参数
+  const params = new FormData()
+  params.append('file', file)
+  const config = {
+    headers: {
+      // 添加请求头
+      'Content-Type': 'multipart/form-data'
+    }
+  }
+  const uploadPath = `${dataServiceUrl}/data-service/file/upload`
+
+  return new Promise((resolve, reject) => {
+    // 把 uploadPath 换成自己的 上传路径
+    axios
+      .post(uploadPath, params, config)
+      .then((res) => {
+        console.log('uploadImage -> res', res)
+        // 如果为真 resolve出去
+        if (res && res.data && +res.data.resultCode === 1) {
+          resolve(`https://umpfile.oss-cn-hangzhou.aliyuncs.com/${res.data.value}`)
+        } else {
+          // 否则 Toast 提示
+          Toast.fail(res.data.resultMessage || '上传出错')
+          reject(res.data)
+        }
+      })
+      .catch((err) => {
+        Toast.fail('上传出错')
+        reject(err)
       })
   })
 }

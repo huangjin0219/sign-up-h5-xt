@@ -1,16 +1,13 @@
 <!--
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
- * @LastEditors: HuZhangjie
- * @LastEditTime: 2020-09-17 10:10:07
+ * @LastEditors: huangjin
+ * @LastEditTime: 2023-04-19 14:59:20
  * @Description: 模板-职位
 -->
 <template>
-  <div class='app-container'>
-    <Title
-      :tipTitle="tipTitle"
-      label="单位职务"
-    />
+  <div class="app-container">
+    <Title :tip-title="tipTitle" label="单位职务" />
     <!-- <tab-module
       v-model="templateValue"
       :tab-type="true"
@@ -18,8 +15,8 @@
       :couldEdit="couldEdit"
     ></tab-module> -->
     <van-field
-      class="info-space"
       v-model="templateValue"
+      class="info-space"
       placeholder="请输入单位职务"
       maxlength="32"
       :readonly="!couldEdit"
@@ -29,11 +26,16 @@
 </template>
 
 <script>
-import Title from '../Title'
-// import TabModule from '../TabModule'
 import { Field } from 'vant'
+import Title from '../Title/index.vue'
+// import TabModule from '../TabModule'
 
 export default {
+  components: {
+    Title,
+    'van-field': Field
+    // TabModule
+  },
   props: {
     value: {
       type: [String, Number],
@@ -49,12 +51,8 @@ export default {
       default: true
     }
   },
-  components: {
-    Title,
-    'van-field': Field
-    // TabModule
-  },
-  data () {
+  emits: ['input'],
+  data() {
     return {
       // list: [
       //   '设计师',
@@ -75,10 +73,10 @@ export default {
   },
   computed: {
     templateValue: {
-      get () {
+      get() {
         return this.value
       },
-      set (val) {
+      set(val) {
         this.$emit('input', val)
       }
     }
@@ -86,6 +84,4 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

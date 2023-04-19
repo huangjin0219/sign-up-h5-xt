@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
  * @LastEditors: huangjin
- * @LastEditTime: 2021-12-27 15:33:31
+ * @LastEditTime: 2023-04-19 15:06:49
  * @Description: 模板-报考省市
 -->
 <template>
@@ -28,7 +28,7 @@
 <script>
 import { getAreaList } from '@/common/api/signUp/common'
 import { Field, Popup, Area } from 'vant'
-import Title from '../Title'
+import Title from '../Title/index.vue'
 
 export default {
   components: {
@@ -62,6 +62,7 @@ export default {
       default: 0
     }
   },
+  emits: ['input', 'change'],
   data() {
     return {
       loading: true,
@@ -80,10 +81,10 @@ export default {
       get() {
         const { provinceId, areaId, provinceTotalList, cityTotalList } = this
         if (!provinceTotalList.length || !cityTotalList.length || !provinceId || !areaId) return ''
-        const _findProvince = provinceTotalList.find((item) => item.id === provinceId) || {}
-        const _findCity = cityTotalList.find((item) => item.id === areaId) || {}
-        const provinceName = _findProvince.name
-        const cityName = _findCity.name
+        const findProvince = provinceTotalList.find((item) => item.id === provinceId) || {}
+        const findCity = cityTotalList.find((item) => item.id === areaId) || {}
+        const provinceName = findProvince.name
+        const cityName = findCity.name
 
         // return `${provinceName && cityName ? '' : ''}/${_findCity.name}`
         return provinceName && cityName ? `${provinceName}/${cityName}` : ''
@@ -134,10 +135,10 @@ export default {
     },
     onConfirmArea(values) {
       const [province, city] = values
-      const _findProvinceId = this.provinceTotalList.find((item) => +item.code === +province.code)
-      const _findCity = this.cityTotalList.find((item) => +item.code === +city.code)
+      const findProvinceId = this.provinceTotalList.find((item) => +item.code === +province.code)
+      const findCity = this.cityTotalList.find((item) => +item.code === +city.code)
 
-      this.$emit('change', { provinceId: _findProvinceId.id, areaId: _findCity.id })
+      this.$emit('change', { provinceId: findProvinceId.id, areaId: findCity.id })
       this.showArea = false
     }
   }

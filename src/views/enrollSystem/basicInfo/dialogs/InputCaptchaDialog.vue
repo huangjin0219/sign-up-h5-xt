@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-02 09:55:22
  * @LastEditors: huangjin
- * @LastEditTime: 2022-12-02 11:44:52
+ * @LastEditTime: 2023-04-19 13:40:56
  * @Description: 填写信息与下单信息不一致时的提示弹窗
 -->
 
@@ -30,7 +30,7 @@
       </template>
       <template v-else>
         <!-- 验证码输入框 -->
-        <van-field clickable v-model="captcha" />
+        <van-field v-model="captcha" clickable />
         <!-- @touchstart.native.stop="showKeyboard = true" -->
       </template>
       <div class="btn-wrapper">
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import BaseDialog from '@/components/base/Dialog.vue'
+import BaseDialog from '@/components/SignUpDialog.vue'
 import { PasswordInput, NumberKeyboard, Field } from 'vant'
 import { sendVerifyDxdkCode } from '@/common/api/signUp/user'
 
@@ -64,9 +64,9 @@ const isH5 = () => {
   if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) {
     console.log('h5')
     return true
-  } else {
-    console.log('pc')
   }
+  console.log('pc')
+
   return false
 }
 export default {
@@ -86,7 +86,8 @@ export default {
       default: ''
     }
   },
-  data () {
+  emits: ['update:show', 'confirm'],
+  data() {
     return {
       captchaDisabled: false, // 获取验证码是否可点击
       captchaText: '获取验证码',
@@ -97,23 +98,23 @@ export default {
   },
   computed: {
     showDialog: {
-      get () {
+      get() {
         return this.show
       },
-      set (val) {
+      set(val) {
         this.$emit('update:show', val)
       }
     },
-    ish5 () {
+    ish5() {
       return isH5()
     }
   },
-  created () {
+  created() {
     this.getCaptcha()
   },
   methods: {
     // 获取验证码
-    async getCaptcha () {
+    async getCaptcha() {
       if (this.captchaDisabled) return
       if (!this.mobile) return this.$toast('手机号有误')
       this.captchaDisabled = true
@@ -127,12 +128,12 @@ export default {
       this.handleCountdown()
     },
     // 处理验证码倒计时展示
-    handleCountdown () {
+    handleCountdown() {
       let countdown = 60
       this.captchaText = `${countdown}s`
       this.captchaDisabled = true
       this.timer = setInterval(() => {
-        countdown--
+        countdown -= 1
         this.captchaText = `${countdown}s`
         if (countdown <= 0) {
           this.captchaText = '重新发送'
@@ -141,19 +142,19 @@ export default {
         }
       }, 1000)
     },
-    handleInput (key) {
+    handleInput(key) {
       this.captcha = (this.captcha + key).slice(0, 6)
       if (this.captcha.length === 6) {
         this.handleConfirm()
       }
     },
-    handleDelete () {
+    handleDelete() {
       this.captcha = this.captcha.slice(0, this.captcha.length - 1)
     },
-    handleClose () {
+    handleClose() {
       this.showDialog = false
     },
-    async handleConfirm () {
+    async handleConfirm() {
       if (!this.captcha) return this.$toast('请输入验证码~')
 
       clearInterval(this.timer)
@@ -166,7 +167,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/var.scss";
+@import '@/styles/var.scss';
 
 .tip-dialog {
   display: flex;
@@ -178,7 +179,7 @@ export default {
   box-sizing: border-box;
 
   // 验证码输入框的样式
-  /deep/ .van-password-input {
+  :deep(.van-password-input) {
     margin: 0;
     margin-top: 7px;
     li {

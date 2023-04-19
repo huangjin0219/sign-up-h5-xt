@@ -2,27 +2,19 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
  * @LastEditors: huangjin
- * @LastEditTime: 2021-12-17 14:56:21
+ * @LastEditTime: 2023-04-19 15:01:42
  * @Description: 模板-学历
 -->
 <template>
-  <div class='app-container'>
-    <Title
-      :tipTitle="templateItem.tips"
-      label="学历"
-    />
-    <tab-module
-      v-model="templateValue"
-      :tab-type="true"
-      :list="list"
-      :couldEdit="couldEdit"
-    ></tab-module>
+  <div class="app-container">
+    <Title :tip-title="templateItem.tips" label="学历" />
+    <tab-module v-model="templateValue" :tab-type="true" :list="list" :could-edit="couldEdit"></tab-module>
   </div>
 </template>
 
 <script>
-import Title from '../Title'
-import TabModule from '../TabModule'
+import Title from '../Title/index.vue'
+import TabModule from '../TabModule/index.vue'
 
 const EDUCATION_LIST = [
   { key: '无', values: [2, 18, 19] },
@@ -39,6 +31,10 @@ const EDUCATION_LIST = [
 ]
 
 export default {
+  components: {
+    Title,
+    TabModule
+  },
   props: {
     value: {
       type: [String, Number],
@@ -59,11 +55,8 @@ export default {
       default: 0
     }
   },
-  components: {
-    Title,
-    TabModule
-  },
-  data () {
+  emits: ['input'],
+  data() {
     return {
       // list: [
       //   '初中',
@@ -79,25 +72,21 @@ export default {
   },
   computed: {
     templateValue: {
-      get () {
+      get() {
         return this.value
       },
-      set (val) {
+      set(val) {
         this.$emit('input', val)
       }
     },
-    list () {
+    list() {
       if (this.templateItem.options) {
         return this.templateItem.options.split(',')
       }
-      return EDUCATION_LIST.filter(
-        item => item.values.includes(this.educationType)
-      ).map(item => item.key)
+      return EDUCATION_LIST.filter((item) => item.values.includes(this.educationType)).map((item) => item.key)
     }
   }
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

@@ -2,37 +2,40 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
  * @LastEditors: huangjin
- * @LastEditTime: 2021-07-22 14:31:58
+ * @LastEditTime: 2023-04-19 14:55:14
  * @Description: 模板-姓名拼音
 -->
 <template>
-  <div class='app-container'>
-    <Title
-      :tipTitle="templateItem.tips"
-      label="工作年限"
-    />
+  <div class="app-container">
+    <Title :tip-title="templateItem.tips" label="工作年限" />
     <van-field
-      class="info-space years"
       v-model="templateValue"
+      class="info-space years"
       placeholder="请输入工作年限"
       type="number"
       label="年"
       :readonly="!couldEdit"
-      :rules="[{
-        required: !templateItem.unnecessary,
-        validator: !templateItem.unnecessary ? basisValidator.workYear : undefined,
-        message: '工作年限不可超出50年'
-      }]"
+      :rules="[
+        {
+          required: !templateItem.unnecessary,
+          validator: !templateItem.unnecessary ? basisValidator.workYear : undefined,
+          message: '工作年限不可超出50年'
+        }
+      ]"
     />
   </div>
 </template>
 
 <script>
 import { Field } from 'vant'
-import Title from '../Title'
+import Title from '../Title/index.vue'
 import { basisValidator } from '../../validate'
 
 export default {
+  components: {
+    Title,
+    'van-field': Field
+  },
   props: {
     value: {
       type: [String, Number],
@@ -48,33 +51,24 @@ export default {
       default: true
     }
   },
-  components: {
-    Title,
-    'van-field': Field
-  },
-  data () {
+  emits: ['input'],
+  data() {
     return {
       basisValidator
     }
   },
   computed: {
     templateValue: {
-      get () {
+      get() {
         return this.value
       },
-      set (val) {
+      set(val) {
         this.$emit('input', val)
       }
     }
   },
-  created () {},
-  mounted () {},
-  methods: {
-
-  }
+  methods: {}
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

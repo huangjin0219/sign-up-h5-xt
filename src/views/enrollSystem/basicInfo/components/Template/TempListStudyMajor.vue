@@ -2,29 +2,25 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
  * @LastEditors: huangjin
- * @LastEditTime: 2021-11-16 14:27:45
+ * @LastEditTime: 2023-04-19 14:59:54
  * @Description: 模板-选择专业
 -->
 <template>
-  <div class='app-container'>
-    <Title
-      :tipTitle="templateItem.tips"
-      label="专业"
-    />
-    <tab-module
-      v-model="templateValue"
-      :tab-type="true"
-      :list="majorList"
-      :couldEdit="couldEdit"
-    ></tab-module>
+  <div class="app-container">
+    <Title :tip-title="templateItem.tips" label="专业" />
+    <tab-module v-model="templateValue" :tab-type="true" :list="majorList" :could-edit="couldEdit"></tab-module>
   </div>
 </template>
 
 <script>
-import Title from '../Title'
-import TabModule from '../TabModule'
+import Title from '../Title/index.vue'
+import TabModule from '../TabModule/index.vue'
 
 export default {
+  components: {
+    Title,
+    TabModule
+  },
   props: {
     value: {
       type: String,
@@ -40,11 +36,8 @@ export default {
       default: true
     }
   },
-  components: {
-    Title,
-    TabModule
-  },
-  data () {
+  emits: ['input'],
+  data() {
     return {
       majorList: [
         '土木工程',
@@ -63,26 +56,21 @@ export default {
   },
   computed: {
     templateValue: {
-      get () {
+      get() {
         return this.value
       },
-      set (val) {
+      set(val) {
         this.$emit('input', val)
       }
     }
   },
-  created () {},
-  mounted () {
+  mounted() {
     if (this.templateItem.options) {
       this.majorList = this.templateItem.options.split(',')
     }
   },
-  methods: {
-
-  }
+  methods: {}
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

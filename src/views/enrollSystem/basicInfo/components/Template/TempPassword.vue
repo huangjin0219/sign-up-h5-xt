@@ -6,14 +6,11 @@
  * @Description: 模板-学习网站账号
 -->
 <template>
-  <div class='app-container'>
-    <Title
-      :tipTitle="templateItem.tips"
-      :label="templateItem.aliasLabelName || '学习网站密码'"
-    />
+  <div class="app-container">
+    <Title :tip-title="templateItem.tips" :label="templateItem.aliasLabelName || '学习网站密码'" />
     <van-field
-      class="info-space"
       v-model="templateValue"
+      class="info-space"
       :placeholder="`请输入${templateItem.aliasLabelName || '学习网站密码'}`"
       :readonly="!couldEdit"
       :disabled="disabled"
@@ -24,9 +21,13 @@
 
 <script>
 import { Field } from 'vant'
-import Title from '../Title'
+import Title from '../Title/index.vue'
 
 export default {
+  components: {
+    Title,
+    'van-field': Field
+  },
   props: {
     value: {
       type: String,
@@ -46,33 +47,24 @@ export default {
       default: false
     }
   },
-  components: {
-    Title,
-    'van-field': Field
-  },
-  data () {
+  emits: ['input'],
+  data() {
     return {
       // basisValidator
     }
   },
   computed: {
     templateValue: {
-      get () {
+      get() {
         return this.value
       },
-      set (val) {
+      set(val) {
         this.$emit('input', val)
       }
     }
   },
-  created () {},
-  mounted () {},
-  methods: {
-
-  }
+  methods: {}
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

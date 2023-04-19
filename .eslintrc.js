@@ -2,7 +2,7 @@
  * @Author: jiangruohui
  * @Date: 2022-03-14 15:49:50
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-19 09:51:44
+ * @LastEditTime: 2023-04-19 16:49:33
  * @Description:
  */
 module.exports = {
@@ -60,7 +60,10 @@ module.exports = {
     'import/no-unresolved': 'off',
     'func-names': 'off',
     'no-debugger': process.env.VITE_APP_ENV === 'production' ? 2 : 0,
-    'no-console': process.env.VITE_APP_ENV === 'production' ? 2 : 0
+    'no-console': process.env.VITE_APP_ENV === 'production' ? 2 : 0,
+    'no-plusplus': 0,
+    'no-bitwise': 0,
+    'no-multi-assign': 0
   },
   settings: {
     'import/resolver': {
