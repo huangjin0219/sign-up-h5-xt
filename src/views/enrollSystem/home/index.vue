@@ -2,13 +2,17 @@
  * @Author: HuZhangjie
  * @Date: 2020-06-30 17:33:53
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-18 17:44:23
+ * @LastEditTime: 2023-04-19 09:44:20
  * @Description: bim报名系统-首页登录页和信息确认页
 -->
 <template>
   <div class="page-home__bg">
     <div class="page-home">
-      <div class="enroll-time">报名开放时间：{{ enrollInfo.startTime }}-{{ enrollInfo.endTime }}</div>
+      <div class="enroll-time">
+        报名开放时间：{{ $filters.date(enrollInfo.startTime, 'YY.MM.dd hh:mm:ss') }}-{{
+          $filters.date(enrollInfo.endTime, 'YY.MM.dd hh:mm:ss')
+        }}
+      </div>
       <div class="enroll-content__bg">
         <div class="enroll-content">
           <!-- 未登录，显示登录面板 -->
@@ -39,113 +43,120 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
+import { Toast } from 'vant'
+import { useSignUpStore } from '@/store/index'
+
 import { bizType } from '@/config/index'
 // import md5 from 'js-md5'
 // import { setStore } from '@/utils/store'
 import { sendVerifyCode } from '@/common/api/signUp/user'
 import { enrollCheck } from '@/common/api/signUp/enrollSys'
 // import { SING_UP_RECORD_ID_STORE_KEY, LOGIN_STATUS_STORE_KEY } from '@/permission'
+const route = useRoute()
+const router = useRouter()
+const signUpStore = useSignUpStore()
+const { registerOrLogin } = signUpStore
 
-export default {
-  name: 'EnrollSystemHome',
-  props: {},
-  data() {
-    return {
-      enrollInfo: {},
-      captchaText: '获取验证码',
-      captchaDisabled: false, // 获取验证码是否可点击
-      loginLoading: false,
-      signUpRecordId: ''
-    }
-  },
-  computed: {},
-  mounted() {
-    const { signUpRecordId } = this.$route.query
-    this.signUpRecordId = signUpRecordId
-    this.getLink(signUpRecordId)
-  },
-  methods: {
-    async getLink(signUpRecordId) {
-      const res = await enrollCheck({ signUpRecordId })
-      this.enrollInfo = res
-    },
-    async getCaptcha() {
-      if (this.captchaDisabled) return
-      const { customerMobile } = this.enrollInfo
-      if (!customerMobile) return this.$toast('请输入手机号码')
-      this.enrollInfo.captcha = ''
-      const params = {
-        mobile: customerMobile,
-        bizType
-      }
-      await sendVerifyCode(params)
-      this.captchaDisabled = true
-      this.$toast('正在发送验证码')
-      // TODO: fetch getCaptcha
-      this.handleCountdown()
-    },
-    // 处理验证码倒计时展示
-    handleCountdown() {
-      let countdown = 60
-      this.captchaText = `${countdown}s后获取`
-      this.captchaDisabled = true
-      this.timer = setInterval(() => {
-        countdown -= 1
-        this.captchaText = `${countdown}s后获取`
-        if (countdown <= 0) {
-          this.captchaText = '发送验证码'
-          this.captchaDisabled = false
-          clearInterval(this.timer)
-        }
-      }, 1000)
-    },
-    async handleLogin() {
-      console.log('handleLogin -> ', this.loginLoading)
-      if (this.loginLoading) return
-      const { customerMobile, captcha } = this.enrollInfo
-      if (!captcha) return this.$toast('请输入验证码')
-      const params = {
-        loginType: 2,
-        mobile: customerMobile,
-        verificationCode: captcha,
-        bizType,
-        appType: '1005'
-      }
-      console.log('handleLogin -> params', params)
-      await this.$store.dispatch('user/registerOrLogin', params)
+const enrollInfo = ref<any>({})
+const captchaText = ref<string>('获取验证码')
+const captchaDisabled = ref<boolean>(false) // 获取验证码是否可点击
+const loginLoading = ref<boolean>(false)
+const signUpRecordId = ref<string>('')
 
-      // 将登录状态存下来
-      // setStore(SING_UP_RECORD_ID_STORE_KEY, md5(`${SING_UP_RECORD_ID_STORE_KEY}${this.signUpRecordId}`))
-      // setStore(LOGIN_STATUS_STORE_KEY, md5(`${LOGIN_STATUS_STORE_KEY}${this.signUpRecordId}`))
-
-      const { query } = this.$route
-      const { redirect, ...otherQuery } = this.$route.query
-      if (redirect) {
-        this.$router.push({
-          path: redirect,
-          query: otherQuery
-        })
-      } else {
-        if (query.source) {
-          this.$router.push({
-            name: 'AddInfo',
-            query
-          })
-          return
-        }
-        this.$router.push({
-          path: '/enrollSystem/userInfo',
-          query
-        })
-      }
-      this.loginLoading = true
-      // TODO: fetch login 登录成功后清除定时器
-      setTimeout(() => {
-        this.loginLoading = false
-      }, 1000)
-    }
+onMounted(() => {
+  if (route.query.signUpRecordId) {
+    signUpRecordId.value = route.query.signUpRecordId as string
+    getLink(signUpRecordId.value)
   }
+})
+
+const getLink = async (signUpRecordId: any) => {
+  const res: any = await enrollCheck({ signUpRecordId })
+  enrollInfo.value = res.data
+  console.log(' hj ~ file: index.vue:74 ~ getLink ~ enrollInfo.value:', enrollInfo.value)
+}
+const getCaptcha = async () => {
+  if (captchaDisabled.value) return
+  const { customerMobile } = enrollInfo.value
+  if (!customerMobile) return Toast('请输入手机号码')
+  enrollInfo.value.captcha = ''
+  const params = {
+    mobile: customerMobile,
+    bizType
+  }
+  await sendVerifyCode(params)
+  captchaDisabled.value = true
+  Toast('正在发送验证码')
+  // TODO: fetch getCaptcha
+  handleCountdown()
+}
+
+// 处理验证码倒计时展示
+const handleCountdown = () => {
+  let countdown = 60
+  captchaText.value = `${countdown}s后获取`
+  captchaDisabled.value = true
+  const timer = setInterval(() => {
+    countdown -= 1
+    captchaText.value = `${countdown}s后获取`
+    if (countdown <= 0) {
+      captchaText.value = '发送验证码'
+      captchaDisabled.value = false
+      clearInterval(timer)
+    }
+  }, 1000)
+}
+
+const handleLogin = async () => {
+  console.log('handleLogin -> ', loginLoading.value)
+  if (loginLoading.value) return
+  const { customerMobile, captcha } = enrollInfo.value
+  if (!captcha) return Toast('请输入验证码')
+  const params = {
+    loginType: 2,
+    mobile: customerMobile,
+    verificationCode: captcha,
+    bizType,
+    appType: '1005'
+  }
+  console.log('handleLogin -> params', params)
+  await registerOrLogin(params)
+
+  // 将登录状态存下来
+  // setStore(SING_UP_RECORD_ID_STORE_KEY, md5(`${SING_UP_RECORD_ID_STORE_KEY}${this.signUpRecordId}`))
+  // setStore(LOGIN_STATUS_STORE_KEY, md5(`${LOGIN_STATUS_STORE_KEY}${this.signUpRecordId}`))
+
+  const { query } = route
+  const { redirect, ...otherQuery } = route.query
+  if (redirect) {
+    router.push({
+      path: redirect as string,
+      query: otherQuery
+    })
+  } else {
+    if (query.source) {
+      router.push({
+        name: 'AddInfo',
+        query
+      })
+      return
+    }
+    router.push({
+      path: '/enrollSystem/userInfo',
+      query
+    })
+  }
+  loginLoading.value = true
+  // TODO: fetch login 登录成功后清除定时器
+  setTimeout(() => {
+    loginLoading.value = false
+  }, 1000)
+}
+</script>
+<script lang="ts">
+export default {
+  name: 'EnrollSystemHome'
 }
 </script>
 
@@ -169,7 +180,8 @@ $borderColor: #dcdfe6;
   flex-direction: column;
   align-items: center;
   color: #fff;
-  @include bg-url('@/assets/images/signUp/bim_home_bg@2x.png');
+  background: url('@/assets/images/signUp/bim_home_bg@2x.png');
+  // @include bg-url('@/assets/images/signUp/bim_home_bg@2x.png');
   background-size: contain;
   background-repeat: no-repeat;
   .enroll-time {

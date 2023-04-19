@@ -1,8 +1,8 @@
 /*
  * @Author: jiangruohui
  * @Date: 2022-03-29 20:24:47
- * @LastEditors: jiangruohui
- * @LastEditTime: 2023-03-13 16:58:37
+ * @LastEditors: huangjin
+ * @LastEditTime: 2023-04-18 20:50:39
  * @Description:
  */
 import { SOURCE_THIRD_CHANNEL_CODE } from '@/config/index'
@@ -13,6 +13,7 @@ import {
   fetchLogout,
   queryUserInfo
 } from '@/common/api/user'
+import { registerOrLogin as signUpRegisterOrLogin } from '@/common/api/signUp/user'
 import type { RegisterOrLoginParams, WxLoginParams, BindPhoneParams } from '@/common/api/user'
 import { queryCategoryList } from '@/common/api/index'
 import { getUserInfo, setUserInfo, removeUserInfo, setStore, getStore, removeStore, cookie } from '@/utils/store'
@@ -353,6 +354,41 @@ export const useAdminStore = defineStore('admin', function () {
   return {
     adminUser,
     saveAdminUser
+  }
+})
+
+export const useSignUpStore = defineStore('signUp', function () {
+  const signUpUserStoreKey = 'signUpUser'
+  const user = ref<any>(getStore(signUpUserStoreKey))
+
+  const registerOrLogin = ({ loginType, mobile, verificationCode, bizType, appType }: any) => {
+    return new Promise((resolve, reject) => {
+      signUpRegisterOrLogin({ loginType, mobile, verificationCode, bizType, appType })
+        .then((response: any) => {
+          const { data } = response
+          const user = {
+            token: data.userToken,
+            userIdentification: data.userIdentification,
+            userNo: data.userNo
+          }
+          saveUser(user)
+
+          resolve(response.data)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  }
+
+  const saveUser = (value: any) => {
+    setStore(signUpUserStoreKey, value, 'session')
+    user.value = { ...value }
+  }
+
+  return {
+    registerOrLogin,
+    saveUser
   }
 })
 

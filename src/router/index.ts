@@ -2,7 +2,7 @@
  * @Author: jiangruohui
  * @Date: 2022-03-15 13:54:07
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-18 16:01:40
+ * @LastEditTime: 2023-04-18 20:59:15
  * @Description:
  */
 import { createRouter, createWebHistory, RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
@@ -16,6 +16,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'Home',
+    redirect: '/enrollSystem/home',
     component: () => import('@/views/enrollSystem/home/index.vue'),
     meta: {
       title: '学天服务中心'
