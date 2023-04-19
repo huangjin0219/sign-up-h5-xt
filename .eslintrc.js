@@ -1,8 +1,8 @@
 /*
  * @Author: jiangruohui
  * @Date: 2022-03-14 15:49:50
- * @LastEditors: jiangruohui
- * @LastEditTime: 2022-03-31 14:31:11
+ * @LastEditors: huangjin
+ * @LastEditTime: 2023-04-19 09:51:44
  * @Description:
  */
 module.exports = {
@@ -58,7 +58,9 @@ module.exports = {
     'prefer-object-spread': 'off',
     'no-empty': 'off',
     'import/no-unresolved': 'off',
-    'func-names': 'off'
+    'func-names': 'off',
+    'no-debugger': process.env.VITE_APP_ENV === 'production' ? 2 : 0,
+    'no-console': process.env.VITE_APP_ENV === 'production' ? 2 : 0
   },
   settings: {
     'import/resolver': {
