@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-02 16:06:49
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-20 11:09:49
+ * @LastEditTime: 2023-04-20 16:22:20
  * @Description: 照片信息表单
 -->
 <template>
@@ -100,9 +100,11 @@
               type="primary"
               >上传文件</van-button
             >
-            <div v-else slot="preview-cover" class="upload-file__preview">
-              <a :href="fileForm.idCardFrontBackDocFile[0]" download>点击下载查看</a>
-            </div>
+            <template v-else #preview-cover>
+              <div class="upload-file__preview">
+                <a :href="fileForm.idCardFrontBackDocFile[0]" download>点击下载查看</a>
+              </div>
+            </template>
           </van-uploader>
         </div>
       </div>
@@ -174,14 +176,9 @@
               type="primary"
               >上传文件</van-button
             >
-            <div
-              v-else
-              slot="preview-cover"
-              class="upload-file__preview"
-              @click="handlePreviewPdf(fileForm.educationDocFile)"
-            >
-              点击下载查看
-            </div>
+            <template v-else #preview-cover>
+              <div class="upload-file__preview" @click="handlePreviewPdf(fileForm.educationDocFile)">点击下载查看</div>
+            </template>
           </van-uploader>
         </div>
       </div>
@@ -458,8 +455,8 @@
   </div>
 </template>
 
-<script>
-import { Form, Uploader, Button } from 'vant'
+<script lang="ts" setup>
+import { Form as vanForm, Uploader as vanUploader, Button as vanButton, Toast } from 'vant'
 import { uploadImage } from '@/utils/request'
 import { BASIS_TEMPLATE_KEY_MAP, ID_PHOTO_ORGAN_SIZE_MAP, PDF_VIEWER_HOST } from '@/constant'
 import { isStrImageEnd, isStrFileEnd, getSignUpImageUrl } from '@/utils'
@@ -477,175 +474,155 @@ const UPLOAD_PARAM_ACCEPT_MAP = {
   templateDocFile: '.doc,.docx'
 }
 
-export default {
-  components: {
-    Title,
-    UploadSlot,
-    IdentityTipDialog,
-    'van-form': Form,
-    'van-button': Button,
-    'van-uploader': Uploader
-  },
-  props: {
-    photoForm: {
-      type: Object,
-      default: () => ({})
-    },
-    fileForm: {
-      type: Object,
-      default: () => ({})
-    },
-    templateList: {
-      type: Array,
-      default: () => []
-    },
-    // 能否编辑
-    couldEdit: {
-      type: Boolean,
-      default: true
-    },
-    organizationId: {
-      type: [Number, String],
-      default: ''
-    }
-  },
-  data() {
-    return {
-      UPLOAD_PARAM_ACCEPT_MAP,
-      BASIS_TEMPLATE_KEY_MAP,
-      // 展示身份证提示的弹窗
-      showIdentityDialog: false,
-      // 控制身份证提示弹窗内部的图片
-      isFrontDialog: true,
-      // 记录正反弹窗的展示
-      aleradyShowIdentityForntDialog: false,
-      aleradyShowIdentityBackDialog: false,
+interface Props {
+  cphotoForm?: object
+  cfileForm?: object
+  templateList?: any[]
+  couldEdit?: boolean
+  organizationId?: number | string
+}
+const props = withDefaults(defineProps<Props>(), {
+  cphotoForm: () => ({}),
+  cfileForm: () => ({}),
+  templateList: () => [],
+  couldEdit: true,
+  organizationId: ''
+})
+const { cphotoForm, cfileForm, templateList, couldEdit, organizationId } = toRefs(props)
 
-      identityFrontBg: getSignUpImageUrl('bim_answer_lldcard_back@2x.png'),
-      identityBackBg: getSignUpImageUrl('bim_answer_lidcard_front@2x.png'),
-      oneInchBg: getSignUpImageUrl('bim_answer_lphoto@2x.png'),
-      educationBg: getSignUpImageUrl('bim_answer_lDiploma@2x.png'),
-      workProofBg: getSignUpImageUrl('bim_answer_work_proof@2x.png')
-    }
-  },
-  computed: {
-    extfieldList() {
-      return this.templateList.filter((tem) => {
-        return /UPLOAD_EXTFIELD/.test(tem.key)
-      })
-    }
-  },
-  methods: {
-    getFileAccept(type) {
-      if (!type) return false
-      let acceptType
-      switch (type.toLocaleLowerCase()) {
-        case 'word':
-          acceptType = '.doc,.docx'
-          break
-        case 'pdf':
-          acceptType = '.pdf'
-          break
+const photoForm = ref<any>(cphotoForm.value)
+const fileForm = ref<any>(cfileForm.value)
+// UPLOAD_PARAM_ACCEPT_MAP,
+//       BASIS_TEMPLATE_KEY_MAP,
+// 展示身份证提示的弹窗
+const showIdentityDialog = ref<boolean>(false)
+// 控制身份证提示弹窗内部的图片
+const isFrontDialog = ref<boolean>(true)
+// 记录正反弹窗的展示
+const aleradyShowIdentityForntDialog = ref<boolean>(false)
+const aleradyShowIdentityBackDialog = ref<boolean>(false)
 
-        default:
-          break
-      }
-      return acceptType
-    },
-    // 点击弹窗展示身份证的提示弹窗
-    handleClickIdentity(type) {
-      // 未展示过提示弹窗
-      if (type === 'front' && !this.aleradyShowIdentityForntDialog) {
-        this.showIdentityDialog = true
-        this.aleradyShowIdentityForntDialog = true
-        this.isFrontDialog = true
-      } else if (type === 'back' && !this.aleradyShowIdentityBackDialog) {
-        this.showIdentityDialog = true
-        this.aleradyShowIdentityBackDialog = true
-        this.isFrontDialog = false
-      }
-    },
-    // 上传图片后的回调函数
-    handleAfterRead(file, urlType) {
-      if (isStrImageEnd(urlType)) {
-        this.handleUploadImage(file, urlType)
-      } else if (isStrFileEnd(urlType)) {
-        this.handleUploadFile(file, urlType)
-      }
-    },
-    // 上传图片-压缩图片
-    async handleUploadImage(file, urlType) {
-      const type = file.file.name.split('.')[1]
-      // templateList中增加format字段的处理
-      const tempItem = this.templateList.find((item) => item.inputParameter === urlType)
-      if (tempItem.format && tempItem.format.split(',').every((item) => item !== type.toLocaleLowerCase())) {
-        this.photoForm[urlType] = []
-        this.$toast(`请上传${tempItem.format}格式的图片`)
-        return false
-      }
-      if (!type || ['png', 'jpg'].every((item) => item !== type.toLocaleLowerCase())) {
-        this.photoForm[urlType] = []
-        this.$toast('请上传jpg或png格式的图片')
-        return false
-      }
-      const organImageSize = ID_PHOTO_ORGAN_SIZE_MAP[this.organizationId]
+const identityFrontBg = ref<string>(getSignUpImageUrl('bim_answer_lldcard_back@2x.png'))
+const identityBackBg = ref<string>(getSignUpImageUrl('bim_answer_lidcard_front@2x.png'))
+const oneInchBg = ref<string>(getSignUpImageUrl('bim_answer_lphoto@2x.png'))
+const educationBg = ref<string>(getSignUpImageUrl('bim_answer_lDiploma@2x.png'))
+const workProofBg = ref<string>(getSignUpImageUrl('bim_answer_work_proof@2x.png'))
 
-      console.log('🚀 ~ file:  ~ organImageSize', organImageSize)
-      const fileCompress = await handleCompressImg(file.file)
-      // 证件照的大小判断，某些机构有要求
-      if (['photoImage'].includes(urlType) && organImageSize) {
-        if (fileCompress.size > organImageSize * 1024) {
-          this.photoForm[urlType] = []
-          this.$toast(`证件照大小超过${organImageSize}K`)
-          return false
-        }
-      }
-      if (fileCompress.size > 200 * 1024) {
-        this.photoForm[urlType] = []
-        this.$toast('文件大小不能超过 - 200K')
-        return false
-      }
-      uploadImage(fileCompress)
-        .then((res) => {
-          this.photoForm[urlType] = [{ url: res }]
-        })
-        .catch((err) => {
-          console.log('handleAfterRead -> err', err)
-          this.photoForm[urlType] = []
-        })
-    },
-    // 上传word或者pdf文件
-    async handleUploadFile(file, urlType, item = {}) {
-      const str = file.file.name
-      const type = str.substring(str.lastIndexOf('.') + 1, str.length)
-      console.log('🚀 ~ file: PhotoInfoForm.vue ~ line 493 ~ handleUploadFile ~ type', type)
-      const accept = item.format || UPLOAD_PARAM_ACCEPT_MAP[urlType]
-      if (!type || accept.split(',').every((item) => item !== `.${type.toLocaleLowerCase()}`)) {
-        this.fileForm[urlType] = []
-        this.$toast(`请上传${accept}格式的文件`)
-        return false
-      }
-      console.log('🚀 ~ file: PhotoInfoForm. ~ file, urlType', file, urlType)
-      uploadImage(file.file)
-        .then((res) => {
-          this.fileForm[urlType] = [res]
-        })
-        .catch((err) => {
-          console.log('handleAfterRead -> err', err)
-          this.fileForm[urlType] = []
-        })
-    },
-    handlePreviewPdf(fileUrl) {
-      window.open(`${PDF_VIEWER_HOST}?file=${encodeURIComponent(fileUrl)}`)
-    },
-    handleOverSize() {
-      this.$toast('文件大小不能超过 - 4M')
-    },
-    // 判断是否展示对应的输入项
-    showFormItem(prop) {
-      return this.templateList.find((template) => template.key === prop)
+const extfieldList = computed(() => {
+  return templateList.value.filter((tem) => {
+    return /UPLOAD_EXTFIELD/.test(tem.key)
+  })
+})
+
+const getFileAccept = (type: any) => {
+  if (!type) return false
+  let acceptType
+  switch (type.toLocaleLowerCase()) {
+    case 'word':
+      acceptType = '.doc,.docx'
+      break
+    case 'pdf':
+      acceptType = '.pdf'
+      break
+
+    default:
+      break
+  }
+  return acceptType
+}
+// 点击弹窗展示身份证的提示弹窗
+const handleClickIdentity = (type: any) => {
+  // 未展示过提示弹窗
+  if (type === 'front' && !aleradyShowIdentityForntDialog.value) {
+    showIdentityDialog.value = true
+    aleradyShowIdentityForntDialog.value = true
+    isFrontDialog.value = true
+  } else if (type === 'back' && !aleradyShowIdentityBackDialog.value) {
+    showIdentityDialog.value = true
+    aleradyShowIdentityBackDialog.value = true
+    isFrontDialog.value = false
+  }
+}
+
+// 上传图片后的回调函数
+const handleAfterRead = (file: any, urlType: any) => {
+  if (isStrImageEnd(urlType)) {
+    handleUploadImage(file, urlType)
+  } else if (isStrFileEnd(urlType)) {
+    handleUploadFile(file, urlType)
+  }
+}
+// 上传图片-压缩图片
+const handleUploadImage = async (file: any, urlType: any) => {
+  const type = file.file.name.split('.')[1]
+  // templateList中增加format字段的处理
+  const tempItem = templateList.value.find((item) => item.inputParameter === urlType)
+  if (tempItem.format && tempItem.format.split(',').every((item: any) => item !== type.toLocaleLowerCase())) {
+    photoForm.value[urlType] = []
+    Toast(`请上传${tempItem.format}格式的图片`)
+    return false
+  }
+  if (!type || ['png', 'jpg'].every((item) => item !== type.toLocaleLowerCase())) {
+    photoForm.value[urlType] = []
+    Toast('请上传jpg或png格式的图片')
+    return false
+  }
+  const organImageSize = ID_PHOTO_ORGAN_SIZE_MAP[organizationId.value]
+
+  console.log('🚀 ~ file:  ~ organImageSize', organImageSize)
+  const fileCompress: any = await handleCompressImg(file.file)
+  // 证件照的大小判断，某些机构有要求
+  if (['photoImage'].includes(urlType) && organImageSize) {
+    if (fileCompress.size > organImageSize * 1024) {
+      photoForm.value[urlType] = []
+      Toast(`证件照大小超过${organImageSize}K`)
+      return false
     }
   }
+  if (fileCompress.size > 200 * 1024) {
+    photoForm.value[urlType] = []
+    Toast('文件大小不能超过 - 200K')
+    return false
+  }
+  uploadImage(fileCompress)
+    .then((res) => {
+      photoForm.value[urlType] = [{ url: res }]
+    })
+    .catch((err) => {
+      console.log('handleAfterRead -> err', err)
+      photoForm.value[urlType] = []
+    })
+}
+// 上传word或者pdf文件
+const handleUploadFile = async (file: any, urlType: any, item: any = {}) => {
+  const str = file.file.name
+  const type = str.substring(str.lastIndexOf('.') + 1, str.length)
+  console.log('🚀 ~ file: PhotoInfoForm.vue ~ line 493 ~ handleUploadFile ~ type', type)
+  const accept = item.format || UPLOAD_PARAM_ACCEPT_MAP[urlType]
+  if (!type || accept.split(',').every((item: any) => item !== `.${type.toLocaleLowerCase()}`)) {
+    fileForm.value[urlType] = []
+    Toast(`请上传${accept}格式的文件`)
+    return false
+  }
+  console.log('🚀 ~ file: PhotoInfoForm. ~ file, urlType', file, urlType)
+  uploadImage(file.file)
+    .then((res) => {
+      fileForm.value[urlType] = [res]
+    })
+    .catch((err) => {
+      console.log('handleAfterRead -> err', err)
+      fileForm.value[urlType] = []
+    })
+}
+const handlePreviewPdf = (fileUrl: any) => {
+  window.open(`${PDF_VIEWER_HOST}?file=${encodeURIComponent(fileUrl)}`)
+}
+const handleOverSize = () => {
+  Toast('文件大小不能超过 - 4M')
+}
+// 判断是否展示对应的输入项
+const showFormItem = (prop: any) => {
+  return templateList.value.find((template) => template.key === prop)
 }
 </script>
 

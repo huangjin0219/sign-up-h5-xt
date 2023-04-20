@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-02 10:08:43
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-19 11:17:31
+ * @LastEditTime: 2023-04-20 15:55:47
  * @Description: 基础弹窗组件
 -->
 
@@ -10,7 +10,8 @@
   <transition name="fade">
     <div class="base-dialog">
       <div class="dialog-content">
-        <img class="dialog-close__icon" src="@/assets/images/icon_close@2x.png" @click="handleClose" />
+        <!-- <img class="dialog-close__icon" src="@/assets/images/icon_close@2x.png" @click="handleClose" /> -->
+        <img class="dialog-close__icon" :src="closeBg" @click="handleClose" />
         <slot></slot>
       </div>
     </div>
@@ -18,6 +19,8 @@
 </template>
 
 <script lang="ts" setup>
+import closeBg from '@/assets/images/signUp/icon_close@2x.png'
+
 interface Props {
   show?: boolean
 }

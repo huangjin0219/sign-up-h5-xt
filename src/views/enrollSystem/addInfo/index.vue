@@ -28,24 +28,20 @@
 import { Form, Uploader } from 'vant'
 import { uploadImage } from '@/utils/request'
 import { queryAddInfoTemplateList, submitAddInfo } from '@/common/api/signUp/enrollSys'
-import Title from '../basicInfo/components/Title'
-import UploadSlot from '../basicInfo/components/UploadSlot'
+import { getSignUpImageUrl } from '@/utils'
+import Title from '../basicInfo/components/Title/index.vue'
+import UploadSlot from '../basicInfo/components/UploadSlot/index.vue'
 import { handleCompressImg } from '../basicInfo/upload'
 
 /**
  * 自动引入 templata中的所有vue 模板文件
- * require.context(directory, useSubdirectories = false, regExp = /^.//);
- * @param {String} directory 读取文件的路径
- * @param {Boolean} directory 匹配文件的正则表达式
- * @param {regExp} regExp 读取文件的路径
  */
-const modulesFiles = require.context('./components/Template', true, /.vue$/)
-const modules = modulesFiles.keys().reduce((modules, modulePath) => {
-  const moduleName = modulePath.replace(/^.\/(.*)\.vue/, '$1')
-  const value = modulesFiles(modulePath)
-  modules[moduleName] = value.default
-  return modules
-}, {})
+const modulesFiles = import.meta.globEager('./components/Template/*.vue')
+const modules = {}
+Object.keys(modulesFiles).forEach((modulePath) => {
+  const moduleName = modulePath.replace(/^.\/components\/Template\/(.*)\.vue/, '$1')
+  modules[moduleName] = modulesFiles[modulePath].default
+})
 
 export default {
   name: 'AddInfo',
@@ -60,7 +56,7 @@ export default {
   data() {
     return {
       queryInfo: {}, // 路由信息
-      oneInchBg: require('../../../assets/images/signUp/bim_answer_lphoto@2x.png'),
+      oneInchBg: getSignUpImageUrl('bim_answer_lphoto@2x.png'),
       baseForm: {
         basisTime: '',
         practiceTime: '',
