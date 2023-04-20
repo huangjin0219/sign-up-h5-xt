@@ -14,12 +14,12 @@
       name="area"
       class="info-space"
       :placeholder="`请选择${titleLabel}`"
-      :value="areaName"
+      :model-value="areaName"
       :right-icon="couldEdit ? 'arrow' : ''"
       :rules="[{ required: couldEdit, message: `请选择${titleLabel}` }]"
       @click="handleShowPop"
     />
-    <van-popup v-model="showArea" position="bottom">
+    <van-popup v-model:show="showArea" position="bottom">
       <van-area :area-list="areaList" :columns-num="2" @confirm="onConfirmArea" @cancel="showArea = false" />
     </van-popup>
   </div>
@@ -62,7 +62,7 @@ export default {
       default: 0
     }
   },
-  emits: ['input', 'change'],
+  emits: ['update:value', 'change'],
   data() {
     return {
       loading: true,
@@ -90,7 +90,7 @@ export default {
         return provinceName && cityName ? `${provinceName}/${cityName}` : ''
       },
       set(val) {
-        this.$emit('input', val)
+        this.$emit('update:value', val)
       }
     },
     titleLabel() {

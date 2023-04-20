@@ -36,7 +36,7 @@ export default {
       default: true
     }
   },
-  emits: ['input'],
+  emits: ['update:value'],
   data() {
     return {
       list: ['建筑设计BIM应用', '结构工程BIM应用', '设备工程BIM应用', 'BIM建模', '综合BIM应用']
@@ -48,7 +48,7 @@ export default {
         return this.value
       },
       set(val) {
-        this.$emit('input', val)
+        this.$emit('update:value', val)
       }
     }
   }

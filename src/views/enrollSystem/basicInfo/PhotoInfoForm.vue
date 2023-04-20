@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-02 16:06:49
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-19 14:37:38
+ * @LastEditTime: 2023-04-20 11:09:49
  * @Description: 照片信息表单
 -->
 <template>
@@ -462,7 +462,7 @@
 import { Form, Uploader, Button } from 'vant'
 import { uploadImage } from '@/utils/request'
 import { BASIS_TEMPLATE_KEY_MAP, ID_PHOTO_ORGAN_SIZE_MAP, PDF_VIEWER_HOST } from '@/constant'
-import { isStrImageEnd, isStrFileEnd } from '@/utils'
+import { isStrImageEnd, isStrFileEnd, getSignUpImageUrl } from '@/utils'
 import Title from './components/Title/index.vue'
 import UploadSlot from './components/UploadSlot/index.vue'
 import IdentityTipDialog from './dialogs/IdentityTipDialog.vue'
@@ -521,11 +521,11 @@ export default {
       aleradyShowIdentityForntDialog: false,
       aleradyShowIdentityBackDialog: false,
 
-      identityFrontBg: new URL('@/assets/images/signUp/bim_answer_lldcard_back@2x.png', import.meta.url).href,
-      identityBackBg: new URL('@/assets/images/signUp/bim_answer_lidcard_front@2x.png', import.meta.url).href,
-      oneInchBg: new URL('@/assets/images/signUp/bim_answer_lphoto@2x.png', import.meta.url).href,
-      educationBg: new URL('@/assets/images/signUp/bim_answer_lDiploma@2x.png', import.meta.url).href,
-      workProofBg: new URL('@/assets/images/signUp/bim_answer_work_proof@2x.png', import.meta.url).href
+      identityFrontBg: getSignUpImageUrl('bim_answer_lldcard_back@2x.png'),
+      identityBackBg: getSignUpImageUrl('bim_answer_lidcard_front@2x.png'),
+      oneInchBg: getSignUpImageUrl('bim_answer_lphoto@2x.png'),
+      educationBg: getSignUpImageUrl('bim_answer_lDiploma@2x.png'),
+      workProofBg: getSignUpImageUrl('bim_answer_work_proof@2x.png')
     }
   },
   computed: {

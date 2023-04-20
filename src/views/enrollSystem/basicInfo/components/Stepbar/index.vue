@@ -4,7 +4,7 @@
  * @Author: 刘帅楠
  * @Date: 2020-07-01 11:35:54
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-19 15:16:48
+ * @LastEditTime: 2023-04-20 11:05:35
 -->
 <template>
   <div class="stpebar-wrap">
@@ -20,6 +20,8 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { getSignUpImageUrl } from '@/utils'
+
 interface Props {
   infoType?: boolean
 }
@@ -30,8 +32,8 @@ const props = withDefaults(defineProps<Props>(), {
 const { infoType } = toRefs(props)
 const imgSrc = computed(() => {
   return !infoType.value
-    ? new URL('@/assets/images/signUp/basicInfo/bim_answer_lable2_nor.png', import.meta.url).href
-    : new URL('@/assets/images/signUp/basicInfo/bim_answer_lable2_sel.png', import.meta.url).href
+    ? getSignUpImageUrl('/basicInfo/bim_answer_lable2_nor.png')
+    : getSignUpImageUrl('/basicInfo/bim_answer_lable2_sel.png')
 })
 </script>
 <style lang="scss" scoped>

@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-19 14:58:09
+ * @LastEditTime: 2023-04-20 10:18:08
  * @Description: 模板-姓名
 -->
 <template>
@@ -48,17 +48,19 @@ export default {
       default: false
     }
   },
-  emits: ['input'],
+  emits: ['update:value'],
   data() {
     return {}
   },
   computed: {
     templateValue: {
       get() {
+        console.log(' hj ~ file: TempName.vue:60 ~ get ~ this.value:', this.value)
         return this.value
       },
       set(val) {
-        this.$emit('input', val)
+        console.log(' hj ~ file: TempName.vue:62 ~ set ~ val:', val)
+        this.$emit('update:value', val)
       }
     }
   },

@@ -241,3 +241,7 @@ export const isStrFileEnd = (str: any) => {
   if (!str) return false
   return /file$/.test(str.toLocaleLowerCase())
 }
+
+export const getSignUpImageUrl = (name: string) => {
+  return new URL(`../assets/images/signUp/${name}`, import.meta.url).href
+}

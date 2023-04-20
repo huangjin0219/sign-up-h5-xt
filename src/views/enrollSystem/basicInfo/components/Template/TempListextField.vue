@@ -36,7 +36,7 @@ export default {
       default: true
     }
   },
-  emits: ['input'],
+  emits: ['update:value'],
   data() {
     return {}
   },
@@ -46,7 +46,7 @@ export default {
         return this.value
       },
       set(val) {
-        this.$emit('input', val)
+        this.$emit('update:value', val)
       }
     },
     list() {

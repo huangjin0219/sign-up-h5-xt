@@ -1,8 +1,8 @@
 <!--
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
- * @LastEditors: HuZhangjie
- * @LastEditTime: 2020-07-15 21:27:07
+ * @LastEditors: huangjin
+ * @LastEditTime: 2023-04-20 10:20:44
  * @Description: 模板-民族
 -->
 <template>
@@ -18,13 +18,13 @@
       readonly
       clickable
       class="info-space"
-      :value="templateValue"
+      :model-value="templateValue"
       :rules="[{ required: couldEdit, message: '请选择民族' }]"
       placeholder="请选择民族"
       :right-icon="couldEdit ? 'arrow' : ''"
       @click="handleShowPicker"
     />
-    <van-popup v-model="showPicker" round position="bottom">
+    <van-popup v-model:show="showPicker" round position="bottom">
       <van-picker
         title="民族"
         show-toolbar
@@ -66,7 +66,7 @@ export default {
       default: true
     }
   },
-  emits: ['input'],
+  emits: ['update:value'],
   data() {
     return {
       loading: true,
@@ -81,7 +81,8 @@ export default {
         return currNation.dictdataName
       },
       set(val) {
-        this.$emit('input', val)
+        console.log(' hj ~ file: TempNation.vue:84 ~ set ~ val:', val)
+        this.$emit('update:value', val)
       }
     }
   },
@@ -106,7 +107,7 @@ export default {
       }
     },
     onConfirm(value) {
-      console.log('onConfirm -> value', value)
+      console.log('onConfirm -> value', value, value.dictdataValue)
       this.templateValue = value.dictdataValue
       this.showPicker = false
     }

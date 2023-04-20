@@ -4,7 +4,7 @@
  * @Author: 刘帅楠
  * @Date: 2020-07-01 09:25:35
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-19 16:29:47
+ * @LastEditTime: 2023-04-20 10:18:58
 -->
 <template>
   <div class="page-fill-info">
@@ -26,7 +26,7 @@
       <!-- 姓名 -->
       <TempName
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_NAME)"
-        v-model="baseForm.customerName"
+        v-model:value="baseForm.customerName"
         :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_NAME).tips"
         :could-edit="couldEdit && !isJixuJiaoyu"
         :disabled="isJixuJiaoyu"
@@ -35,7 +35,7 @@
       <!-- 姓名拼音 -->
       <TempNameSpell
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_NAMEPINYIN)"
-        v-model="baseForm.namePinyin"
+        v-model:value="baseForm.namePinyin"
         :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_NAMEPINYIN).tips"
         :could-edit="couldEdit"
       ></TempNameSpell>
@@ -43,7 +43,7 @@
       <!-- 性别 -->
       <TempGender
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_GENDER)"
-        v-model="baseForm.gender"
+        v-model:value="baseForm.gender"
         :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_GENDER).tips"
         :could-edit="couldEdit"
       ></TempGender>
@@ -51,7 +51,7 @@
       <!-- 民族 -->
       <TempNation
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_NATION)"
-        v-model="baseForm.nation"
+        v-model:value="baseForm.nation"
         :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_NATION).tips"
         :could-edit="couldEdit"
       ></TempNation>
@@ -59,7 +59,7 @@
       <!-- 身份证号 -->
       <TempCardNo
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_CARDNO)"
-        v-model="baseForm.cardNo"
+        v-model:value="baseForm.cardNo"
         :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_CARDNO).tips"
         :could-edit="couldEdit && !isMakeupExam && !isJixuJiaoyu"
         :disabled="isMakeupExam || isJixuJiaoyu"
@@ -68,7 +68,7 @@
       <!-- 手机号 -->
       <TempMobile
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_MOBILE)"
-        v-model="baseForm.signUpMobile"
+        v-model:value="baseForm.signUpMobile"
         :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_MOBILE).tips"
         :could-edit="couldEdit && !isJixuJiaoyu"
         :disabled="isJixuJiaoyu"
@@ -77,7 +77,7 @@
       <!-- 通讯地址 -->
       <TempAddress
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_ADDRESS)"
-        v-model="baseForm.address"
+        v-model:value="baseForm.address"
         :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_ADDRESS)"
         :could-edit="couldEdit"
       ></TempAddress>
@@ -96,7 +96,7 @@
       <!-- 考场名称 -->
       <TempExamRoom
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_EXAM_ROOM)"
-        v-model="baseForm.examRoom"
+        v-model:value="baseForm.examRoom"
         :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_EXAM_ROOM).tips"
         :could-edit="false"
       ></TempExamRoom>
@@ -104,7 +104,7 @@
       <!-- 出生日期 -->
       <TempBirthday
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.DATE_BORN)"
-        v-model="baseForm.birthday"
+        v-model:value="baseForm.birthday"
         :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.DATE_BORN).tips"
         :could-edit="couldEdit"
       ></TempBirthday>
@@ -112,7 +112,7 @@
       <!-- 毕业日期 -->
       <TempGraduateTime
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.DATE_GRADUATEDATE)"
-        v-model="baseForm.graduateTime"
+        v-model:value="baseForm.graduateTime"
         :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.DATE_GRADUATEDATE)"
         :could-edit="couldEdit"
       ></TempGraduateTime>
@@ -120,7 +120,7 @@
       <!-- 毕业院校 -->
       <TempGraduateSchool
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_SCHOOL)"
-        v-model="baseForm.graduateSchool"
+        v-model:value="baseForm.graduateSchool"
         :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_SCHOOL)"
         :could-edit="couldEdit"
       ></TempGraduateSchool>
@@ -128,7 +128,7 @@
       <!-- 邮箱 -->
       <TempEmail
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_EMAIL)"
-        v-model="baseForm.email"
+        v-model:value="baseForm.email"
         :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_EMAIL)"
         :could-edit="couldEdit"
       ></TempEmail>
@@ -136,7 +136,7 @@
       <!-- 选择学历 list选择 -->
       <TempListEducation
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_EDUCATION)"
-        v-model="baseForm.education"
+        v-model:value="baseForm.education"
         :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_EDUCATION)"
         :could-edit="couldEdit"
         :education-type="educationType"
@@ -145,7 +145,7 @@
       <!-- 选择报考地点 list选择 -->
       <TempListExamArea
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_EXAM_AREA)"
-        v-model="baseForm.examArea"
+        v-model:value="baseForm.examArea"
         :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_EXAM_AREA).tips"
         :could-edit="couldEdit"
         :options="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_EXAM_AREA).options"
@@ -154,7 +154,7 @@
       <!-- 所学专业 input输入 -->
       <TempStudyMajor
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_PROFESSION)"
-        v-model="baseForm.studyMajor"
+        v-model:value="baseForm.studyMajor"
         :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_PROFESSION)"
         :could-edit="couldEdit"
       ></TempStudyMajor>
@@ -162,7 +162,7 @@
       <!-- 选择专业 list选择 -->
       <TempListStudyMajor
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_PROFESSION)"
-        v-model="baseForm.studyMajor"
+        v-model:value="baseForm.studyMajor"
         :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_PROFESSION)"
         :could-edit="couldEdit"
       ></TempListStudyMajor>
@@ -170,14 +170,14 @@
       <!-- 参加工作时间 -->
       <TempJobTime
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.DATE_TAKEJOBTIME)"
-        v-model="baseForm.takeJobTime"
+        v-model:value="baseForm.takeJobTime"
         :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.DATE_TAKEJOBTIME).tips"
         :could-edit="couldEdit"
       ></TempJobTime>
       <!-- 工作单位 -->
       <TempWorkUnit
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_UNIT)"
-        v-model="baseForm.workUnit"
+        v-model:value="baseForm.workUnit"
         :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_UNIT).tips"
         :could-edit="couldEdit"
       ></TempWorkUnit>
@@ -185,7 +185,7 @@
       <!-- 工作年限 -->
       <TempWorkYear
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_WORKYEAR)"
-        v-model="baseForm.workYear"
+        v-model:value="baseForm.workYear"
         :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_WORKYEAR)"
         :could-edit="couldEdit"
       ></TempWorkYear>
@@ -193,7 +193,7 @@
       <!-- 学习网站账号 -->
       <TempAccount
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_THIRDACCOUNT)"
-        v-model="baseForm.thirdAccount"
+        v-model:value="baseForm.thirdAccount"
         :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_THIRDACCOUNT)"
         :could-edit="couldEdit"
       >
@@ -202,7 +202,7 @@
       <!-- 学习网站密码 -->
       <TempPassword
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_THIRDPASSWORD)"
-        v-model="baseForm.thirdPassword"
+        v-model:value="baseForm.thirdPassword"
         :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_THIRDPASSWORD)"
         :could-edit="couldEdit"
       >
@@ -211,7 +211,7 @@
       <!-- 注册证书编号 -->
       <TempCertNo
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_CERT_NO)"
-        v-model="baseForm.certNo"
+        v-model:value="baseForm.certNo"
         :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_CERT_NO)"
         :could-edit="couldEdit"
       ></TempCertNo>
@@ -219,7 +219,7 @@
       <!-- 主项/增项 list-->
       <TempAdditional
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_ADDITIONAL)"
-        v-model="baseForm.additional"
+        v-model:value="baseForm.additional"
         :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_ADDITIONAL)"
         :could-edit="couldEdit"
       ></TempAdditional>
@@ -227,7 +227,7 @@
       <!-- 单位职位 list选择 -->
       <TempListUnitPosiiton
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_UNIT_POSITION)"
-        v-model="baseForm.unitPosition"
+        v-model:value="baseForm.unitPosition"
         :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_UNIT_POSITION).tips"
         :could-edit="couldEdit"
       ></TempListUnitPosiiton>
@@ -235,7 +235,7 @@
       <!-- 资格证书 list选择 -->
       <TempListQualification
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_QUALIFICATIONCERTIFICATE)"
-        v-model="baseForm.qualificationName"
+        v-model:value="baseForm.qualificationName"
         :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_QUALIFICATIONCERTIFICATE).tips"
         :could-edit="couldEdit"
       ></TempListQualification>
@@ -243,7 +243,7 @@
       <!-- 级别 list选择 -->
       <TempListLevel
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_LEVEL)"
-        v-model="baseForm.level"
+        v-model:value="baseForm.level"
         :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_LEVEL).tips"
         :could-edit="couldEdit"
       ></TempListLevel>
@@ -251,7 +251,7 @@
       <!-- 方向 list选择 -->
       <TempListDirection
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_DIRECTION)"
-        v-model="baseForm.direction"
+        v-model:value="baseForm.direction"
         :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_DIRECTION).tips"
         :could-edit="couldEdit"
       ></TempListDirection>
@@ -259,21 +259,21 @@
       <!-- 软件 -->
       <div v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.LABEL_SOFTWAVE)">
         <Title :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.LABEL_SOFTWAVE).tips" label="软件" />
-        <van-field class="info-space" readonly :value="'revit'" />
+        <van-field class="info-space" readonly :model-value="'revit'" />
       </div>
 
       <template v-for="item in extfieldList">
         <TempInputExtField
           v-if="/INPUT/.test(item.key)"
           :key="item.inputParameter"
-          v-model="baseForm[item.inputParameter]"
+          v-model:value="baseForm[item.inputParameter]"
           :template-item="item"
           :could-edit="couldEdit"
         ></TempInputExtField>
         <TempListextField
           v-if="/LIST/.test(item.key)"
           :key="item.inputParameter"
-          v-model="baseForm[item.inputParameter]"
+          v-model:value="baseForm[item.inputParameter]"
           :template-item="item"
           :could-edit="couldEdit"
           :education-type="educationType"

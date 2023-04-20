@@ -3,20 +3,16 @@ import request from '@/utils/request'
 // 发送验证码
 export function sendVerifyCode(params) {
   return request({
-    url: '/verifyCode/sendLoginVerifyCode',
+    url: '/uic/verifyCode/sendLoginVerifyCode',
     method: 'post',
-    data: params,
-    options: {
-      domain: 'uic'
-    }
+    data: params
   })
 }
 
 // 登录
 export function registerOrLogin(params, options = { toast: true }) {
-  options = Object.assign(options, { domain: 'uic' })
   return request({
-    url: '/user/registerOrLogin',
+    url: '/uic/user/registerOrLogin',
     method: 'post',
     data: params,
     options
@@ -26,11 +22,8 @@ export function registerOrLogin(params, options = { toast: true }) {
 // 发送验证码-重置报名手机号
 export function sendVerifyDxdkCode(params) {
   return request({
-    url: '/verifyCode/sendDxdkCode',
+    url: '/uic/verifyCode/sendDxdkCode',
     method: 'post',
-    data: params,
-    options: {
-      domain: 'uic'
-    }
+    data: params
   })
 }

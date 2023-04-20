@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-19 15:01:42
+ * @LastEditTime: 2023-04-20 10:28:04
  * @Description: 模板-学历
 -->
 <template>
@@ -55,7 +55,7 @@ export default {
       default: 0
     }
   },
-  emits: ['input'],
+  emits: ['update:value'],
   data() {
     return {
       // list: [
@@ -76,7 +76,7 @@ export default {
         return this.value
       },
       set(val) {
-        this.$emit('input', val)
+        this.$emit('update:value', val)
       }
     },
     list() {

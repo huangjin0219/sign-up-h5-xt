@@ -15,11 +15,11 @@
       name="datetimePicker"
       placeholder="请选择毕业日期"
       :rules="[{ required: !templateItem.unnecessary, message: '请选择毕业日期' }]"
-      :value="templateValue"
+      :model-value="templateValue"
       :right-icon="couldEdit ? 'arrow' : ''"
       @click="handleShowPop"
     />
-    <van-popup v-model="showPicker" position="bottom">
+    <van-popup v-model:show="showPicker" position="bottom">
       <van-datetime-picker
         v-model="currentDate"
         type="date"
@@ -59,7 +59,7 @@ export default {
       default: true
     }
   },
-  emits: ['input'],
+  emits: ['update:value'],
   data() {
     return {
       showPicker: false,
@@ -75,7 +75,7 @@ export default {
         return dayjs(this.value).format('YYYY-MM-DD')
       },
       set(val) {
-        this.$emit('input', dayjs(val).valueOf())
+        this.$emit('update:value', dayjs(val).valueOf())
       }
     }
   },

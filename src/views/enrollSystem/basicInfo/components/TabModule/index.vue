@@ -4,7 +4,7 @@
  * @Author: 刘帅楠
  * @Date: 2020-07-01 17:24:27
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-19 14:19:22
+ * @LastEditTime: 2023-04-20 10:34:26
 -->
 <template>
   <div class="tab-wrap">
@@ -12,7 +12,7 @@
       v-for="item in list"
       :key="item"
       class="tab-content"
-      :class="[{ 'tab-project': tabType }, { 'is-active': value === item }]"
+      :class="[{ 'tab-project': tabType }, { 'is-active': modelValue === item }]"
       @click="handleTabClick(item)"
     >
       {{ item }}
@@ -21,27 +21,27 @@
 </template>
 <script lang="ts" setup>
 interface Props {
-  value?: string | number
+  modelValue?: string | number
   list?: any[]
   tabType?: boolean
   couldEdit?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
-  value: '',
+  modelValue: '',
   list: () => [],
   tabType: true,
   couldEdit: true
 })
-const emit = defineEmits(['input'])
-const { value, list, tabType, couldEdit } = toRefs(props)
+const emit = defineEmits(['update:model-value'])
+const { modelValue, list, tabType, couldEdit } = toRefs(props)
 
 const tabValue = computed({
   get() {
-    return value.value
+    return modelValue.value
   },
   set(val) {
     if (couldEdit.value) {
-      emit('input', val)
+      emit('update:model-value', val)
     }
   }
 })

@@ -2,7 +2,7 @@
  * @Author: jiangruohui
  * @Date: 2022-03-24 14:33:19
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-19 14:42:13
+ * @LastEditTime: 2023-04-19 17:12:11
  * @Description:
  */
 
@@ -53,13 +53,6 @@ const baseUrlMap = {
   development: 'https://devxtapi.xuetian.cn'
 }
 export const baseURL = baseUrlMap[apiEnv]
-
-const dataServiceUrlMap = {
-  development: 'https://devxtapi.xuetian.cn/data-service',
-  test: 'https://testxtapi.xuetian.cn/data-service',
-  production: 'https://dsw.xuetian.cn'
-}
-export const dataServiceUrl = dataServiceUrlMap[apiEnv]
 /** ***************************  接口请求地址 end  ****************************** */
 
 /** ***************************  Cookie相关 start  ****************************** */
@@ -89,3 +82,24 @@ const mSchoolUrlMap = {
   development: 'https://devm.xuetian.cn'
 }
 export const mSchoolUrl = mSchoolUrlMap[apiEnv]
+
+/** ***************************  报名 end  ****************************** */
+const server = {
+  // 配置中心
+  setting: {
+    development: 'https://devdataconfigapi.xuetian.cn',
+    test: 'https://testdataconfigapi.xuetian.cn',
+    production: 'https://dataconfigapi.xuetian.cn'
+  },
+  // data-service服务，上传图片
+  ds: {
+    development: 'https://devxtapi.xuetian.cn/data-service',
+    test: 'https://testxtapi.xuetian.cn/data-service',
+    production: 'https://dsw.xuetian.cn'
+  }
+}
+
+export const getBaseUrl = (system = 'setting') => {
+  return server[system][apiEnv]
+}
+/** ***************************  报名 end  ****************************** */

@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-02 17:06:07
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-19 14:29:45
+ * @LastEditTime: 2023-04-20 11:08:11
  * @Description: 上传组件的内部自定义slot
 -->
 <template>
@@ -16,6 +16,8 @@
 </template>
 
 <script lang="ts" setup>
+import { getSignUpImageUrl } from '@/utils'
+
 interface Props {
   width?: string
   text?: string
@@ -24,7 +26,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   width: '',
   text: '正面',
-  uploadBg: new URL('@/assets/images/signUp/bim_answer_lidcard_front@2x.png', import.meta.url).href
+  uploadBg: getSignUpImageUrl('bim_answer_lidcard_front@2x.png')
 })
 const { width, text, uploadBg } = toRefs(props)
 </script>

@@ -4,7 +4,7 @@
  * @Author: jiangruohui
  * @Date: 2022-03-15 16:52:54
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-19 14:43:12
+ * @LastEditTime: 2023-04-19 17:10:52
  * @Description:
  */
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
@@ -14,7 +14,7 @@ import { Toast } from 'vant'
 import { useUserStore, useMainStore } from '@/store/index'
 import { encrypt, decrypt } from '@/utils/aes'
 import { removeUserInfo } from '@/utils/store'
-import { baseURL, dataServiceUrl } from '@/config'
+import { baseURL, getBaseUrl } from '@/config'
 
 const needEncrypt = import.meta.env.PROD && import.meta.env?.VITE_APP_ENV === 'production'
 const LOGIN_ERROR_CODE = 2
@@ -74,7 +74,8 @@ const genHeader = () => {
 service.interceptors.request.use(
   (config: RequestConfig) => {
     if (config.options && config.options.domain) {
-      config.baseURL = `${baseURL}/${config.options.domain}`
+      config.baseURL = getBaseUrl(config.options.domain)
+      console.log(' hj ~ file: request.ts:78 ~ config.baseURL:', config.baseURL)
     }
     const mainStore = useMainStore()
     const userStore = useUserStore()
@@ -358,7 +359,7 @@ export const uploadImage = (file: any, options = {}) => {
       'Content-Type': 'multipart/form-data'
     }
   }
-  const uploadPath = `${dataServiceUrl}/data-service/file/upload`
+  const uploadPath = `${getBaseUrl('ds')}/data-service/file/upload`
 
   return new Promise((resolve, reject) => {
     // 把 uploadPath 换成自己的 上传路径
