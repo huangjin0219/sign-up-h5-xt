@@ -109,7 +109,7 @@ const handleNext = async () => {
     })
     return
   }
-  if (!isDataStatusWaitWrite) {
+  if (!isDataStatusWaitWrite.value) {
     router.push({
       name: 'BasicInfo',
       query

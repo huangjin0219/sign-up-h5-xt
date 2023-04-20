@@ -9,14 +9,14 @@
             v-model="baseForm.ad_ticket_photo"
             max-count="1"
             class="upload-one-inch"
-            :after-read="(file) => handleUploadImage(file, 'adTicketPhoto')"
+            :after-read="(file) => handleUploadImage(file, 'ad_ticket_photo')"
           >
             <upload-slot :upload-bg="oneInchBg"></upload-slot>
           </vant-uploader>
         </div>
       </div>
-      <TempTime v-if="basisShow" v-model="baseForm.basisTime" title="基础考试时间" />
-      <TempTime v-if="practiceShow" v-model="baseForm.practiceTime" title="实务考试时间" />
+      <TempTime v-if="basisShow" v-model:value="baseForm.basisTime" title="基础考试时间" />
+      <TempTime v-if="practiceShow" v-model:value="baseForm.practiceTime" title="实务考试时间" />
     </vant-form>
     <div v-if="basisShow || practiceShow || ticketShow" class="bottom">
       <div class="save" @click="handleReWrite">重新填写</div>
@@ -75,23 +75,23 @@ export default {
     async handleUploadImage(file, urlType) {
       const type = file.file.name.split('.')[1]
       if (!type || ['png', 'jpg'].every((item) => item !== type.toLocaleLowerCase())) {
-        this.baseForm.ad_ticket_photo = []
+        this.baseForm[urlType] = []
         this.$toast('请上传jpg或png格式的图片')
         return false
       }
       const fileCompress = await handleCompressImg(file.file)
       if (fileCompress.size > 2 * 1024 * 1024) {
-        this.baseForm.ad_ticket_photo = []
+        this.baseForm[urlType] = []
         this.$toast('准考证照大小超过2M限制')
         return false
       }
       uploadImage(fileCompress)
         .then((res) => {
-          this.baseForm.ad_ticket_photo = [{ url: res }]
+          this.baseForm[urlType] = [{ url: res }]
         })
         .catch((err) => {
           console.log('handleUploadImage -> error', err)
-          this.baseForm.ad_ticket_photo = []
+          this.baseForm[urlType] = []
         })
     },
     // 获取列表数据
@@ -137,7 +137,7 @@ export default {
           }
         })
         param.supplementData = supplementData
-        submitAddInfo(param).then((res) => {
+        submitAddInfo(param).then(() => {
           this.$toast.success('提交成功')
         })
       } catch (error) {

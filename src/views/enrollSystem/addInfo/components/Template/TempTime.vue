@@ -70,6 +70,7 @@ export default {
       default: ''
     }
   },
+  emits: ['update:value'],
   data() {
     return {
       startDate: this.value ? new Date(this.value.split(',')[0]) : new Date(),
@@ -90,7 +91,7 @@ export default {
         return arr[0] || ''
       },
       set(val) {
-        this.$emit('input', [val, this.endTime || ''].join(','))
+        this.$emit('update:value', [val, this.endTime || ''].join(','))
       }
     },
     endTime: {
@@ -100,7 +101,7 @@ export default {
         return arr[1] || ''
       },
       set(val) {
-        this.$emit('input', [this.startTime || '', val].join(','))
+        this.$emit('update:value', [this.startTime || '', val].join(','))
       }
     }
   },

@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-06-30 17:33:53
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-19 10:15:26
+ * @LastEditTime: 2023-04-20 20:54:20
  * @Description: 线上报名系统-错误状态提示页
 -->
 <template>
@@ -55,7 +55,7 @@ const isFineshed = computed(() => {
   return errorCode.value === PRE_ERR_CODE + ERR_CODE_MAP.TIME_ILLEGAL
 })
 const isErrorLink = computed(() => {
-  return isNotExist || isInvalidLink || isFineshed
+  return isNotExist.value || isInvalidLink.value || isFineshed.value
 })
 </script>
 <script lang="ts">
