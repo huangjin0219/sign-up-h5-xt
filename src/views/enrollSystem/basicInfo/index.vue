@@ -4,7 +4,7 @@
  * @Author: 刘帅楠
  * @Date: 2020-07-01 09:25:35
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-20 16:24:48
+ * @LastEditTime: 2023-04-20 20:28:09
 -->
 <template>
   <div class="page-fill-info">
@@ -283,6 +283,7 @@
 
     <PhotoInfoForm
       v-show="!showBasisStep"
+      ref="photoInfoFormRef"
       :cphoto-form="photoForm"
       :file-form="fileForm"
       :could-edit="couldEdit"
@@ -709,7 +710,11 @@ const hasMobileChange = () => {
   return signUpMobile !== customerMobile
 }
 
+const photoInfoFormRef = ref()
 const buildSaveParams = () => {
+  photoForm.value = photoInfoFormRef.value.photoForm
+  fileForm.value = photoInfoFormRef.value.fileForm
+
   const cphotoForm = Object.keys(photoForm.value).reduce((res, imageKey) => {
     const imgObj = photoForm.value[imageKey][0]
     if (imgObj) {
@@ -722,7 +727,7 @@ const buildSaveParams = () => {
   const cfileForm = Object.keys(fileForm.value).reduce((res, fileKey) => {
     const fileValue = fileForm.value[fileKey][0]
     if (fileValue) {
-      res[fileKey] = fileValue
+      res[fileKey] = fileValue.url || ''
     }
     return res
   }, {})

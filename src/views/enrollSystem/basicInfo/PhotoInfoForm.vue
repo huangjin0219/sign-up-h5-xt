@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-02 16:06:49
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-20 16:22:20
+ * @LastEditTime: 2023-04-20 20:31:28
  * @Description: 照片信息表单
 -->
 <template>
@@ -94,14 +94,14 @@
             :max-size="4 * 1024 * 1024"
             @oversize="handleOverSize"
           >
-            <van-button
-              v-if="!fileForm.idCardFrontBackDocFile || !fileForm.idCardFrontBackDocFile.length"
-              icon="plus"
-              type="primary"
-              >上传文件</van-button
-            >
-            <template v-else #preview-cover>
-              <div class="upload-file__preview">
+            <template #preview-cover>
+              <van-button
+                v-if="!fileForm.idCardFrontBackDocFile || !fileForm.idCardFrontBackDocFile.length"
+                icon="plus"
+                type="primary"
+                >上传文件</van-button
+              >
+              <div v-else class="upload-file__preview">
                 <a :href="fileForm.idCardFrontBackDocFile[0]" download>点击下载查看</a>
               </div>
             </template>
@@ -176,7 +176,7 @@
               type="primary"
               >上传文件</van-button
             >
-            <template v-else #preview-cover>
+            <template #preview-cover>
               <div class="upload-file__preview" @click="handlePreviewPdf(fileForm.educationDocFile)">点击下载查看</div>
             </template>
           </van-uploader>
@@ -206,14 +206,11 @@
               type="primary"
               >上传文件</van-button
             >
-            <div
-              v-else
-              slot="preview-cover"
-              class="upload-file__preview"
-              @click="handlePreviewPdf(fileForm.educationPrepareDocFile)"
-            >
-              点击下载查看
-            </div>
+            <template #preview-cover>
+              <div class="upload-file__preview" @click="handlePreviewPdf(fileForm.educationPrepareDocFile)">
+                点击下载查看
+              </div>
+            </template>
           </van-uploader>
         </div>
       </div>
@@ -240,14 +237,11 @@
               type="primary"
               >上传文件</van-button
             >
-            <div
-              v-else
-              slot="preview-cover"
-              class="upload-file__preview"
-              @click="handlePreviewPdf(fileForm.educationCheckReportDocFile)"
-            >
-              点击下载查看
-            </div>
+            <template #preview-cover>
+              <div class="upload-file__preview" @click="handlePreviewPdf(fileForm.educationCheckReportDocFile)">
+                点击下载查看
+              </div>
+            </template>
           </van-uploader>
         </div>
       </div>
@@ -349,9 +343,11 @@
             <van-button v-if="!fileForm.templateDocFile || !fileForm.templateDocFile.length" icon="plus" type="primary"
               >上传文件</van-button
             >
-            <div v-else slot="preview-cover" class="upload-file__preview">
-              <a :href="fileForm.templateDocFile[0]" download>点击下载查看</a>
-            </div>
+            <template #preview-cover>
+              <div class="upload-file__preview">
+                <a :href="fileForm.templateDocFile[0]" download>点击下载查看</a>
+              </div>
+            </template>
           </van-uploader>
         </div>
       </div>
@@ -442,9 +438,11 @@
                 type="primary"
                 >上传文件</van-button
               >
-              <div v-else slot="preview-cover" class="upload-file__preview">
-                <a :href="fileForm[item.inputParameter][0]" download>点击下载查看</a>
-              </div>
+              <template #preview-cover>
+                <div class="upload-file__preview">
+                  <a :href="fileForm[item.inputParameter][0]" download>点击下载查看</a>
+                </div>
+              </template>
             </van-uploader>
           </div>
         </div>
@@ -492,6 +490,10 @@ const { cphotoForm, cfileForm, templateList, couldEdit, organizationId } = toRef
 
 const photoForm = ref<any>(cphotoForm.value)
 const fileForm = ref<any>(cfileForm.value)
+defineExpose({
+  photoForm,
+  fileForm
+})
 // UPLOAD_PARAM_ACCEPT_MAP,
 //       BASIS_TEMPLATE_KEY_MAP,
 // 展示身份证提示的弹窗
@@ -546,6 +548,7 @@ const handleClickIdentity = (type: any) => {
 
 // 上传图片后的回调函数
 const handleAfterRead = (file: any, urlType: any) => {
+  console.log(' hj ~ file: PhotoInfoForm.vue:547 ~ handleAfterRead ~ urlType:', urlType)
   if (isStrImageEnd(urlType)) {
     handleUploadImage(file, urlType)
   } else if (isStrFileEnd(urlType)) {
@@ -586,6 +589,7 @@ const handleUploadImage = async (file: any, urlType: any) => {
   }
   uploadImage(fileCompress)
     .then((res) => {
+      console.log(' hj ~ file: PhotoInfoForm.vue:587 ~ .then ~ res:', res)
       photoForm.value[urlType] = [{ url: res }]
     })
     .catch((err) => {
@@ -607,7 +611,7 @@ const handleUploadFile = async (file: any, urlType: any, item: any = {}) => {
   console.log('🚀 ~ file: PhotoInfoForm. ~ file, urlType', file, urlType)
   uploadImage(file.file)
     .then((res) => {
-      fileForm.value[urlType] = [res]
+      fileForm.value[urlType] = [{ url: res }]
     })
     .catch((err) => {
       console.log('handleAfterRead -> err', err)
@@ -683,6 +687,10 @@ const showFormItem = (prop: any) => {
   // 文件类型的 不展示icon
   .upload-file {
     :deep(.van-uploader__file-icon) {
+      display: none;
+    }
+
+    :deep(.van-ellipsis) {
       display: none;
     }
     .upload-file__preview {
