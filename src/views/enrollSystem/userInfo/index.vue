@@ -4,14 +4,14 @@
  * @Author: 刘帅楠
  * @Date: 2020-07-09 14:31:37
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-19 11:39:17
+ * @LastEditTime: 2023-04-21 17:37:25
 -->
 <template>
   <div class="page-home__bg">
     <div class="page-home">
       <div class="enroll-time">
-        报名开放时间：{{ $filters.date(enrollInfo.startTime, 'YY/MM/dd hh:mm') }}-{{
-          $filters.date(enrollInfo.endTime, 'YY/MM/dd hh:mm')
+        报名开放时间：{{ $filters.date(enrollInfo.startTime, 'YY.MM.dd hh:mm:ss') }}-{{
+          $filters.date(enrollInfo.endTime, 'YY.MM.dd hh:mm:ss')
         }}
       </div>
       <div class="enroll-content__bg">
@@ -162,8 +162,6 @@ $borderColor: #dcdfe6;
   background-repeat: no-repeat;
   .enroll-time {
     margin-top: 142px;
-    padding: 0 20px;
-    text-align: center;
     opacity: 0.6;
     font-size: 14px;
     font-family: PingFangSC-Regular, PingFang SC;

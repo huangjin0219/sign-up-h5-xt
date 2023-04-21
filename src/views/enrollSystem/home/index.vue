@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-06-30 17:33:53
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-19 10:52:55
+ * @LastEditTime: 2023-04-21 17:36:10
  * @Description: bim报名系统-首页登录页和信息确认页
 -->
 <template>
@@ -48,11 +48,12 @@ import { Toast } from 'vant'
 import { useSignUpStore } from '@/store/index'
 
 import { bizType } from '@/config/index'
-// import md5 from 'js-md5'
-// import { setStore } from '@/utils/store'
+import md5 from 'js-md5'
+import { setStore } from '@/utils/store'
 import { sendVerifyCode } from '@/common/api/signUp/user'
 import { enrollCheck } from '@/common/api/signUp/enrollSys'
-// import { SING_UP_RECORD_ID_STORE_KEY, LOGIN_STATUS_STORE_KEY } from '@/permission'
+import { SING_UP_RECORD_ID_STORE_KEY, LOGIN_STATUS_STORE_KEY } from '@/router/signUpPermission'
+
 const route = useRoute()
 const router = useRouter()
 const signUpStore = useSignUpStore()
@@ -72,8 +73,8 @@ onMounted(() => {
 })
 
 const getLink = async (signUpRecordId: any) => {
-  const res: any = await enrollCheck({ signUpRecordId })
-  enrollInfo.value = res.data
+  const data: any = await enrollCheck({ signUpRecordId })
+  enrollInfo.value = data
   console.log(' hj ~ file: index.vue:74 ~ getLink ~ enrollInfo.value:', enrollInfo.value)
 }
 const getCaptcha = async () => {
@@ -124,8 +125,8 @@ const handleLogin = async () => {
   await registerOrLogin(params)
 
   // 将登录状态存下来
-  // setStore(SING_UP_RECORD_ID_STORE_KEY, md5(`${SING_UP_RECORD_ID_STORE_KEY}${this.signUpRecordId}`))
-  // setStore(LOGIN_STATUS_STORE_KEY, md5(`${LOGIN_STATUS_STORE_KEY}${this.signUpRecordId}`))
+  setStore(SING_UP_RECORD_ID_STORE_KEY, md5(`${SING_UP_RECORD_ID_STORE_KEY}${signUpRecordId.value}`))
+  setStore(LOGIN_STATUS_STORE_KEY, md5(`${LOGIN_STATUS_STORE_KEY}${signUpRecordId.value}`))
 
   const { query } = route
   const { redirect, ...otherQuery } = route.query

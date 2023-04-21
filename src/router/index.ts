@@ -2,7 +2,7 @@
  * @Author: jiangruohui
  * @Date: 2022-03-15 13:54:07
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-18 20:59:15
+ * @LastEditTime: 2023-04-21 17:13:48
  * @Description:
  */
 import { createRouter, createWebHistory, RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
@@ -10,6 +10,7 @@ import { useUserStore, useMainStore } from '@/store/index'
 import { APP_NAME } from '@/config/index'
 import { encrypt64 } from '@/utils/index'
 import { shareArrive } from '@/common/api/index'
+import { validPermissionRouter } from './signUpPermission'
 import signUpRouter from './modules/signUp'
 
 const routes: Array<RouteRecordRaw> = [
@@ -100,7 +101,9 @@ router.beforeEach(async (to, from, next) => {
       next(`/login${query?.data ? `?data=${query.data}` : ''}`)
     }
   } else {
-    next()
+    // next()
+    validPermissionRouter(to, from, next)
+    console.log(typeof validPermissionRouter)
   }
 })
 

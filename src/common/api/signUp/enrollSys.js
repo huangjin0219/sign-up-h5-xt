@@ -47,15 +47,13 @@ export function acquireConfirmInfo(params) {
 }
 
 // 报名信息确定
-export function cmdConfirm(params) {
+export function cmdConfirm(params, options) {
+  options = Object.assign(options, { login: true, toast: true })
   return request({
     url: '/crm-business/signUp/confirm',
     method: 'post',
     data: params,
-    options: {
-      login: true,
-      toast: true
-    }
+    options
   })
 }
 
