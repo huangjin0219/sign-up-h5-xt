@@ -4,7 +4,7 @@
  * @Author: 刘帅楠
  * @Date: 2020-07-01 17:24:27
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-19 14:23:23
+ * @LastEditTime: 2023-04-21 10:38:52
 -->
 <template>
   <div class="stpebar-title">
@@ -18,11 +18,10 @@ interface Props {
   label?: string
   tipTitle?: string
 }
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   label: '',
   tipTitle: ''
 })
-const { label, tipTitle } = toRefs(props)
 </script>
 <style lang="scss" scoped>
 @import '@/styles/mixin.scss';

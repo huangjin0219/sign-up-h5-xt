@@ -4,7 +4,7 @@
  * @Author: 刘帅楠
  * @Date: 2020-07-01 17:24:27
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-20 10:34:26
+ * @LastEditTime: 2023-04-21 10:38:19
 -->
 <template>
   <div class="tab-wrap">
@@ -32,9 +32,9 @@ const props = withDefaults(defineProps<Props>(), {
   tabType: true,
   couldEdit: true
 })
-const emit = defineEmits(['update:model-value'])
-const { modelValue, list, tabType, couldEdit } = toRefs(props)
+const { modelValue, couldEdit } = toRefs(props)
 
+const emit = defineEmits(['update:model-value'])
 const tabValue = computed({
   get() {
     return modelValue.value

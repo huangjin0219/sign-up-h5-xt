@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-14 10:15:33
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-19 13:59:53
+ * @LastEditTime: 2023-04-21 10:36:24
  * @Description: 审核结果展示
 -->
 <template>
@@ -57,11 +57,10 @@ const EXAM_STATUS_DESC_MAP = {
 }
 
 interface Props {
-  signNo?: string
+  signNo?: string // 报名编号
   remark?: string
-  isReWrite?: boolean
+  isReWrite?: boolean // 重新填写状态
   dataCheckStatus: string | number
-  dataStatus: string | number
   status: string | number
   examStatus: string | number
 }
@@ -72,19 +71,14 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const {
-  signNo, // 报名编号
   // 审核结果状态
   dataCheckStatus,
-  // 填写状态
-  dataStatus,
   // 报名状态 1.初始化 2.待报名 3.已报名 4.废弃
   status,
   // 考试状态 1.未知 2.未通过 3.通过
   examStatus,
   // 不通过原因
-  remark,
-  // 重新填写状态
-  isReWrite
+  remark
 } = toRefs(props)
 
 // 不通过原因

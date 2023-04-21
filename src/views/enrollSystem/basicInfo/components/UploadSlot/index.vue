@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-02 17:06:07
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-20 11:08:11
+ * @LastEditTime: 2023-04-21 10:40:12
  * @Description: 上传组件的内部自定义slot
 -->
 <template>
@@ -23,12 +23,11 @@ interface Props {
   text?: string
   uploadBg?: string
 }
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   width: '',
   text: '正面',
   uploadBg: getSignUpImageUrl('bim_answer_lidcard_front@2x.png')
 })
-const { width, text, uploadBg } = toRefs(props)
 </script>
 
 <style lang="scss" scoped>
