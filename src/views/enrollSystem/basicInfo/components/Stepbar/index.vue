@@ -4,7 +4,7 @@
  * @Author: 刘帅楠
  * @Date: 2020-07-01 11:35:54
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-20 11:05:35
+ * @LastEditTime: 2023-04-25 11:02:59
 -->
 <template>
   <div class="stpebar-wrap">
@@ -32,8 +32,8 @@ const props = withDefaults(defineProps<Props>(), {
 const { infoType } = toRefs(props)
 const imgSrc = computed(() => {
   return !infoType.value
-    ? getSignUpImageUrl('/basicInfo/bim_answer_lable2_nor.png')
-    : getSignUpImageUrl('/basicInfo/bim_answer_lable2_sel.png')
+    ? getSignUpImageUrl('basicInfo/bim_answer_lable2_nor.png')
+    : getSignUpImageUrl('basicInfo/bim_answer_lable2_sel.png')
 })
 </script>
 <style lang="scss" scoped>
