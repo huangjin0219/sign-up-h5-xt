@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-02 16:06:49
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-20 20:31:28
+ * @LastEditTime: 2023-04-21 17:48:48
  * @Description: 照片信息表单
 -->
 <template>
@@ -455,7 +455,7 @@
 
 <script lang="ts" setup>
 import { Form as vanForm, Uploader as vanUploader, Button as vanButton, Toast } from 'vant'
-import { uploadImage } from '@/utils/request'
+import { uploader as uploadImage } from '@/utils/request'
 import { BASIS_TEMPLATE_KEY_MAP, ID_PHOTO_ORGAN_SIZE_MAP, PDF_VIEWER_HOST } from '@/constant'
 import { isStrImageEnd, isStrFileEnd, getSignUpImageUrl } from '@/utils'
 import Title from './components/Title/index.vue'
@@ -588,9 +588,9 @@ const handleUploadImage = async (file: any, urlType: any) => {
     return false
   }
   uploadImage(fileCompress)
-    .then((res) => {
+    .then((res: any) => {
       console.log(' hj ~ file: PhotoInfoForm.vue:587 ~ .then ~ res:', res)
-      photoForm.value[urlType] = [{ url: res }]
+      photoForm.value[urlType] = [{ url: res.data.url }]
     })
     .catch((err) => {
       console.log('handleAfterRead -> err', err)
@@ -610,8 +610,8 @@ const handleUploadFile = async (file: any, urlType: any, item: any = {}) => {
   }
   console.log('🚀 ~ file: PhotoInfoForm. ~ file, urlType', file, urlType)
   uploadImage(file.file)
-    .then((res) => {
-      fileForm.value[urlType] = [{ url: res }]
+    .then((res: any) => {
+      fileForm.value[urlType] = [{ url: res.data.url }]
     })
     .catch((err) => {
       console.log('handleAfterRead -> err', err)

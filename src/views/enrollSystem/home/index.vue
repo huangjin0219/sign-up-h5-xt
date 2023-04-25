@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-06-30 17:33:53
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-21 17:36:10
+ * @LastEditTime: 2023-04-22 11:42:54
  * @Description: bim报名系统-首页登录页和信息确认页
 -->
 <template>
@@ -45,18 +45,21 @@
 
 <script lang="ts" setup>
 import { Toast } from 'vant'
-import { useSignUpStore } from '@/store/index'
+// import { useSignUpStore } from '@/store/index'
+import { useUserStore } from '@/store/index'
 
-import { bizType } from '@/config/index'
 import md5 from 'js-md5'
 import { setStore } from '@/utils/store'
 import { sendVerifyCode } from '@/common/api/signUp/user'
 import { enrollCheck } from '@/common/api/signUp/enrollSys'
 import { SING_UP_RECORD_ID_STORE_KEY, LOGIN_STATUS_STORE_KEY } from '@/router/signUpPermission'
+import { LoginVerificationType, LoginOperationType } from '@/utils/enum'
 
+const bizType = '1009'
 const route = useRoute()
 const router = useRouter()
-const signUpStore = useSignUpStore()
+// const signUpStore = useSignUpStore()
+const signUpStore = useUserStore()
 const { registerOrLogin } = signUpStore
 
 const enrollInfo = ref<any>({})
@@ -114,12 +117,19 @@ const handleLogin = async () => {
   if (loginLoading.value) return
   const { customerMobile, captcha } = enrollInfo.value
   if (!captcha) return Toast('请输入验证码')
+  // const params = {
+  //   loginType: 2,
+  //   mobile: customerMobile,
+  //   verificationCode: captcha,
+  //   bizType,
+  //   appType: '1005'
+  // }
   const params = {
-    loginType: 2,
     mobile: customerMobile,
     verificationCode: captcha,
-    bizType,
-    appType: '1005'
+    loginVerificationType: LoginVerificationType.MobileCaptch, // 手机号验证码登录
+    loginOperationType: LoginOperationType.LoginOrRegister,
+    bizType
   }
   console.log('handleLogin -> params', params)
   await registerOrLogin(params)

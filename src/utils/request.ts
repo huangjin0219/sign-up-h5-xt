@@ -4,7 +4,7 @@
  * @Author: jiangruohui
  * @Date: 2022-03-15 16:52:54
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-19 17:10:52
+ * @LastEditTime: 2023-04-21 20:55:12
  * @Description:
  */
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
@@ -331,7 +331,9 @@ export const uploader = (file: any) => {
   return new Promise((resolve, reject) => {
     const formData = new FormData()
     const userStore = useUserStore()
-    formData.append('userToken', userStore.user?.userToken as string)
+    if (userStore.user) {
+      formData.append('userToken', userStore.user?.userToken as string)
+    }
     formData.append('resource', file)
     axios
       .post(`${baseURL}/zeus/multimedia/upload`, formData, {
@@ -349,7 +351,7 @@ export const uploader = (file: any) => {
 }
 
 // 上传图片
-export const uploadImage = (file: any, options = {}) => {
+export const uploadImage = (file: any) => {
   // new 一个FormData格式的参数
   const params = new FormData()
   params.append('file', file)

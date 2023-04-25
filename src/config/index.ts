@@ -6,7 +6,6 @@
  * @Description:
  */
 
-export const bizType = '1009'
 // 环境类型
 export type EnvType = 'production' | 'development' | 'test'
 export const APP_NAME = '学天服务中心'
