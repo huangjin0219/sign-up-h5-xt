@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-06-30 17:33:53
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-22 11:42:54
+ * @LastEditTime: 2023-04-26 17:20:01
  * @Description: bim报名系统-首页登录页和信息确认页
 -->
 <template>
@@ -251,7 +251,7 @@ $borderColor: #dcdfe6;
             color: $bimPrimary;
             font-size: 13px;
             border-left: 0.5px solid $borderColor;
-            &[disabled] {
+            &[disabled='true'] {
               color: $disabledTextColor;
             }
           }
