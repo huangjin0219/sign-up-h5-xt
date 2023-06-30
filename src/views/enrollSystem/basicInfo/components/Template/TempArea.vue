@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-19 15:06:49
+ * @LastEditTime: 2023-06-30 17:21:30
  * @Description: 模板-报考省市
 -->
 <template>
@@ -65,7 +65,6 @@ export default {
   emits: ['update:value', 'change'],
   data() {
     return {
-      loading: true,
       showArea: false,
       // 带id的省数据
       provinceTotalList: [],

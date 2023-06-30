@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-19 15:01:01
+ * @LastEditTime: 2023-06-30 13:38:19
  * @Description: 模板-拓展列表
 -->
 <template>
@@ -51,6 +51,7 @@ export default {
     },
     list() {
       if (this.templateItem.options) {
+        if (Array.isArray(this.templateItem.options)) return this.templateItem.options
         return this.templateItem.options.split(',')
       }
       return []

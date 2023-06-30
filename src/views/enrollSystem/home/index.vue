@@ -2,16 +2,16 @@
  * @Author: HuZhangjie
  * @Date: 2020-06-30 17:33:53
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-26 17:20:01
+ * @LastEditTime: 2023-06-30 13:59:54
  * @Description: bim报名系统-首页登录页和信息确认页
 -->
 <template>
   <div class="page-home__bg">
     <div class="page-home">
       <div class="enroll-time">
-        报名开放时间：{{ $filters.date(enrollInfo.startTime, 'YY.MM.dd hh:mm:ss') }}-{{
+        <!-- 报名开放时间：{{ $filters.date(enrollInfo.startTime, 'YY.MM.dd hh:mm:ss') }}-{{
           $filters.date(enrollInfo.endTime, 'YY.MM.dd hh:mm:ss')
-        }}
+        }} -->
       </div>
       <div class="enroll-content__bg">
         <div class="enroll-content">

@@ -4,7 +4,7 @@
  * @Author: 刘帅楠
  * @Date: 2020-07-01 09:25:35
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-20 20:28:09
+ * @LastEditTime: 2023-06-30 20:45:54
 -->
 <template>
   <div class="page-fill-info">
@@ -279,6 +279,48 @@
           :education-type="educationType"
         ></TempListextField>
       </template>
+
+      <template v-for="item in baseForm.userInfo">
+        <!-- 输入框 -->
+        <TempInputExtField
+          v-if="
+            ['输入框', '详细地址', '手机号', '邮箱', '出生年月', '身份证号', '文本', '数字', '日期'].includes(item.desc)
+          "
+          :key="item.code"
+          v-model:value="item.value"
+          :template-item="item"
+          :could-edit="couldEdit"
+        ></TempInputExtField>
+        <!-- 民族 -->
+        <TempNation
+          v-if="['民族'].includes(item.desc)"
+          :key="item.code"
+          v-model:value="item.value"
+          :tip-title="item.tips"
+          :could-edit="couldEdit"
+        ></TempNation>
+        <!-- 报考省市 -->
+        <!-- :province-id="baseForm.provinceId"
+        :area-id="baseForm.areaId" -->
+        <TempCity
+          v-if="['省/市'].includes(item.desc)"
+          :key="item.code"
+          v-model:value="item.value"
+          :could-edit="isSevenType ? false : couldEdit"
+          :education-type="educationType"
+          :template-item="item"
+        ></TempCity>
+        <!-- @change="handleChangeArea" -->
+        <!-- 单选 -->
+        <TempListextField
+          v-if="['单选项', '多选项'].includes(item.desc)"
+          :key="item.code"
+          v-model:value="item.value"
+          :template-item="item"
+          :could-edit="couldEdit"
+          :education-type="educationType"
+        ></TempListextField>
+      </template>
     </van-form>
 
     <PhotoInfoForm
@@ -326,6 +368,8 @@
 <script lang="ts" setup>
 import { Form as vanForm, Field as vanField, Toast } from 'vant'
 import type { FormInstance } from 'vant'
+import { TEMPLATE_ITEM } from '@/typings/sign-up'
+
 import { BASIS_TEMPLATE_KEY_LIST, BASIS_TEMPLATE_KEY_MAP, AUDIT_STATUS_MAP, DATA_WRITE_STATUS_MAP } from '@/constant'
 import { isStrImageEnd, isStrFileEnd } from '@/utils'
 import filters from '@/common/filters/index'
@@ -488,13 +532,21 @@ onMounted(async () => {
 
 const imgExtfieldList = ref<any[]>([])
 const docExtfieldList = ref<any[]>([])
+const onlyOneTemplateList = ref<any[]>([])
+const otherInfoTemplateList = ref<TEMPLATE_ITEM[]>([])
 // 获取模板列表
 const getTemplateList = async () => {
   const data = await queryTemplateList({ signUpRecordId: queryInfo.value.signUpRecordId })
-  templateList.value = [
-    ...data.inputData
-    // { key: 'UPLOAD_FRONT_AND_BACK_IDCARD_DOCFILE', tip: '请上传身份证正反面word文档', inputParameter: 'idCardFrontAndBackDocFile' }
-  ]
+  // templateList.value = [
+  //   ...data.inputData
+  //   // { key: 'UPLOAD_FRONT_AND_BACK_IDCARD_DOCFILE', tip: '请上传身份证正反面word文档', inputParameter: 'idCardFrontAndBackDocFile' }
+  // ]
+  templateList.value = data.ruleValue && JSON.parse(data.ruleValue)
+
+  onlyOneTemplateList.value = templateList.value.filter((i) => i.itemType === 'once')
+  otherInfoTemplateList.value = templateList.value.filter((i) => i.itemType !== 'once').sort((a, b) => a.sort - b.sort)
+  console.log(' hj ~ file: index.vue:532 ~ getTemplateList ~ otherInfoTemplateList:', otherInfoTemplateList.value)
+
   extfieldList.value = templateList.value.filter((tem) => {
     return /EXTFIELD/.test(tem.key)
   })
@@ -508,6 +560,7 @@ const getTemplateList = async () => {
   educationType.value = data.educationType
   getMuliteTempData()
 }
+
 // 多选多的数据
 const getMuliteTempData = () => {
   const result = { keyNameMap: {}, tempData: {} }
@@ -541,12 +594,33 @@ const getCustomerInfo = async () => {
     customerMobile?: any
     provinceId?: any
     areaId?: any
+    userInfo?: any
   }
   const cphotoForm = {}
   const cfileForm = {}
   const cauditForm = {}
   const cbaseForm: baseFormProp = {}
   const data = await queryCustomerInfo({ signUpRecordId: queryInfo.value.signUpRecordId })
+  /**
+   * 处理 userInfo ：userInfo = userInfo + otherInfoTemplateList
+   * 若请求回来的数据中的 userInfo 有值，则将这些值的 value 分别赋值给 otherInfoTemplateList
+   *  得到的新的值再赋值给 userInfo
+   *  这样做的目的是规则可能会调整（新增规则）导致 userInfo 和 otherInfoTemplateList（只会多不会少） 不一致
+   * 没值的话 直接取 otherInfoTemplateList
+   */
+  const queryedUserInfo = data.userInfo && JSON.parse(data.userInfo)
+  console.log(' hj ~ file: index.vue:606 ~ getCustomerInfo ~ queryedUserInfo:', queryedUserInfo)
+  const userInfo = otherInfoTemplateList.value.map((otherInfoTemplateItem: TEMPLATE_ITEM) => {
+    if (queryedUserInfo && queryedUserInfo.length > 0) {
+      const index = queryedUserInfo.findIndex((item: any) => item.code === otherInfoTemplateItem.code)
+      if (index !== -1) {
+        return Object.assign(otherInfoTemplateItem, queryedUserInfo[index])
+      }
+    }
+    return otherInfoTemplateItem
+  })
+  data.userInfo = userInfo
+
   // 处理customer的信息，拆分为基础信息，图片信息，校验信息等
   Object.keys(data).forEach((key) => {
     if (isStrImageEnd(key) || imgExtfieldList.value.map((item) => item.inputParameter).includes(key)) {
@@ -568,7 +642,8 @@ const getCustomerInfo = async () => {
     provinceId: isSevenType.value ? 10110000 : provinceId,
     areaId: isSevenType.value ? 10110100 : areaId,
     examRoom: isSevenType.value ? '总部1102' : '',
-    signUpMobile: signUpMobile || customerMobile
+    signUpMobile: signUpMobile || customerMobile,
+    userInfo
   }
   auditForm.value = {
     ...cauditForm
@@ -600,6 +675,10 @@ const handleChangeArea = ({ provinceId, areaId }: any) => {
 const showFormItem = (prop: any) => {
   return templateList.value.find((template) => template.key === prop)
 }
+// 判断是否展示对应的输入项
+// const showOnlyOnceFormItem = (prop: any) => {
+//   return checkNeedShowOnlyOneItem(prop, onlyOneTemplateList.value)
+// }
 // 重新填写
 const handleReWrite = () => {
   console.log('handleReWrite -> auditForm.value', auditForm.value.isOutDate)
@@ -736,6 +815,7 @@ const buildSaveParams = () => {
     ...baseForm.value,
     ...cphotoForm,
     ...cfileForm,
+    userInfo: JSON.stringify(otherInfoTemplateList.value),
     signUpRecordId: queryInfo.value.signUpRecordId
   }
 }
