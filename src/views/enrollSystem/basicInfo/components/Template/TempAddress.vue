@@ -2,18 +2,23 @@
  * @Author: huangjin
  * @Date: 2021-07-20 20:49:19
  * @LastEditors: huangjin
- * @LastEditTime: 2021-07-21 13:42:29
+ * @LastEditTime: 2023-07-03 14:23:57
  * @Description: 模板-通讯地址
 -->
 <template>
   <div class="app-container">
-    <Title :tip-title="templateItem.tips" label="通讯地址" />
+    <Title :tip-title="templateItem.tips" :label="templateItem.aliasLabelName || '通讯地址'" />
     <van-field
       v-model="templateValue"
       class="info-space"
-      placeholder="请输入通讯地址"
+      :placeholder="`请输入${templateItem.aliasLabelName || '通讯地址'}`"
       :readonly="!couldEdit"
-      :rules="[{ required: !templateItem.unnecessary, message: '请输入正确的通讯地址' }]"
+      :rules="[
+        {
+          required: !templateItem.unnecessary,
+          message: `请填写${templateItem.aliasLabelName || '正确的通讯地址'}`
+        }
+      ]"
     />
   </div>
 </template>
