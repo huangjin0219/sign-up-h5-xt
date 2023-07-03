@@ -4,7 +4,7 @@
  * @Author: 刘帅楠
  * @Date: 2020-07-01 09:25:35
  * @LastEditors: huangjin
- * @LastEditTime: 2023-06-30 20:45:54
+ * @LastEditTime: 2023-07-03 16:35:35
 -->
 <template>
   <div class="page-fill-info">
@@ -281,30 +281,93 @@
       </template>
 
       <template v-for="item in baseForm.userInfo">
-        <!-- 输入框 -->
-        <TempInputExtField
-          v-if="
-            ['输入框', '详细地址', '手机号', '邮箱', '出生年月', '身份证号', '文本', '数字', '日期'].includes(item.desc)
-          "
-          :key="item.code"
+        <!-- 性别 -->
+        <TempGender
+          v-if="['性别'].includes(item.desc)"
+          :key="item.ident"
           v-model:value="item.value"
-          :template-item="item"
+          :tip-title="item.tips"
           :could-edit="couldEdit"
-        ></TempInputExtField>
+        ></TempGender>
+
         <!-- 民族 -->
         <TempNation
           v-if="['民族'].includes(item.desc)"
-          :key="item.code"
+          :key="item.ident"
           v-model:value="item.value"
           :tip-title="item.tips"
           :could-edit="couldEdit"
         ></TempNation>
+
+        <!-- 身份证号 -->
+        <TempCardNo
+          v-if="['身份证号'].includes(item.desc)"
+          :key="item.ident"
+          v-model:value="item.value"
+          :tip-title="item.tips"
+          :could-edit="couldEdit"
+        ></TempCardNo>
+
+        <!-- 手机号 -->
+        <TempMobile
+          v-if="['手机号'].includes(item.desc)"
+          :key="item.ident"
+          v-model:value="item.value"
+          :tip-title="item.tips"
+          :could-edit="couldEdit"
+          :disabled="isJixuJiaoyu"
+        ></TempMobile>
+
+        <!-- 通讯地址 -->
+        <TempAddress
+          v-if="['详细地址'].includes(item.desc)"
+          :key="item.ident"
+          v-model:value="item.value"
+          :template-item="item"
+          :could-edit="couldEdit"
+        ></TempAddress>
+
+        <!-- 选择年月 -->
+        <TempSelectYearMonth
+          v-if="['出生年月'].includes(item.desc)"
+          :key="item.ident"
+          v-model:value="item.value"
+          :template-item="item"
+          :could-edit="couldEdit"
+        ></TempSelectYearMonth>
+
+        <!-- 选择日期 -->
+        <TempSelectDate
+          v-if="['日期'].includes(item.desc)"
+          :key="item.ident"
+          v-model:value="item.value"
+          :template-item="item"
+          :could-edit="couldEdit"
+        ></TempSelectDate>
+
+        <!-- 邮箱 -->
+        <TempEmail
+          v-if="['邮箱'].includes(item.desc)"
+          :key="item.ident"
+          v-model:value="item.value"
+          :template-item="item"
+          :could-edit="couldEdit"
+        ></TempEmail>
+
+        <!-- 输入框 -->
+        <TempInputExtField
+          v-if="['输入框', '文本', '数字'].includes(item.desc)"
+          :key="item.ident"
+          v-model:value="item.value"
+          :template-item="item"
+          :could-edit="couldEdit"
+        ></TempInputExtField>
         <!-- 报考省市 -->
         <!-- :province-id="baseForm.provinceId"
         :area-id="baseForm.areaId" -->
         <TempCity
           v-if="['省/市'].includes(item.desc)"
-          :key="item.code"
+          :key="item.ident"
           v-model:value="item.value"
           :could-edit="isSevenType ? false : couldEdit"
           :education-type="educationType"
@@ -313,12 +376,22 @@
         <!-- @change="handleChangeArea" -->
         <!-- 单选 -->
         <TempListextField
-          v-if="['单选项', '多选项'].includes(item.desc)"
-          :key="item.code"
+          v-if="['单选项'].includes(item.desc)"
+          :key="item.key"
           v-model:value="item.value"
           :template-item="item"
           :could-edit="couldEdit"
           :education-type="educationType"
+        ></TempListextField>
+        <!-- 多选 -->
+        <TempListextField
+          v-if="['多选项'].includes(item.desc)"
+          :key="item.key"
+          v-model:value="item.value"
+          :template-item="item"
+          :could-edit="couldEdit"
+          :education-type="educationType"
+          multiple
         ></TempListextField>
       </template>
     </van-form>
@@ -612,7 +685,7 @@ const getCustomerInfo = async () => {
   console.log(' hj ~ file: index.vue:606 ~ getCustomerInfo ~ queryedUserInfo:', queryedUserInfo)
   const userInfo = otherInfoTemplateList.value.map((otherInfoTemplateItem: TEMPLATE_ITEM) => {
     if (queryedUserInfo && queryedUserInfo.length > 0) {
-      const index = queryedUserInfo.findIndex((item: any) => item.code === otherInfoTemplateItem.code)
+      const index = queryedUserInfo.findIndex((item: any) => item.ident === otherInfoTemplateItem.ident)
       if (index !== -1) {
         return Object.assign(otherInfoTemplateItem, queryedUserInfo[index])
       }
