@@ -5,6 +5,7 @@
 
 // 报名规则
 export interface TEMPLATE_ITEM {
+  ident?: string
   code?: number
   desc?: string
   aliasLabelName?: string // label 内容 - 标题
