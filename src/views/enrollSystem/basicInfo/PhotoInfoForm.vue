@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-02 16:06:49
  * @LastEditors: huangjin
- * @LastEditTime: 2023-07-04 16:19:04
+ * @LastEditTime: 2023-07-04 18:23:50
  * @Description: 照片信息表单
 -->
 <template>
@@ -701,10 +701,11 @@ const handleUploadImage2 = async (file: any, tempItem: any) => {
     Toast('文件大小不能超过 - 200K')
     return false
   }
-  uploadImage(fileCompress)
+  uploadImage2(fileCompress)
     .then((res: any) => {
       console.log(' hj ~ file: PhotoInfoForm.vue:587 ~ .then ~ res:', res)
-      tempItem.value = [{ url: res.data.url }]
+      // tempItem.value = [{ url: res.data.url }]
+      tempItem.value = [{ url: res }]
     })
     .catch((err) => {
       console.log('handleAfterRead -> err', err)
