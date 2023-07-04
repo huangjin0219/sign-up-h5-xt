@@ -4,7 +4,7 @@
  * @Author: 刘帅楠
  * @Date: 2020-07-01 09:25:35
  * @LastEditors: huangjin
- * @LastEditTime: 2023-07-04 15:38:16
+ * @LastEditTime: 2023-07-04 17:11:19
 -->
 <template>
   <div class="page-fill-info">
@@ -280,6 +280,50 @@
         ></TempListextField>
       </template>
 
+      <template v-if="onlyOneTemplateList && onlyOneTemplateList.length">
+        <!-- 手机号 -->
+        <TempMobile
+          v-if="showOnlyOnceFormItem('报名手机号')"
+          v-model:value="baseForm.signUpMobile"
+          :tip-title="showOnlyOnceFormItem('报名手机号').tips"
+          :could-edit="couldEdit && !isJixuJiaoyu"
+          :disabled="isJixuJiaoyu"
+        ></TempMobile>
+        <TempAllAreaAsync
+          v-if="showOnlyOnceFormItem('省/市/区')"
+          :value="baseForm"
+          :could-edit="isSevenType ? false : couldEdit"
+          :education-type="educationType"
+          :template-item="showOnlyOnceFormItem('省/市/区')"
+          @update:value="setAreaInfo"
+        ></TempAllAreaAsync>
+        <TempAllAreaAsync
+          v-if="showOnlyOnceFormItem('省/市')"
+          :value="{
+            provinceId: baseForm.provinceId,
+            cityId: baseForm.cityId,
+            areaId: baseForm.areaId
+          }"
+          :level="2"
+          :could-edit="isSevenType ? false : couldEdit"
+          :education-type="educationType"
+          :template-item="showOnlyOnceFormItem('省/市')"
+          @update:value="(value:any) => (baseForm = { ...baseForm, ...value })"
+        ></TempAllAreaAsync>
+        <TempAllAreaAsync
+          v-if="showOnlyOnceFormItem('省份')"
+          :value="{
+            provinceId: baseForm.provinceId,
+            cityId: baseForm.cityId,
+            areaId: baseForm.areaId
+          }"
+          :level="1"
+          :could-edit="isSevenType ? false : couldEdit"
+          :education-type="educationType"
+          :template-item="showOnlyOnceFormItem('省份')"
+          @update:value="(value:any) => (baseForm = { ...baseForm, ...value })"
+        ></TempAllAreaAsync>
+      </template>
       <template v-for="item in baseForm.userInfo">
         <!-- 性别 -->
         <TempGender
@@ -760,15 +804,22 @@ const handleChangeArea = ({ provinceId, areaId }: any) => {
   }
   console.log('handleChangeArea -> ', baseForm.value)
 }
+const setAreaInfo = (value: any) => {
+  baseForm.value = {
+    ...baseForm.value,
+    ...value
+  }
+  console.log('handleChangeArea -> ', baseForm.value)
+}
 
 // 判断是否展示对应的输入项
 const showFormItem = (prop: any) => {
   return templateList.value.find((template) => template.key === prop)
 }
 // 判断是否展示对应的输入项
-// const showOnlyOnceFormItem = (prop: any) => {
-//   return checkNeedShowOnlyOneItem(prop, onlyOneTemplateList.value)
-// }
+const showOnlyOnceFormItem = (desc: any) => {
+  return onlyOneTemplateList.value.find((i) => i.desc === desc)
+}
 // 重新填写
 const handleReWrite = () => {
   console.log('handleReWrite -> auditForm.value', auditForm.value.isOutDate)
