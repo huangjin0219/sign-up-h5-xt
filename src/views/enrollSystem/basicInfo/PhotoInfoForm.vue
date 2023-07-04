@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-02 16:06:49
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-21 17:48:48
+ * @LastEditTime: 2023-07-04 16:19:04
  * @Description: 照片信息表单
 -->
 <template>
@@ -447,6 +447,50 @@
           </div>
         </div>
       </template>
+      <template v-for="item in photoAndFileTempItemList">
+        <!-- 上传照片模板 -->
+        <div v-if="['图片'].includes(item.desc!)" :key="item.ident" class="form-item">
+          <Title :label="item.aliasLabelName" :tip-title="item.tips" />
+          <div class="info-space">
+            <van-uploader
+              v-model="item.value"
+              max-count="1"
+              class="upload-education"
+              :deletable="couldEdit"
+              :after-read="(file) => handleUploadImage2(file, item)"
+            >
+              <upload-slot :upload-bg="educationBg"></upload-slot>
+            </van-uploader>
+          </div>
+        </div>
+        <!-- 上传文件的模板 -->
+        <div v-if="['文件'].includes(item.desc!)" :key="item.ident" class="form-item">
+          <Title :label="item.aliasLabelName" :tip-title="item.tips" />
+          <div v-if="item.templateUrl" class="info-template">
+            <a :href="item.templateUrl" download>点击下载模板</a>
+          </div>
+          <!-- 这里的 format 是 '.doc,.docx' 的形式，与图片的 format 有所不同 'jpg,jpep' -->
+          <div class="info-space">
+            <van-uploader
+              v-model="item.value"
+              :accept="item.format?.join(',')"
+              class="upload-file"
+              :max-count="1"
+              :deletable="couldEdit"
+              :after-read="(file) => handleUploadFile2(file, item)"
+              :max-size="4 * 1024 * 1024"
+              @oversize="handleOverSize"
+            >
+              <van-button v-if="!item.value || !item.value.length" icon="plus" type="primary">上传文件</van-button>
+              <template #preview-cover>
+                <div class="upload-file__preview">
+                  <a :href="item.value[0].url" download>点击下载查看</a>
+                </div>
+              </template>
+            </van-uploader>
+          </div>
+        </div>
+      </template>
     </van-form>
 
     <IdentityTipDialog v-if="showIdentityDialog" v-model:show="showIdentityDialog" :is-front="isFrontDialog" />
@@ -455,9 +499,10 @@
 
 <script lang="ts" setup>
 import { Form as vanForm, Uploader as vanUploader, Button as vanButton, Toast } from 'vant'
-import { uploader as uploadImage } from '@/utils/request'
+import { uploader as uploadImage, uploadImage as uploadImage2 } from '@/utils/request'
 import { BASIS_TEMPLATE_KEY_MAP, ID_PHOTO_ORGAN_SIZE_MAP, PDF_VIEWER_HOST } from '@/constant'
 import { isStrImageEnd, isStrFileEnd, getSignUpImageUrl } from '@/utils'
+import { TEMPLATE_ITEM } from '@/typings/sign-up'
 import Title from './components/Title/index.vue'
 import UploadSlot from './components/UploadSlot/index.vue'
 import IdentityTipDialog from './dialogs/IdentityTipDialog.vue'
@@ -476,6 +521,7 @@ interface Props {
   cphotoForm?: object
   cfileForm?: object
   templateList?: any[]
+  userInfo?: TEMPLATE_ITEM[]
   couldEdit?: boolean
   organizationId?: number | string
 }
@@ -483,10 +529,11 @@ const props = withDefaults(defineProps<Props>(), {
   cphotoForm: () => ({}),
   cfileForm: () => ({}),
   templateList: () => [],
+  userInfo: () => [],
   couldEdit: true,
   organizationId: ''
 })
-const { cphotoForm, cfileForm, templateList, couldEdit, organizationId } = toRefs(props)
+const { cphotoForm, cfileForm, templateList, couldEdit, organizationId, userInfo } = toRefs(props)
 
 const photoForm = ref<any>(cphotoForm.value)
 const fileForm = ref<any>(cfileForm.value)
@@ -494,6 +541,11 @@ defineExpose({
   photoForm,
   fileForm
 })
+
+const photoAndFileTempItemList = computed(() =>
+  userInfo.value.filter((i) => ['图片', '文件'].includes(i.desc as string))
+)
+console.log(' hj ~ file: PhotoInfoForm.vue:551 ~ photoAndFileTempItemList:', photoAndFileTempItemList)
 // UPLOAD_PARAM_ACCEPT_MAP,
 //       BASIS_TEMPLATE_KEY_MAP,
 // 展示身份证提示的弹窗
@@ -616,6 +668,70 @@ const handleUploadFile = async (file: any, urlType: any, item: any = {}) => {
     .catch((err) => {
       console.log('handleAfterRead -> err', err)
       fileForm.value[urlType] = []
+    })
+}
+// 上传图片-压缩图片
+const handleUploadImage2 = async (file: any, tempItem: any) => {
+  const type = file.file.name.split('.')[1]
+  // templateList中增加format字段的处理
+  if (tempItem.format && tempItem.format.every((i: any) => i !== `.${type.toLocaleLowerCase()}`)) {
+    tempItem.value = []
+    Toast(`请上传${tempItem.format.join(',')}格式的图片`)
+    return false
+  }
+  if (!type || ['png', 'jpg'].every((item) => item !== type.toLocaleLowerCase())) {
+    tempItem.value = []
+    Toast('请上传jpg或png格式的图片')
+    return false
+  }
+  const organImageSize = ID_PHOTO_ORGAN_SIZE_MAP[organizationId.value]
+
+  console.log('🚀 ~ file:  ~ organImageSize', organImageSize)
+  const fileCompress: any = await handleCompressImg(file.file)
+  // 证件照的大小判断，某些机构有要求
+  if (organImageSize) {
+    if (fileCompress.size > organImageSize * 1024) {
+      tempItem.value = []
+      Toast(`证件照大小超过${organImageSize}K`)
+      return false
+    }
+  }
+  if (fileCompress.size > 200 * 1024) {
+    tempItem.value = []
+    Toast('文件大小不能超过 - 200K')
+    return false
+  }
+  uploadImage(fileCompress)
+    .then((res: any) => {
+      console.log(' hj ~ file: PhotoInfoForm.vue:587 ~ .then ~ res:', res)
+      tempItem.value = [{ url: res.data.url }]
+    })
+    .catch((err) => {
+      console.log('handleAfterRead -> err', err)
+      tempItem.value = []
+    })
+}
+// 上传word或者pdf文件
+const handleUploadFile2 = async (file: any, tempItem: any = {}) => {
+  const str = file.file.name
+  const type = str.substring(str.lastIndexOf('.') + 1, str.length)
+  console.log('🚀 ~ file: PhotoInfoForm.vue ~ line 493 ~ handleUploadFile ~ type', type)
+  const accept = tempItem.format
+  if (!type || (accept && accept.every((item: any) => item !== `.${type.toLocaleLowerCase()}`))) {
+    tempItem.value = []
+    Toast(`请上传${accept.join(',')}格式的文件`)
+    return false
+  }
+  console.log('🚀 ~ file: PhotoInfoForm. ~ file, urlType', file, tempItem)
+  uploadImage2(file.file)
+    .then((res: any) => {
+      console.log(' hj ~ file: PhotoInfoForm.vue:726 ~ .then ~ res:', res)
+      // tempItem.value = [{ url: res.data.url }]
+      tempItem.value = [{ url: res }]
+    })
+    .catch((err) => {
+      console.log('handleAfterRead -> err', err)
+      tempItem.value = []
     })
 }
 const handlePreviewPdf = (fileUrl: any) => {

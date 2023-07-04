@@ -4,7 +4,7 @@
  * @Author: 刘帅楠
  * @Date: 2020-07-01 09:25:35
  * @LastEditors: huangjin
- * @LastEditTime: 2023-07-04 13:47:16
+ * @LastEditTime: 2023-07-04 15:38:16
 -->
 <template>
   <div class="page-fill-info">
@@ -416,9 +416,10 @@
       v-show="!showBasisStep"
       ref="photoInfoFormRef"
       :cphoto-form="photoForm"
-      :file-form="fileForm"
+      :cfile-form="fileForm"
       :could-edit="couldEdit"
       :template-list="templateList"
+      :user-info="baseForm.userInfo"
       :organization-id="baseForm.organizationId"
     />
 
