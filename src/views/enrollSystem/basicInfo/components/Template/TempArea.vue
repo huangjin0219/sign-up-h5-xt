@@ -2,8 +2,8 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
  * @LastEditors: huangjin
- * @LastEditTime: 2023-06-30 17:21:30
- * @Description: 模板-报考省市
+ * @LastEditTime: 2023-07-04 13:34:48
+ * @Description: 模板-报考省市 使用的是数据中心的老接口
 -->
 <template>
   <div class="app-container">

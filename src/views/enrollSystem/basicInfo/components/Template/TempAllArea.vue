@@ -1,6 +1,9 @@
 <!--
  * @Author: huangjin
  * @Description: 模板-省/市/区
+ 使用的是 uic 的 getAllArea 获取所有数据
+ 但是实际使用中返回的数据只有省市两级，没有区，不符合省市区的需求
+ 此组件先留着 接口返回的数据有区级时可用
 -->
 <template>
   <div class="app-container">
@@ -17,7 +20,6 @@
       @click="handleShowPop"
     />
     <VanPopup v-model:show="showArea" position="bottom">
-      <!-- <VanArea :area-list="areaList" :columns-num="2" @confirm="onConfirmArea" @cancel="showArea = false" /> -->
       <van-cascader
         title="请选择所在地区"
         :options="areaList"

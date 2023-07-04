@@ -1,6 +1,8 @@
 <!--
  * @Author: huangjin
  * @Description: 模板-省/市/区 - 异步 省市区三个接口分开调
+ 此组件使用省市区三个接口分别获取各级数据，稍显繁琐，但是可满足需求
+ 省市区显示几级可通过 level 控制
 -->
 <template>
   <div class="app-container">
@@ -45,35 +47,66 @@ interface Props {
   couldEdit?: boolean
   // 教育类型(其实是汇总表的数字),为汇总表7时 title 为考试地点
   educationType?: number
+  // 省市区都显示为3
+  level?: number
 }
 const props = withDefaults(defineProps<Props>(), {
   value: () => ({}),
   templateItem: () => ({}),
   couldEdit: true,
-  educationType: 0
+  educationType: 0,
+  level: 3
 })
 
 const emit = defineEmits(['change', 'update:value'])
 
 const showArea = ref<boolean>(false)
-// 组件所需的数据
-const columns = ref([
-  // 省
-  {
-    values: [],
-    defaultIndex: 0
-  },
-  // 市
-  {
-    values: [],
-    defaultIndex: 0
-  },
-  // 区
-  {
-    values: [],
-    defaultIndex: 0
+const defaultColumns = (level: number) => {
+  switch (level) {
+    case 1:
+      return [
+        {
+          values: [],
+          defaultIndex: 0
+        }
+      ]
+    case 2:
+      return [
+        {
+          values: [],
+          defaultIndex: 0
+        },
+        {
+          values: [],
+          defaultIndex: 0
+        }
+      ]
+    case 3:
+      return [
+        {
+          values: [],
+          defaultIndex: 0
+        },
+        {
+          values: [],
+          defaultIndex: 0
+        },
+        {
+          values: [],
+          defaultIndex: 0
+        }
+      ]
+    default:
+      return [
+        {
+          values: [],
+          defaultIndex: 0
+        }
+      ]
   }
-])
+}
+// 组件所需的数据
+const columns = ref(defaultColumns(props.level))
 
 onMounted(async () => {
   await handleProvince()
@@ -81,17 +114,23 @@ onMounted(async () => {
 
 // 省市区的文字展示
 const areaName = computed(() => {
-  if (
-    !columns.value.length ||
-    !props.value.provinceId ||
-    !props.value.provinceName ||
-    !props.value.cityId ||
-    !props.value.cityName ||
-    !props.value.areaName
-  )
-    return ''
+  if (!columns.value.length || !props.value.provinceId || !props.value.provinceName) return ''
   const { provinceName, cityName, areaName } = props.value
-  return provinceName && cityName && areaName ? `${provinceName}/${cityName}/${areaName}` : ''
+  let completeName
+  switch (props.level) {
+    case 1:
+      completeName = provinceName
+      break
+    case 2:
+      completeName = provinceName && cityName ? `${provinceName}/${cityName}` : ''
+      break
+    case 3:
+      completeName = provinceName && cityName && areaName ? `${provinceName}/${cityName}/${areaName}` : ''
+      break
+    default:
+      break
+  }
+  return completeName
 })
 
 const handleShowPop = () => {
@@ -102,10 +141,10 @@ const handleShowPop = () => {
 const onChange = (value: Area[], index: number) => {
   switch (index) {
     case 0:
-      handleCity(value[index].areaId)
+      if (props.level !== 1) handleCity(value[index].areaId)
       break
     case 1:
-      handleArea(value[index].areaId)
+      if (props.level === 3) handleArea(value[index].areaId)
       break
 
     default:
@@ -117,13 +156,11 @@ const handleCloseArea = () => {
 }
 
 const sureRegion = (sureArea: Area[]) => {
-  const provinceId = sureArea[0].areaId
-  const cityId = sureArea[1].areaId
-  const { areaId } = sureArea[2]
-  const provinceName = sureArea[0].text
-  const cityName = sureArea[1].text
-  const areaName = sureArea[2].text
+  const { areaId: provinceId, text: provinceName } = sureArea[0] || {}
+  const { areaId: cityId, text: cityName } = sureArea[1] || {}
+  const { areaId, text: areaName } = sureArea[2] || {}
   // 把 value 传递出去
+  console.log('value', { provinceId, cityId, areaId, provinceName, cityName, areaName })
   emit('update:value', { provinceId, cityId, areaId, provinceName, cityName, areaName })
 
   showArea.value = false
@@ -139,7 +176,7 @@ const handleProvince = () => {
         const index = columns.value[0].values.findIndex((i: any) => i.areaId === props.value.provinceId)
         columns.value[0].defaultIndex = index
       }
-      handleCity(props.value.provinceId || data[0].areaId)
+      if (props.level !== 1) handleCity(props.value.provinceId || data[0].areaId)
     } else {
       columns.value[0].values = []
       columns.value[1].values = []
@@ -158,7 +195,7 @@ const handleCity = async (provinceId: number) => {
         const index = columns.value[1].values.findIndex((i: any) => i.areaId === props.value.cityId)
         columns.value[1].defaultIndex = index
       }
-      handleArea(props.value.cityId || data[0].areaId)
+      if (props.level === 3) handleArea(props.value.cityId || data[0].areaId)
     } else {
       columns.value[1].values = []
       columns.value[2].values = []

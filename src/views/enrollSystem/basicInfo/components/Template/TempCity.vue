@@ -1,6 +1,9 @@
 <!--
  * @Author: huangjin
  * @Description: 模板-省/市
+ 从 TempArea 修改得来，主要是把 emit('change' 改为 emit('update:value'
+ 可以直接使用 v-model
+ 但是可以用 TempAllAreaAsync 代替 这个组件可用可不用
 -->
 <template>
   <div class="app-container">
@@ -63,19 +66,6 @@ const cityTotalList = ref<any[]>([])
 // 组件所需的数据
 const areaList = ref<AreaList>()
 
-// 选项列表，children 代表子选项，支持多级嵌套
-// const options = [
-//   {
-//     text: '浙江省',
-//     value: '330000',
-//     children: [{ text: '杭州市', value: '330100' }]
-//   },
-//   {
-//     text: '江苏省',
-//     value: '320000',
-//     children: [{ text: '南京市', value: '320100' }]
-//   }
-// ]
 const titleLabel = computed(() => {
   if (props.templateItem.aliasLabelName) {
     return props.templateItem.aliasLabelName

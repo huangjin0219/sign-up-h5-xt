@@ -4,7 +4,7 @@
  * @Author: 刘帅楠
  * @Date: 2020-07-01 09:25:35
  * @LastEditors: huangjin
- * @LastEditTime: 2023-07-03 18:15:45
+ * @LastEditTime: 2023-07-04 13:47:16
 -->
 <template>
   <div class="page-fill-info">
@@ -362,22 +362,29 @@
           :template-item="item"
           :could-edit="couldEdit"
         ></TempInputExtField>
-        <!-- 报考省市 -->
-        <!-- :province-id="baseForm.provinceId"
-        :area-id="baseForm.areaId" -->
-        <TempCity
-          v-if="['省/市'].includes(item.desc)"
+
+        <TempAllAreaAsync
+          v-if="['省/市/区'].includes(item.desc)"
           :key="item.ident"
           v-model:value="item.value"
           :could-edit="isSevenType ? false : couldEdit"
           :education-type="educationType"
           :template-item="item"
-        ></TempCity>
-        <!-- @change="handleChangeArea" -->
+        ></TempAllAreaAsync>
         <TempAllAreaAsync
-          v-if="['省/市/区'].includes(item.desc)"
+          v-if="['省/市'].includes(item.desc)"
           :key="item.ident"
           v-model:value="item.value"
+          :level="2"
+          :could-edit="isSevenType ? false : couldEdit"
+          :education-type="educationType"
+          :template-item="item"
+        ></TempAllAreaAsync>
+        <TempAllAreaAsync
+          v-if="['省份'].includes(item.desc)"
+          :key="item.ident"
+          v-model:value="item.value"
+          :level="1"
           :could-edit="isSevenType ? false : couldEdit"
           :education-type="educationType"
           :template-item="item"
