@@ -4,7 +4,7 @@
  * @Author: 刘帅楠
  * @Date: 2020-07-01 09:25:35
  * @LastEditors: huangjin
- * @LastEditTime: 2023-07-03 16:35:35
+ * @LastEditTime: 2023-07-03 18:15:45
 -->
 <template>
   <div class="page-fill-info">
@@ -374,6 +374,15 @@
           :template-item="item"
         ></TempCity>
         <!-- @change="handleChangeArea" -->
+        <TempAllAreaAsync
+          v-if="['省/市/区'].includes(item.desc)"
+          :key="item.ident"
+          v-model:value="item.value"
+          :could-edit="isSevenType ? false : couldEdit"
+          :education-type="educationType"
+          :template-item="item"
+        ></TempAllAreaAsync>
+
         <!-- 单选 -->
         <TempListextField
           v-if="['单选项'].includes(item.desc)"

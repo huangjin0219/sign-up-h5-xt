@@ -27,3 +27,43 @@ export function sendVerifyDxdkCode(params) {
     data: params
   })
 }
+
+// 获取全部地区
+export function getAllArea(params = {}, options = {}) {
+  return request({
+    url: '/uic/area/getAllArea',
+    method: 'post',
+    data: params,
+    options
+  })
+}
+
+// 获取省列表
+export function getProvince(params = {}, options = {}) {
+  return request({
+    url: '/uic/area/getProvince',
+    method: 'post',
+    data: params,
+    options
+  })
+}
+
+// 获取市列表
+export function getCity(params = { provinceId: '' }, options = {}) {
+  return request({
+    url: '/uic/area/getCity',
+    method: 'post',
+    data: params,
+    options
+  })
+}
+
+// 获取地区列表
+export function getArea(params = { cityId: '' }, options = {}) {
+  return request({
+    url: '/uic/area/getArea',
+    method: 'post',
+    data: params,
+    options
+  })
+}
