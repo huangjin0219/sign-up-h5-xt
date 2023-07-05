@@ -2,7 +2,7 @@
  * @Author: huangjin
  * @Date: 2023-07-03 15:28:31
  * @LastEditors: huangjin
- * @LastEditTime: 2023-07-03 16:37:46
+ * @LastEditTime: 2023-07-05 19:56:54
  * @Description: 多选项
 -->
 <template>
@@ -37,7 +37,8 @@ const { modelValue, couldEdit } = toRefs(props)
 
 const emit = defineEmits(['update:model-value'])
 
-const tabValue = ref<any[]>(props.modelValue)
+console.log(' hj ~ file: multiple.vue:41 ~ props.modelValue:', props.modelValue)
+const tabValue = ref<any[]>(props.modelValue || [])
 
 const handleTabClick = (item: any) => {
   if (couldEdit.value) {
