@@ -4,7 +4,7 @@
  * @Author: 刘帅楠
  * @Date: 2020-07-01 09:25:35
  * @LastEditors: huangjin
- * @LastEditTime: 2023-07-04 17:11:19
+ * @LastEditTime: 2023-07-05 10:36:59
 -->
 <template>
   <div class="page-fill-info">
@@ -397,6 +397,16 @@
           :template-item="item"
           :could-edit="couldEdit"
         ></TempEmail>
+
+        <!-- 选择学历 list选择 -->
+        <TempListEducation
+          v-if="['学历'].includes(item.desc)"
+          :key="item.ident"
+          v-model:value="item.value"
+          :template-item="item"
+          :could-edit="couldEdit"
+          :education-type="educationType"
+        ></TempListEducation>
 
         <!-- 输入框 -->
         <TempInputExtField
