@@ -15,6 +15,12 @@ export function validPermissionRouter(to: any, from: any, next: any) {
     next()
     return
   }
+
+  // 预览
+  if (to.path === '/enrollSystem/basicInfo' && to.query.ruleId) {
+    next()
+    return
+  }
   const { signUpRecordId, pid } = to.query
   if (!signUpRecordId) {
     Dialog({

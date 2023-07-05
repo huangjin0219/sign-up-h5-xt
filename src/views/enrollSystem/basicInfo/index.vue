@@ -4,7 +4,7 @@
  * @Author: 刘帅楠
  * @Date: 2020-07-01 09:25:35
  * @LastEditors: huangjin
- * @LastEditTime: 2023-07-05 10:36:59
+ * @LastEditTime: 2023-07-05 17:04:06
 -->
 <template>
   <div class="page-fill-info">
@@ -517,7 +517,7 @@ import { TEMPLATE_ITEM } from '@/typings/sign-up'
 import { BASIS_TEMPLATE_KEY_LIST, BASIS_TEMPLATE_KEY_MAP, AUDIT_STATUS_MAP, DATA_WRITE_STATUS_MAP } from '@/constant'
 import { isStrImageEnd, isStrFileEnd } from '@/utils'
 import filters from '@/common/filters/index'
-import { queryTemplateList, queryCustomerInfo, saveCustomerInfo } from '@/common/api/signUp/enrollSys'
+import { queryTemplateList, getRuleDetail, queryCustomerInfo, saveCustomerInfo } from '@/common/api/signUp/enrollSys'
 import AuditResult from './components/AuditResult/index.vue'
 import Stepbar from './components/Stepbar/index.vue'
 import PhotoInfoForm from './PhotoInfoForm.vue'
@@ -671,7 +671,12 @@ onMounted(async () => {
   queryInfo.value = route.query
 
   await getTemplateList()
-  getCustomerInfo()
+  const { ruleId } = queryInfo.value
+  if (!ruleId) getCustomerInfo()
+})
+const isPreview = computed(() => {
+  const { ruleId } = queryInfo.value
+  return !!ruleId
 })
 
 const imgExtfieldList = ref<any[]>([])
@@ -680,7 +685,13 @@ const onlyOneTemplateList = ref<any[]>([])
 const otherInfoTemplateList = ref<TEMPLATE_ITEM[]>([])
 // 获取模板列表
 const getTemplateList = async () => {
-  const data = await queryTemplateList({ signUpRecordId: queryInfo.value.signUpRecordId })
+  const { ruleId } = queryInfo.value
+  let data
+  if (isPreview.value) {
+    data = await getRuleDetail({ id: ruleId })
+  } else {
+    data = await queryTemplateList({ signUpRecordId: queryInfo.value.signUpRecordId })
+  }
   // templateList.value = [
   //   ...data.inputData
   //   // { key: 'UPLOAD_FRONT_AND_BACK_IDCARD_DOCFILE', tip: '请上传身份证正反面word文档', inputParameter: 'idCardFrontAndBackDocFile' }
@@ -689,6 +700,7 @@ const getTemplateList = async () => {
 
   onlyOneTemplateList.value = templateList.value.filter((i) => i.itemType === 'once')
   otherInfoTemplateList.value = templateList.value.filter((i) => i.itemType !== 'once').sort((a, b) => a.sort - b.sort)
+  baseForm.value.userInfo = otherInfoTemplateList.value
   console.log(' hj ~ file: index.vue:532 ~ getTemplateList ~ otherInfoTemplateList:', otherInfoTemplateList.value)
 
   extfieldList.value = templateList.value.filter((tem) => {
@@ -839,6 +851,7 @@ const handleReWrite = () => {
 }
 // 保存草稿
 const handleSaveDraft = async () => {
+  if (isPreview.value) return
   const cparams = buildSaveParams()
   console.log('handleSaveDraft -> cparams', cparams)
   const data = await saveCustomerInfo({
@@ -857,6 +870,10 @@ const infoChangeFlag = ref<boolean>(false)
 const baseFormRef = ref<FormInstance>()
 // 点击下一步
 const handleNextStep = async () => {
+  if (isPreview.value) {
+    step.value = 'photo'
+    return
+  }
   console.log(' hj ~ file: index.vue:634 ~ handleNextStep ~ isJixuJiaoyu:', isJixuJiaoyu.value)
   if (isJixuJiaoyu.value) {
     if (!baseForm.value.additional || !baseForm.value.studyMajor) {
@@ -902,6 +919,7 @@ const checkInfoChange = () => {
 const captchaFlag = ref<boolean>(false)
 // 提交信息
 const handleSubmit = async () => {
+  if (isPreview.value) return
   await baseFormRef.value?.validate()
 
   const cparams = buildSaveParams()

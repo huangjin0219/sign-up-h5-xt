@@ -68,6 +68,17 @@ export function queryTemplateList(params) {
     }
   })
 }
+// 获取规则详情
+export function getRuleDetail(params) {
+  return request({
+    url: '/sign-up-business/signUp/ruleDetail',
+    method: 'post',
+    data: params,
+    options: {
+      toast: true
+    }
+  })
+}
 
 // 获取 补充资料的template列表
 export function queryAddInfoTemplateList(params) {
