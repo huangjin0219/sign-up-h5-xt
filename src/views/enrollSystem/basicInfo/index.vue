@@ -1,10 +1,6 @@
 <!--
- * @Descripttion:
- * @version: 1.0.0
- * @Author: 刘帅楠
- * @Date: 2020-07-01 09:25:35
- * @LastEditors: huangjin
- * @LastEditTime: 2023-07-05 17:04:06
+ * @Author: huangjin
+ * @Description: 报名基本信息
 -->
 <template>
   <div class="page-fill-info">

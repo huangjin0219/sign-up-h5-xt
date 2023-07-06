@@ -24,7 +24,7 @@ function request(config) {
 // 报名链接检查
 export function enrollCheck(params) {
   return request({
-    url: '/sign-up-business/signUp/check',
+    url: '/sign-up-business/newSignUp/check',
     method: 'post',
     data: params,
     options: {
@@ -36,7 +36,7 @@ export function enrollCheck(params) {
 // 报名链接确定信息查询
 export function acquireConfirmInfo(params) {
   return request({
-    url: '/sign-up-business/signUp/acquireConfirmInfo',
+    url: '/sign-up-business/newSignUp/acquireConfirmInfo',
     method: 'post',
     data: params,
     options: {
@@ -50,7 +50,7 @@ export function acquireConfirmInfo(params) {
 export function cmdConfirm(params, options = {}) {
   options = Object.assign(options, { login: true, toast: true })
   return request({
-    url: '/sign-up-business/signUp/confirm',
+    url: '/sign-up-business/newSignUp/confirm',
     method: 'post',
     data: params,
     options
@@ -60,7 +60,7 @@ export function cmdConfirm(params, options = {}) {
 // 填写报名信息的template列表
 export function queryTemplateList(params) {
   return request({
-    url: '/sign-up-business/signUp/acquireInputTemplate',
+    url: '/sign-up-business/newSignUp/acquireInputTemplate',
     method: 'post',
     data: params,
     options: {
@@ -68,10 +68,11 @@ export function queryTemplateList(params) {
     }
   })
 }
+
 // 获取规则详情
 export function getRuleDetail(params) {
   return request({
-    url: '/sign-up-business/signUp/ruleDetail',
+    url: '/sign-up-business/newSignUp/ruleDetail',
     method: 'post',
     data: params,
     options: {
@@ -83,7 +84,7 @@ export function getRuleDetail(params) {
 // 获取 补充资料的template列表
 export function queryAddInfoTemplateList(params) {
   return request({
-    url: '/sign-up-business/signUp/acquireSupplement',
+    url: '/sign-up-business/newSignUp/acquireSupplement',
     method: 'post',
     data: params,
     options: {
@@ -95,7 +96,7 @@ export function queryAddInfoTemplateList(params) {
 // 填写用户填写信息和审核结果信息
 export function queryCustomerInfo(params) {
   return request({
-    url: '/sign-up-business/signUp/acquireCustomerInfo',
+    url: '/sign-up-business/newSignUp/acquireCustomerInfo',
     method: 'post',
     data: params,
     options: {
@@ -107,7 +108,7 @@ export function queryCustomerInfo(params) {
 // 保存用户信息
 export function saveCustomerInfo(params) {
   return request({
-    url: '/sign-up-business/signUp/submit',
+    url: '/sign-up-business/newSignUp/submit',
     method: 'post',
     data: params,
     options: {
@@ -119,7 +120,7 @@ export function saveCustomerInfo(params) {
 // 提交 补充资料
 export function submitAddInfo(params) {
   return request({
-    url: '/sign-up-business/signUp/supplement',
+    url: '/sign-up-business/newSignUp/supplement',
     method: 'post',
     data: params,
     options: {
