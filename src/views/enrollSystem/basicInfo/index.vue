@@ -40,7 +40,7 @@
       <TempGender
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_GENDER)"
         v-model:value="baseForm.gender"
-        :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_GENDER).tips"
+        :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_GENDER)"
         :could-edit="couldEdit"
       ></TempGender>
 
@@ -48,7 +48,7 @@
       <TempNation
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_NATION)"
         v-model:value="baseForm.nation"
-        :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_NATION).tips"
+        :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_NATION)"
         :could-edit="couldEdit"
       ></TempNation>
 
@@ -56,7 +56,7 @@
       <TempCardNo
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_CARDNO)"
         v-model:value="baseForm.cardNo"
-        :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_CARDNO).tips"
+        :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_CARDNO)"
         :could-edit="couldEdit && !isMakeupExam && !isJixuJiaoyu"
         :disabled="isMakeupExam || isJixuJiaoyu"
       ></TempCardNo>
@@ -65,7 +65,7 @@
       <TempMobile
         v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_MOBILE)"
         v-model:value="baseForm.signUpMobile"
-        :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_MOBILE).tips"
+        :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_MOBILE)"
         :could-edit="couldEdit && !isJixuJiaoyu"
         :disabled="isJixuJiaoyu"
       ></TempMobile>
@@ -281,7 +281,7 @@
         <TempMobile
           v-if="showOnlyOnceFormItem('报名手机号')"
           v-model:value="baseForm.signUpMobile"
-          :tip-title="showOnlyOnceFormItem('报名手机号').tips"
+          :template-item="showOnlyOnceFormItem('报名手机号')"
           :could-edit="couldEdit && !isJixuJiaoyu"
           :disabled="isJixuJiaoyu"
         ></TempMobile>
@@ -326,7 +326,7 @@
           v-if="['性别'].includes(item.desc)"
           :key="item.ident"
           v-model:value="item.value"
-          :tip-title="item.tips"
+          :template-item="item"
           :could-edit="couldEdit"
         ></TempGender>
 
@@ -335,7 +335,7 @@
           v-if="['民族'].includes(item.desc)"
           :key="item.ident"
           v-model:value="item.value"
-          :tip-title="item.tips"
+          :template-item="item"
           :could-edit="couldEdit"
         ></TempNation>
 
@@ -344,7 +344,7 @@
           v-if="['身份证号'].includes(item.desc)"
           :key="item.ident"
           v-model:value="item.value"
-          :tip-title="item.tips"
+          :template-item="item"
           :could-edit="couldEdit"
         ></TempCardNo>
 
@@ -353,7 +353,7 @@
           v-if="['手机号'].includes(item.desc)"
           :key="item.ident"
           v-model:value="item.value"
-          :tip-title="item.tips"
+          :template-item="item"
           :could-edit="couldEdit"
           :disabled="isJixuJiaoyu"
         ></TempMobile>

@@ -3,11 +3,11 @@
  * @Date: 2020-07-11 13:01:04
  * @LastEditors: huangjin
  * @LastEditTime: 2023-04-19 15:03:41
- * @Description: 模板-姓名拼音
+ * @Description: 模板-性别
 -->
 <template>
   <div class="app-container">
-    <Title :tip-title="tipTitle" label="性别" />
+    <Title :tip-title="templateItem.tips" :label="templateItem.aliasLabelName || '性别'" />
     <van-radio-group v-model="templateValue" direction="horizontal" class="info-space" :disabled="!couldEdit">
       <van-radio
         v-for="(item, index) in genderList"
@@ -42,9 +42,9 @@ export default {
       type: [String, Number],
       default: ''
     },
-    tipTitle: {
-      type: String,
-      default: ''
+    templateItem: {
+      type: Object,
+      default: () => ({})
     },
     // 能否编辑
     couldEdit: {

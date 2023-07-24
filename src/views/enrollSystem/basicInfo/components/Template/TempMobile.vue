@@ -7,11 +7,11 @@
 -->
 <template>
   <div class="app-container">
-    <Title :tip-title="tipTitle" label="手机号" />
+    <Title :tip-title="templateItem.tips" :label="templateItem.aliasLabelName || '手机号'" />
     <van-field
       v-model="templateValue"
       class="info-space"
-      placeholder="请输入手机号"
+      :placeholder="`请输入${templateItem.aliasLabelName || '手机号'}`"
       :readonly="!couldEdit"
       :disabled="disabled"
       :rules="[
@@ -40,9 +40,9 @@ export default {
       type: String,
       default: ''
     },
-    tipTitle: {
-      type: String,
-      default: ''
+    templateItem: {
+      type: Object,
+      default: () => ({})
     },
     // 能否编辑
     couldEdit: {

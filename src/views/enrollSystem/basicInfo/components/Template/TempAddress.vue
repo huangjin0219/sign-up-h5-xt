@@ -2,7 +2,7 @@
  * @Author: huangjin
  * @Date: 2021-07-20 20:49:19
  * @LastEditors: huangjin
- * @LastEditTime: 2023-07-03 14:23:57
+ * @LastEditTime: 2023-07-24 15:13:18
  * @Description: 模板-通讯地址
 -->
 <template>

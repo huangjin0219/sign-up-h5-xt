@@ -2,12 +2,12 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-20 10:28:04
+ * @LastEditTime: 2023-07-24 15:10:20
  * @Description: 模板-学历
 -->
 <template>
   <div class="app-container">
-    <Title :tip-title="templateItem.tips" label="学历" />
+    <Title :tip-title="templateItem.tips" :label="templateItem.aliasLabelName || '学历'" />
     <tab-module v-model="templateValue" :tab-type="true" :list="list" :could-edit="couldEdit"></tab-module>
   </div>
 </template>
@@ -81,7 +81,7 @@ export default {
     },
     list() {
       if (this.templateItem.options) {
-        return this.templateItem.options.split(',')
+        return typeof str === 'string' ? this.templateItem.options.split(',') : this.templateItem.options
       }
       return EDUCATION_LIST.filter((item) => item.values.includes(this.educationType)).map((item) => item.key)
     }

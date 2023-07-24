@@ -1,19 +1,22 @@
 <!--
- * @Author: HuZhangjie
- * @Date: 2020-07-11 13:01:04
- * @LastEditors: huangjin
- * @LastEditTime: 2021-07-20 20:44:46
- * @Description: 模板-姓名拼音
+ * @Author: huangjin
+ * @Description: 模板-邮箱
 -->
 <template>
   <div class="app-container">
-    <Title :tip-title="templateItem.tips" label="邮箱" />
+    <Title :tip-title="templateItem.tips" :label="templateItem.aliasLabelName || '邮箱'" />
     <van-field
       v-model="templateValue"
       class="info-space"
-      placeholder="请输入邮箱"
+      :placeholder="`请输入${templateItem.aliasLabelName || '邮箱'}`"
       :readonly="!couldEdit"
-      :rules="[{ required: !templateItem.unnecessary, validator: basisValidator.email, message: '请输入正确的邮箱' }]"
+      :rules="[
+        {
+          required: !templateItem.unnecessary,
+          validator: basisValidator.email,
+          message: `请填写${templateItem.aliasLabelName || '正确的邮箱'}`
+        }
+      ]"
     />
   </div>
 </template>

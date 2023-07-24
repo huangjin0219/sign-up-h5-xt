@@ -1,20 +1,26 @@
 <!--
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
- * @LastEditors: HuZhangjie
- * @LastEditTime: 2020-08-15 22:23:33
+ * @LastEditors: huangjin
+ * @LastEditTime: 2023-07-24 15:14:25
  * @Description: 模板-身份证号
 -->
 <template>
   <div class="app-container">
-    <Title :tip-title="tipTitle" label="身份证号" />
+    <Title :tip-title="templateItem.tips" :label="templateItem.aliasLabelName || '身份证号'" />
     <van-field
       v-model="templateValue"
       class="info-space"
-      placeholder="请输入正确的身份证号"
+      :placeholder="`请输入${templateItem.aliasLabelName || '身份证号'}`"
       :readonly="!couldEdit"
       :disabled="disabled"
-      :rules="[{ required: couldEdit, validator: basisValidator.cardNo, message: '请输入正确的身份证号' }]"
+      :rules="[
+        {
+          required: !templateItem.unnecessary || couldEdit,
+          validator: basisValidator.cardNo,
+          message: `请填写${templateItem.aliasLabelName || '正确的身份证号'}`
+        }
+      ]"
     />
   </div>
 </template>
@@ -34,9 +40,9 @@ export default {
       type: String,
       default: ''
     },
-    tipTitle: {
-      type: String,
-      default: ''
+    templateItem: {
+      type: Object,
+      default: () => ({})
     },
     // 能否编辑
     couldEdit: {

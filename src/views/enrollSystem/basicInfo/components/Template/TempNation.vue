@@ -2,12 +2,12 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
  * @LastEditors: huangjin
- * @LastEditTime: 2023-04-20 10:20:44
+ * @LastEditTime: 2023-07-24 15:02:02
  * @Description: 模板-民族
 -->
 <template>
   <div class="app-container">
-    <Title :tip-title="tipTitle" label="民族" />
+    <Title :tip-title="templateItem.tips" :label="templateItem.aliasLabelName || '民族'" />
     <!-- <van-field
       class="info-space"
       v-model="templateValue"
@@ -19,8 +19,13 @@
       clickable
       class="info-space"
       :model-value="templateValue"
-      :rules="[{ required: couldEdit, message: '请选择民族' }]"
-      placeholder="请选择民族"
+      :rules="[
+        {
+          required: !templateItem.unnecessary || couldEdit,
+          message: `请选择${templateItem.aliasLabelName || '民族'}`
+        }
+      ]"
+      :placeholder="`请选择${templateItem.aliasLabelName || '民族'}`"
       :right-icon="couldEdit ? 'arrow' : ''"
       @click="handleShowPicker"
     />
@@ -56,9 +61,9 @@ export default {
       type: [String, Number],
       default: ''
     },
-    tipTitle: {
-      type: String,
-      default: ''
+    templateItem: {
+      type: Object,
+      default: () => ({})
     },
     // 能否编辑
     couldEdit: {
