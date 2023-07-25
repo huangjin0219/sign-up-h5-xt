@@ -305,21 +305,21 @@
           v-if="showOnlyOnceFormItem('省/市')"
           :value="{
             provinceId: baseForm.provinceId,
+            provinceName: baseForm.provinceName,
             cityId: baseForm.cityId,
-            areaId: baseForm.areaId
+            cityName: baseForm.cityName
           }"
           :level="2"
           :could-edit="isSevenType ? false : couldEdit"
           :education-type="educationType"
           :template-item="showOnlyOnceFormItem('省/市')"
-          @update:value="(value:any) => (baseForm = { ...baseForm, ...value })"
+          @update:value="setAreaInfo"
         ></TempAllAreaAsync>
         <TempAllAreaAsync
           v-if="showOnlyOnceFormItem('省份')"
           :value="{
             provinceId: baseForm.provinceId,
-            cityId: baseForm.cityId,
-            areaId: baseForm.areaId
+            provinceName: baseForm.provinceName
           }"
           :level="1"
           :could-edit="isSevenType ? false : couldEdit"
