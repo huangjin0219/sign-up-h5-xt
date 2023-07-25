@@ -19,4 +19,5 @@ export interface TEMPLATE_ITEM {
   naming?: number // 命名
   connector?: string // 连接符
   suffix?: string // 后缀
+  valueMode?: number // 取值模式
 }

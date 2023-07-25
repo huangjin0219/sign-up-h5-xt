@@ -117,6 +117,18 @@ export function saveCustomerInfo(params) {
   })
 }
 
+// 获取订单上的用户信息
+export function queryInfoFromOrder(params) {
+  return request({
+    url: '/sign-up-business/newSignUp/queryInfoFromOrder',
+    method: 'post',
+    data: params,
+    options: {
+      toast: true
+    }
+  })
+}
+
 // 提交 补充资料
 export function submitAddInfo(params) {
   return request({

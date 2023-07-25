@@ -283,8 +283,16 @@
           v-model:value="baseForm.signUpMobile"
           :template-item="showOnlyOnceFormItem('报名手机号')"
           :could-edit="couldEdit && !isJixuJiaoyu"
-          :disabled="isJixuJiaoyu"
+          :disabled="isJixuJiaoyu || isOrderMobile"
         ></TempMobile>
+        <!-- 身份证号 -->
+        <TempCardNo
+          v-if="showOnlyOnceFormItem('身份证号')"
+          v-model:value="baseForm.cardNo"
+          :template-item="showOnlyOnceFormItem('身份证号')"
+          :could-edit="couldEdit"
+          :disabled="isOrderCardNo"
+        ></TempCardNo>
         <TempAllAreaAsync
           v-if="showOnlyOnceFormItem('省/市/区')"
           :value="baseForm"
@@ -513,7 +521,13 @@ import { TEMPLATE_ITEM } from '@/typings/sign-up'
 import { BASIS_TEMPLATE_KEY_LIST, BASIS_TEMPLATE_KEY_MAP, AUDIT_STATUS_MAP, DATA_WRITE_STATUS_MAP } from '@/constant'
 import { isStrImageEnd, isStrFileEnd } from '@/utils'
 import filters from '@/common/filters/index'
-import { queryTemplateList, getRuleDetail, queryCustomerInfo, saveCustomerInfo } from '@/common/api/signUp/enrollSys'
+import {
+  queryTemplateList,
+  getRuleDetail,
+  queryCustomerInfo,
+  saveCustomerInfo,
+  queryInfoFromOrder
+} from '@/common/api/signUp/enrollSys'
 import AuditResult from './components/AuditResult/index.vue'
 import Stepbar from './components/Stepbar/index.vue'
 import PhotoInfoForm from './PhotoInfoForm.vue'
@@ -713,6 +727,17 @@ const getTemplateList = async () => {
   getMuliteTempData()
 }
 
+// 是否取订单上的报名手机号
+const isOrderMobile = computed(() => {
+  const result = onlyOneTemplateList.value.find((item) => ['报名手机号'].includes(item.desc))
+  return (result && result.valueMode === 1) || false
+})
+// 是否取订单上的身份证号
+const isOrderCardNo = computed(() => {
+  const result = onlyOneTemplateList.value.find((item) => ['身份证号'].includes(item.desc))
+  return (result && result.valueMode === 1) || false
+})
+
 // 多选多的数据
 const getMuliteTempData = () => {
   const result = { keyNameMap: {}, tempData: {} }
@@ -746,6 +771,7 @@ const getCustomerInfo = async () => {
     customerMobile?: any
     provinceId?: any
     areaId?: any
+    cardNo?: any
     userInfo?: any
   }
   const cphotoForm = {}
@@ -753,6 +779,7 @@ const getCustomerInfo = async () => {
   const cauditForm = {}
   const cbaseForm: baseFormProp = {}
   const data = await queryCustomerInfo({ signUpRecordId: queryInfo.value.signUpRecordId })
+  const infoFromOrder = await queryInfoFromOrder({ signUpRecordId: queryInfo.value.signUpRecordId })
   /**
    * 处理 userInfo ：userInfo = userInfo + otherInfoTemplateList
    * 若请求回来的数据中的 userInfo 有值，则将这些值的 value 分别赋值给 otherInfoTemplateList
@@ -787,14 +814,15 @@ const getCustomerInfo = async () => {
     }
   })
 
-  const { signUpMobile, customerMobile, provinceId, areaId } = cbaseForm
+  const { signUpMobile, cardNo, customerMobile, provinceId, areaId } = cbaseForm
   // 默认设置为浙江杭州
   baseForm.value = {
     ...cbaseForm,
     provinceId: isSevenType.value ? 10110000 : provinceId,
     areaId: isSevenType.value ? 10110100 : areaId,
     examRoom: isSevenType.value ? '总部1102' : '',
-    signUpMobile: signUpMobile || customerMobile,
+    signUpMobile: isOrderMobile ? infoFromOrder.mobile : signUpMobile || customerMobile,
+    cardNo: isOrderCardNo ? infoFromOrder.cardNo : cardNo,
     userInfo
   }
   auditForm.value = {
