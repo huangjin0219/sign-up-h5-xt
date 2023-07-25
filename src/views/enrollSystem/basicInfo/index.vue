@@ -414,7 +414,7 @@
 
         <!-- 输入框 -->
         <TempInputExtField
-          v-if="['输入框', '文本', '数字'].includes(item.desc)"
+          v-if="['输入框', '文本', '文本域', '数字'].includes(item.desc)"
           :key="item.ident"
           v-model:value="item.value"
           :template-item="item"
