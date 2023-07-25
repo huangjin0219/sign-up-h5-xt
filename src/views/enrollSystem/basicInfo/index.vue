@@ -793,7 +793,7 @@ const getCustomerInfo = async () => {
     if (queryedUserInfo && queryedUserInfo.length > 0) {
       const index = queryedUserInfo.findIndex((item: any) => item.ident === otherInfoTemplateItem.ident)
       if (index !== -1) {
-        return Object.assign(otherInfoTemplateItem, queryedUserInfo[index])
+        otherInfoTemplateItem.value = queryedUserInfo[index].value
       }
     }
     return otherInfoTemplateItem
