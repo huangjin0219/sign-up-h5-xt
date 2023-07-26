@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
  * @LastEditors: huangjin
- * @LastEditTime: 2023-07-24 15:14:25
+ * @LastEditTime: 2023-07-26 15:32:58
  * @Description: 模板-身份证号
 -->
 <template>
@@ -16,7 +16,7 @@
       :disabled="disabled"
       :rules="[
         {
-          required: !templateItem.unnecessary || couldEdit,
+          required: !templateItem.unnecessary,
           validator: basisValidator.cardNo,
           message: `请填写${templateItem.aliasLabelName || '正确的身份证号'}`
         }
