@@ -1,8 +1,8 @@
 <!--
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
- * @LastEditors: HuZhangjie
- * @LastEditTime: 2020-07-14 17:55:29
+ * @LastEditors: huangjin
+ * @LastEditTime: 2023-07-26 16:40:41
  * @Description: 模板-手机号
 -->
 <template>
@@ -16,7 +16,7 @@
       :disabled="disabled"
       :rules="[
         {
-          required: couldEdit,
+          required: !templateItem.unnecessary,
           validator: basisValidator.mobile,
           message: '请输入正确的手机号'
         }

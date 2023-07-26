@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
  * @LastEditors: huangjin
- * @LastEditTime: 2023-07-24 15:02:02
+ * @LastEditTime: 2023-07-26 16:38:33
  * @Description: 模板-民族
 -->
 <template>
@@ -21,7 +21,7 @@
       :model-value="templateValue"
       :rules="[
         {
-          required: !templateItem.unnecessary || couldEdit,
+          required: !templateItem.unnecessary,
           message: `请选择${templateItem.aliasLabelName || '民族'}`
         }
       ]"

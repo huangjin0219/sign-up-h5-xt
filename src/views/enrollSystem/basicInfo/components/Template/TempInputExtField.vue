@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
  * @LastEditors: huangjin
- * @LastEditTime: 2023-06-30 11:13:08
+ * @LastEditTime: 2023-07-26 16:43:19
  * @Description: 模板-input
 -->
 <template>
@@ -14,7 +14,12 @@
       :placeholder="`请输入${templateItem.aliasLabelName}`"
       :readonly="!couldEdit"
       :disabled="disabled"
-      :rules="[{ required: couldEdit, message: `请填写${templateItem.aliasLabelName}` }]"
+      :rules="[
+        {
+          required: !templateItem.unnecessary,
+          message: `请填写${templateItem.aliasLabelName}`
+        }
+      ]"
     />
   </div>
 </template>

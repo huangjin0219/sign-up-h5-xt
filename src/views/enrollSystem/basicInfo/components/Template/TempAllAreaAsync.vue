@@ -15,7 +15,7 @@
       :placeholder="`请选择${templateItem.aliasLabelName}`"
       :model-value="areaName"
       :right-icon="couldEdit ? 'arrow' : ''"
-      :rules="[{ required: couldEdit, message: `请选择${templateItem.aliasLabelName}` }]"
+      :rules="[{ required: !templateItem.unnecessary, message: `请选择${templateItem.aliasLabelName}` }]"
       @click="handleShowPop"
     />
     <van-popup v-model:show="showArea" position="bottom" :lock-scroll="false">

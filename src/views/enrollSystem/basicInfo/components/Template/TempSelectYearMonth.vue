@@ -2,7 +2,7 @@
  * @Author: HuZhangjie
  * @Date: 2020-07-11 13:01:04
  * @LastEditors: huangjin
- * @LastEditTime: 2023-07-03 14:50:09
+ * @LastEditTime: 2023-07-26 16:38:52
  * @Description: 模板-选择年月
 -->
 <template>
@@ -16,7 +16,7 @@
       :placeholder="`请选择${templateItem.aliasLabelName || '日期'}`"
       :rules="[
         {
-          required: couldEdit || !templateItem.unnecessary,
+          required: !templateItem.unnecessary,
           message: `请选择${templateItem.aliasLabelName || '日期'}`
         }
       ]"
