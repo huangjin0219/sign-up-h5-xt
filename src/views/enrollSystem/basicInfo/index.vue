@@ -908,6 +908,7 @@ const handleNextStep = async () => {
   }
   console.log('11111', baseForm.value, baseFormRef.value)
   if (couldEdit.value) {
+    if (!checkRequiredParams()) return
     const data = await baseFormRef.value?.validate()
     console.log('handleNextStep -> data', data)
   }
@@ -950,6 +951,7 @@ const handleSubmit = async () => {
   console.log('handleSubmit -> cparams', cparams)
 
   if (!checkSaveParams(cparams)) return
+  if (!checkRequiredParams()) return
 
   // 只有一个步骤时 信息改变需要弹窗提示
   if (isOnlyOneStep.value && !infoChangeFlag.value && checkInfoChange()) {
@@ -1013,6 +1015,20 @@ const buildSaveParams = () => {
   }
 }
 
+// 检验 userInfo 里面的必填项是否有值
+const checkRequiredParams = () => {
+  if (baseForm.value.userInfo) {
+    const result = baseForm.value.userInfo.find((item: any) => {
+      return !item.unnecessary && (Array.isArray(item.value) ? !item.value.length : !item.value)
+    })
+    console.log(' hj ~ file: index.vue:1024 ~ result ~ result:', result)
+    if (result) {
+      Toast(`${result.desc}必填`)
+      return false
+    }
+  }
+  return true
+}
 // 保存接口的必填校验
 const checkSaveParams = (params: any) => {
   const { AREA_APPLYAREA } = BASIS_TEMPLATE_KEY_MAP
