@@ -19,263 +19,6 @@
     <Stepbar v-show="!isOnlyOneStep" :info-type="!showBasisStep"></Stepbar>
     <!-- 基础信息表单 -->
     <van-form v-show="showBasisStep" ref="baseFormRef" class="basis-form" scroll-to-error>
-      <!-- 姓名 -->
-      <TempName
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_NAME)"
-        v-model:value="baseForm.customerName"
-        :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_NAME).tips"
-        :could-edit="couldEdit && !isJixuJiaoyu"
-        :disabled="isJixuJiaoyu"
-      ></TempName>
-
-      <!-- 姓名拼音 -->
-      <TempNameSpell
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_NAMEPINYIN)"
-        v-model:value="baseForm.namePinyin"
-        :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_NAMEPINYIN).tips"
-        :could-edit="couldEdit"
-      ></TempNameSpell>
-
-      <!-- 性别 -->
-      <TempGender
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_GENDER)"
-        v-model:value="baseForm.gender"
-        :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_GENDER)"
-        :could-edit="couldEdit"
-      ></TempGender>
-
-      <!-- 民族 -->
-      <TempNation
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_NATION)"
-        v-model:value="baseForm.nation"
-        :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_NATION)"
-        :could-edit="couldEdit"
-      ></TempNation>
-
-      <!-- 身份证号 -->
-      <TempCardNo
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_CARDNO)"
-        v-model:value="baseForm.cardNo"
-        :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_CARDNO)"
-        :could-edit="couldEdit && !isMakeupExam && !isJixuJiaoyu"
-        :disabled="isMakeupExam || isJixuJiaoyu"
-      ></TempCardNo>
-
-      <!-- 手机号 -->
-      <TempMobile
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_MOBILE)"
-        v-model:value="baseForm.signUpMobile"
-        :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_MOBILE)"
-        :could-edit="couldEdit && !isJixuJiaoyu"
-        :disabled="isJixuJiaoyu"
-      ></TempMobile>
-
-      <!-- 通讯地址 -->
-      <TempAddress
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_ADDRESS)"
-        v-model:value="baseForm.address"
-        :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_ADDRESS)"
-        :could-edit="couldEdit"
-      ></TempAddress>
-
-      <!-- 报考省市 -->
-      <TempArea
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.AREA_APPLYAREA)"
-        :province-id="baseForm.provinceId"
-        :area-id="baseForm.areaId"
-        :could-edit="isSevenType ? false : couldEdit"
-        :education-type="educationType"
-        :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.AREA_APPLYAREA)"
-        @change="handleChangeArea"
-      ></TempArea>
-
-      <!-- 考场名称 -->
-      <TempExamRoom
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_EXAM_ROOM)"
-        v-model:value="baseForm.examRoom"
-        :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_EXAM_ROOM).tips"
-        :could-edit="false"
-      ></TempExamRoom>
-
-      <!-- 出生日期 -->
-      <TempBirthday
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.DATE_BORN)"
-        v-model:value="baseForm.birthday"
-        :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.DATE_BORN).tips"
-        :could-edit="couldEdit"
-      ></TempBirthday>
-
-      <!-- 毕业日期 -->
-      <TempGraduateTime
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.DATE_GRADUATEDATE)"
-        v-model:value="baseForm.graduateTime"
-        :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.DATE_GRADUATEDATE)"
-        :could-edit="couldEdit"
-      ></TempGraduateTime>
-
-      <!-- 毕业院校 -->
-      <TempGraduateSchool
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_SCHOOL)"
-        v-model:value="baseForm.graduateSchool"
-        :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_SCHOOL)"
-        :could-edit="couldEdit"
-      ></TempGraduateSchool>
-
-      <!-- 邮箱 -->
-      <TempEmail
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_EMAIL)"
-        v-model:value="baseForm.email"
-        :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_EMAIL)"
-        :could-edit="couldEdit"
-      ></TempEmail>
-
-      <!-- 选择学历 list选择 -->
-      <TempListEducation
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_EDUCATION)"
-        v-model:value="baseForm.education"
-        :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_EDUCATION)"
-        :could-edit="couldEdit"
-        :education-type="educationType"
-      ></TempListEducation>
-
-      <!-- 选择报考地点 list选择 -->
-      <TempListExamArea
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_EXAM_AREA)"
-        v-model:value="baseForm.examArea"
-        :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_EXAM_AREA).tips"
-        :could-edit="couldEdit"
-        :options="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_EXAM_AREA).options"
-      ></TempListExamArea>
-
-      <!-- 所学专业 input输入 -->
-      <TempStudyMajor
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_PROFESSION)"
-        v-model:value="baseForm.studyMajor"
-        :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_PROFESSION)"
-        :could-edit="couldEdit"
-      ></TempStudyMajor>
-
-      <!-- 选择专业 list选择 -->
-      <TempListStudyMajor
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_PROFESSION)"
-        v-model:value="baseForm.studyMajor"
-        :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_PROFESSION)"
-        :could-edit="couldEdit"
-      ></TempListStudyMajor>
-
-      <!-- 参加工作时间 -->
-      <TempJobTime
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.DATE_TAKEJOBTIME)"
-        v-model:value="baseForm.takeJobTime"
-        :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.DATE_TAKEJOBTIME).tips"
-        :could-edit="couldEdit"
-      ></TempJobTime>
-      <!-- 工作单位 -->
-      <TempWorkUnit
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_UNIT)"
-        v-model:value="baseForm.workUnit"
-        :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_UNIT).tips"
-        :could-edit="couldEdit"
-      ></TempWorkUnit>
-
-      <!-- 工作年限 -->
-      <TempWorkYear
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_WORKYEAR)"
-        v-model:value="baseForm.workYear"
-        :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_WORKYEAR)"
-        :could-edit="couldEdit"
-      ></TempWorkYear>
-
-      <!-- 学习网站账号 -->
-      <TempAccount
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_THIRDACCOUNT)"
-        v-model:value="baseForm.thirdAccount"
-        :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_THIRDACCOUNT)"
-        :could-edit="couldEdit"
-      >
-      </TempAccount>
-
-      <!-- 学习网站密码 -->
-      <TempPassword
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_THIRDPASSWORD)"
-        v-model:value="baseForm.thirdPassword"
-        :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_THIRDPASSWORD)"
-        :could-edit="couldEdit"
-      >
-      </TempPassword>
-
-      <!-- 注册证书编号 -->
-      <TempCertNo
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_CERT_NO)"
-        v-model:value="baseForm.certNo"
-        :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_CERT_NO)"
-        :could-edit="couldEdit"
-      ></TempCertNo>
-
-      <!-- 主项/增项 list-->
-      <TempAdditional
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_ADDITIONAL)"
-        v-model:value="baseForm.additional"
-        :template-item="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_ADDITIONAL)"
-        :could-edit="couldEdit"
-      ></TempAdditional>
-
-      <!-- 单位职位 list选择 -->
-      <TempListUnitPosiiton
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_UNIT_POSITION)"
-        v-model:value="baseForm.unitPosition"
-        :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_UNIT_POSITION).tips"
-        :could-edit="couldEdit"
-      ></TempListUnitPosiiton>
-
-      <!-- 资格证书 list选择 -->
-      <TempListQualification
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_QUALIFICATIONCERTIFICATE)"
-        v-model:value="baseForm.qualificationName"
-        :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_QUALIFICATIONCERTIFICATE).tips"
-        :could-edit="couldEdit"
-      ></TempListQualification>
-
-      <!-- 级别 list选择 -->
-      <TempListLevel
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_LEVEL)"
-        v-model:value="baseForm.level"
-        :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_LEVEL).tips"
-        :could-edit="couldEdit"
-      ></TempListLevel>
-
-      <!-- 方向 list选择 -->
-      <TempListDirection
-        v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_DIRECTION)"
-        v-model:value="baseForm.direction"
-        :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.LIST_DIRECTION).tips"
-        :could-edit="couldEdit"
-      ></TempListDirection>
-
-      <!-- 软件 -->
-      <div v-if="showFormItem(BASIS_TEMPLATE_KEY_MAP.LABEL_SOFTWAVE)">
-        <Title :tip-title="showFormItem(BASIS_TEMPLATE_KEY_MAP.LABEL_SOFTWAVE).tips" label="软件" />
-        <van-field class="info-space" readonly :model-value="'revit'" />
-      </div>
-
-      <template v-for="item in extfieldList">
-        <TempInputExtField
-          v-if="/INPUT/.test(item.key)"
-          :key="item.inputParameter"
-          v-model:value="baseForm[item.inputParameter]"
-          :template-item="item"
-          :could-edit="couldEdit"
-        ></TempInputExtField>
-        <TempListextField
-          v-if="/LIST/.test(item.key)"
-          :key="item.inputParameter"
-          v-model:value="baseForm[item.inputParameter]"
-          :template-item="item"
-          :could-edit="couldEdit"
-          :education-type="educationType"
-        ></TempListextField>
-      </template>
-
       <template v-if="onlyOneTemplateList && onlyOneTemplateList.length">
         <!-- 手机号 -->
         <TempMobile
@@ -472,11 +215,7 @@
 
     <PhotoInfoForm
       v-show="!showBasisStep"
-      ref="photoInfoFormRef"
-      :cphoto-form="photoForm"
-      :cfile-form="fileForm"
       :could-edit="couldEdit"
-      :template-list="templateList"
       :user-info="baseForm.userInfo"
       :organization-id="baseForm.organizationId"
     />
@@ -514,12 +253,11 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { Form as vanForm, Field as vanField, Toast } from 'vant'
+import { Form as vanForm, Toast } from 'vant'
 import type { FormInstance } from 'vant'
 import { TEMPLATE_ITEM } from '@/typings/sign-up'
 
-import { BASIS_TEMPLATE_KEY_LIST, BASIS_TEMPLATE_KEY_MAP, AUDIT_STATUS_MAP, DATA_WRITE_STATUS_MAP } from '@/constant'
-import { isStrImageEnd, isStrFileEnd } from '@/utils'
+import { AUDIT_STATUS_MAP, DATA_WRITE_STATUS_MAP } from '@/constant'
 import filters from '@/common/filters/index'
 import {
   queryTemplateList,
@@ -534,7 +272,6 @@ import PhotoInfoForm from './PhotoInfoForm.vue'
 import CheckDiffInfoTipDialog from './dialogs/CheckDiffInfoTipDialog.vue'
 import InputCaptchaDialog from './dialogs/InputCaptchaDialog.vue'
 import SubmitSuccessDialog from './dialogs/SubmitSuccessDialog.vue'
-import Title from './components/Title/index.vue'
 
 // import { basisValidator } from './validate'
 
@@ -560,8 +297,6 @@ const step = ref<string>('basis') // 填写的步骤
 const templateList = ref<any[]>([])
 const extfieldList = ref<any[]>([]) // 所有包括拓展字段的数组
 const educationType = ref<number>(0) // 模板的学历类型
-const muliteKeyNameMap = ref<any>({}) // 多选多校验的key-name map
-const muliteTempData = ref<any>({}) // 多选多的校验数据
 // 老的基础信息
 const oldBaseInfo = ref<any>({})
 const baseForm = ref<any>({
@@ -592,32 +327,7 @@ const showCheckDiffDialog = ref<boolean>(false)
 const showInputCaptchaDialog = ref<boolean>(false)
 
 const showSubmitSuccessDialog = ref<boolean>(false) // 提交成功的提示弹窗
-// 报名图片信息
-const photoForm = ref<any>({
-  cardBackImage: [],
-  cardFrontImage: [],
-  educationImage: [],
-  employmentImage: [],
-  photoImage: [],
-  preEducationImage: [],
-  qualificationImage: [],
-  workImage: [],
-  applyCheckImage: [],
-  fireConfirmAtionImage: [],
-  trainingConfirmationImage: []
-})
-const fileForm = ref<any>({
-  idCardFrontBackDocFile: [],
-  educationDocFile: [],
-  educationPrepareDocFile: [],
-  educationCheckReportDocFile: []
-})
 
-// 是补考类型: 身份证号不能修改
-// signUpType: 1.初次报考 2.考务费报考 3.补考
-const isMakeupExam = computed(() => {
-  return baseForm.value.signUpType === 3
-})
 // 一建继续教育类型的 姓名、身份证号、手机号 不可修改
 const isJixuJiaoyu = computed(() => {
   return educationType.value === 17
@@ -655,26 +365,13 @@ const showReWriteBtn = computed(() => {
 
   return isWritedStatus.value && dataCheckStatus && !isCheckSuccessStatus && !isReWrite.value
 })
-// 汇总表3 人事人才网 学历证明 Image选填
-const isThreeType = computed(() => {
-  return educationType.value === 3
-})
 // 类型为 美国AutoDsesk
 const isOnlyOneStep = computed(() => {
   return educationType.value === 4
 })
-// 为汇总表6 资格证书和从业证明 image选填
-const isSixType = computed(() => {
-  return educationType.value === 6
-})
 // 为汇总表7 考试地点和考场名称不可编辑
 const isSevenType = computed(() => {
   return educationType.value === 7
-})
-// 为汇总表11 毕业证图片和扫描件二选一
-// 学历备案表, 学历验证报告 二选一
-const isElevenType = computed(() => {
-  return educationType.value === 11
 })
 
 onMounted(async () => {
@@ -711,7 +408,6 @@ const getTemplateList = async () => {
   onlyOneTemplateList.value = templateList.value.filter((i) => i.itemType === 'once')
   otherInfoTemplateList.value = templateList.value.filter((i) => i.itemType !== 'once').sort((a, b) => a.sort - b.sort)
   baseForm.value.userInfo = otherInfoTemplateList.value
-  console.log(' hj ~ file: index.vue:532 ~ getTemplateList ~ otherInfoTemplateList:', otherInfoTemplateList.value)
 
   extfieldList.value = templateList.value.filter((tem) => {
     return /EXTFIELD/.test(tem.key)
@@ -722,9 +418,7 @@ const getTemplateList = async () => {
   docExtfieldList.value = templateList.value.filter((tem) => {
     return /UPLOAD_EXTFIELD/.test(tem.key) && /DOC/.test(tem.type)
   })
-  console.log('🚀 ~ file: index.vue ~ line 614 ~ getTemplateList ~ extfieldList', extfieldList.value)
   educationType.value = data.educationType
-  getMuliteTempData()
 }
 
 // 是否取订单上的报名手机号
@@ -738,32 +432,6 @@ const isOrderCardNo = computed(() => {
   return (result && result.valueMode === 1) || false
 })
 
-// 多选多的数据
-const getMuliteTempData = () => {
-  const result = { keyNameMap: {}, tempData: {} }
-  muliteTempData.value = templateList.value
-    .filter((item) => item.chooseName)
-    .reduce(({ keyNameMap, tempData }, curr) => {
-      if (!keyNameMap[curr.key]) {
-        keyNameMap[curr.key] = curr.chooseName
-      }
-      if (tempData[curr.chooseName]) {
-        tempData[curr.chooseName].inputParamArr.push(curr.inputParameter)
-      } else {
-        tempData[curr.chooseName] = {
-          minChooseCount: curr.minChooseCount,
-          inputParamArr: [curr.inputParameter]
-        }
-      }
-      return { keyNameMap, tempData }
-    }, result)
-
-  muliteKeyNameMap.value = result.keyNameMap
-  muliteTempData.value = result.tempData
-
-  console.log('🚀 ~ file: index.vue ~  ~ muliteTempData.value', muliteKeyNameMap.value, muliteTempData.value)
-}
-
 // 获取用户表单信息和审核信息
 const getCustomerInfo = async () => {
   interface baseFormProp {
@@ -774,8 +442,6 @@ const getCustomerInfo = async () => {
     cardNo?: any
     userInfo?: any
   }
-  const cphotoForm = {}
-  const cfileForm = {}
   const cauditForm = {}
   const cbaseForm: baseFormProp = {}
   const data = await queryCustomerInfo({ signUpRecordId: queryInfo.value.signUpRecordId })
@@ -802,25 +468,17 @@ const getCustomerInfo = async () => {
 
   // 处理customer的信息，拆分为基础信息，图片信息，校验信息等
   Object.keys(data).forEach((key) => {
-    if (isStrImageEnd(key) || imgExtfieldList.value.map((item) => item.inputParameter).includes(key)) {
-      // 图片有值-> = [{url}],  为空 -> = []
-      cphotoForm[key] = data[key] ? [{ url: data[key] }] : []
-    } else if (isStrFileEnd(key) || docExtfieldList.value.map((item) => item.inputParameter).includes(key)) {
-      cfileForm[key] = data[key] ? [data[key]] : []
-    } else if (AUDIT_STATUS_KEYS.includes(key)) {
+    if (AUDIT_STATUS_KEYS.includes(key)) {
       cauditForm[key] = data[key]
     } else {
       cbaseForm[key] = data[key]
     }
   })
 
-  const { signUpMobile, cardNo, customerMobile, provinceId, areaId } = cbaseForm
+  const { signUpMobile, cardNo, customerMobile } = cbaseForm
   // 默认设置为浙江杭州
   baseForm.value = {
     ...cbaseForm,
-    provinceId: isSevenType.value ? 10110000 : provinceId,
-    areaId: isSevenType.value ? 10110100 : areaId,
-    examRoom: isSevenType.value ? '总部1102' : '',
     signUpMobile: isOrderMobile ? infoFromOrder.mobile : signUpMobile || customerMobile,
     cardNo: isOrderCardNo ? infoFromOrder.cardNo : cardNo,
     userInfo
@@ -832,24 +490,12 @@ const getCustomerInfo = async () => {
     // // examStatus: 2,
     // status: 3
   }
-  photoForm.value = cphotoForm
-  fileForm.value = cfileForm
   oldBaseInfo.value = { ...baseForm.value }
   console.log('getCustomerInfo -> baseForm.value', baseForm.value)
   console.log('getCustomerInfo -> auditForm.value', auditForm.value)
-  console.log('getCustomerInfo -> photoForm.value', photoForm.value)
 }
 
 // 选择地区
-const handleChangeArea = ({ provinceId, areaId }: any) => {
-  console.log('handleChangeArea -> val', provinceId, areaId)
-  baseForm.value = {
-    ...baseForm.value,
-    provinceId,
-    areaId
-  }
-  console.log('handleChangeArea -> ', baseForm.value)
-}
 const setAreaInfo = (value: any) => {
   baseForm.value = {
     ...baseForm.value,
@@ -858,10 +504,6 @@ const setAreaInfo = (value: any) => {
   console.log('handleChangeArea -> ', baseForm.value)
 }
 
-// 判断是否展示对应的输入项
-const showFormItem = (prop: any) => {
-  return templateList.value.find((template) => template.key === prop)
-}
 // 判断是否展示对应的输入项
 const showOnlyOnceFormItem = (desc: any) => {
   return onlyOneTemplateList.value.find((i) => i.desc === desc)
@@ -932,10 +574,7 @@ const checkInfoChange = () => {
     return true
   }
   // 需要填身份证号 && 身份证号输入不一致
-  if (
-    showFormItem(BASIS_TEMPLATE_KEY_MAP.INPUT_CARDNO) &&
-    oldCardNo.toLocaleLowerCase() !== cardNo.toLocaleLowerCase()
-  ) {
+  if (oldCardNo.toLocaleLowerCase() !== cardNo.toLocaleLowerCase()) {
     return true
   }
   return false
@@ -950,7 +589,6 @@ const handleSubmit = async () => {
   const cparams = buildSaveParams()
   console.log('handleSubmit -> cparams', cparams)
 
-  if (!checkSaveParams(cparams)) return
   if (!checkRequiredParams()) return
 
   // 只有一个步骤时 信息改变需要弹窗提示
@@ -984,33 +622,15 @@ const hasMobileChange = () => {
   return signUpMobile !== customerMobile
 }
 
-const photoInfoFormRef = ref()
 const buildSaveParams = () => {
-  photoForm.value = photoInfoFormRef.value.photoForm
-  fileForm.value = photoInfoFormRef.value.fileForm
-
-  const cphotoForm = Object.keys(photoForm.value).reduce((res, imageKey) => {
-    const imgObj = photoForm.value[imageKey][0]
-    if (imgObj) {
-      res[imageKey] = imgObj.url || ''
-    } else {
-      res[imageKey] = ''
-    }
-    return res
-  }, {})
-  const cfileForm = Object.keys(fileForm.value).reduce((res, fileKey) => {
-    const fileValue = fileForm.value[fileKey][0]
-    if (fileValue) {
-      res[fileKey] = fileValue.url || ''
-    }
-    return res
-  }, {})
-  console.log('buildSaveParams -> cphotoForm', cphotoForm)
+  console.log('buildSaveParams -> baseForm', baseForm.value, {
+    ...baseForm.value,
+    userInfo: JSON.stringify(baseForm.value.userInfo),
+    signUpRecordId: queryInfo.value.signUpRecordId
+  })
   return {
     ...baseForm.value,
-    ...cphotoForm,
-    ...cfileForm,
-    userInfo: JSON.stringify(otherInfoTemplateList.value),
+    userInfo: JSON.stringify(baseForm.value.userInfo),
     signUpRecordId: queryInfo.value.signUpRecordId
   }
 }
@@ -1029,110 +649,7 @@ const checkRequiredParams = () => {
   }
   return true
 }
-// 保存接口的必填校验
-const checkSaveParams = (params: any) => {
-  const { AREA_APPLYAREA } = BASIS_TEMPLATE_KEY_MAP
 
-  // 不需要校验的参数(非必填) 智慧消防确认书
-  const NO_VALID_KEY_LIST = getNoValidKeyList()
-
-  // 1.得到总的templateList
-  // 总表为6时，从业证书和资格证书 为选填，需特殊判断
-  const validTemplateList = templateList.value.filter((item) => {
-    // 选填，无需校验 filter掉
-    return !NO_VALID_KEY_LIST.includes(item.key) && !item.unnecessary
-  })
-  console.log('checkSaveParams -> templateList.value', templateList.value.length)
-  console.log('checkSaveParams -> templateList', validTemplateList.length)
-  console.log('🚀 ~ file: index.vue ~ line 705 ~ checkSaveParams ~ validTemplateList', validTemplateList)
-  // 2.找出未传值的模板
-  const emptyValueTemp = validTemplateList.find((item) => {
-    const { inputParameter, key } = item
-    // 需要特殊处理的校验
-    // 未选择省或者市
-    if (key === AREA_APPLYAREA) {
-      return !params.provinceId || !params.areaId
-    }
-
-    // 其余的普通的模板，都根据 inputParameter 来查找是否为空
-    if (inputParameter) {
-      const val = params[inputParameter]
-      return !val && val !== 0
-    }
-    return false
-  })
-  console.log('🚀 ~ file: index.vue ~ line 829 ~ checkSaveParams ~ emptyValueTemp', emptyValueTemp)
-  // 3.开始判断空值
-  if (emptyValueTemp) {
-    const sameKeyTemp = BASIS_TEMPLATE_KEY_LIST.find((item) => item.key === emptyValueTemp.key)
-    const desc = sameKeyTemp?.desc || emptyValueTemp.aliasLabelName || ''
-    Toast(`${desc}必填`)
-    return false
-  }
-  // 4.特殊判断
-  if (isSixType.value) {
-    if (!params.employmentImage && !params.qualificationImage) {
-      Toast('从业证书和资格证书必选其一')
-      return false
-    }
-  }
-  if (isElevenType.value) {
-    let flag = true
-
-    const findItem = Object.keys(muliteTempData.value).find((choosName) => {
-      const { inputParamArr, minChooseCount } = muliteTempData.value[choosName]
-      // params 中传递的 inputParamArr(需要校验的) 中的参数的个数 < minChooseCount
-      if (inputParamArr.filter((cinputP: any) => params[cinputP]).length < minChooseCount) {
-        Toast(`${choosName}至少选择${minChooseCount}个保存`)
-        // flag = false
-        return true
-      }
-      return false
-    })
-    flag = !findItem
-    return flag
-  }
-  return true
-}
-
-// 无需校验的模板
-const getNoValidKeyList = () => {
-  const {
-    UPLOAD_EDUCATION,
-    UPLOAD_EMPLOYMENT,
-    UPLOAD_QUALIFICATION,
-    UPLOAD_FIRE_CONFIRMATION_IMAGE,
-    UPLOAD_TEMPLATE_DOCFILE,
-    UPLOAD_PREEDUCATION,
-    UPLOAD_EDUCATION_DOCFILE
-  } = BASIS_TEMPLATE_KEY_MAP
-
-  let list = [UPLOAD_FIRE_CONFIRMATION_IMAGE]
-  if (isThreeType.value) {
-    list.push(UPLOAD_EDUCATION)
-  }
-  if (isSixType.value) {
-    list = [
-      ...list,
-      // 从业证书, 资格证书 二选一
-      UPLOAD_EMPLOYMENT,
-      UPLOAD_QUALIFICATION
-    ]
-  }
-  if (isElevenType.value) {
-    list = [
-      ...list,
-      UPLOAD_EDUCATION_DOCFILE, // 学历扫描件选填
-      UPLOAD_PREEDUCATION, // 前置学历照片选填
-      ...Object.keys(muliteKeyNameMap.value)
-    ]
-  }
-  if (educationType.value === 12) {
-    // 三类人员带模板的报名表非必填
-    list.push(UPLOAD_TEMPLATE_DOCFILE)
-  }
-  return list
-}
 // 信息有修改
 const handleConfirmChangeInfo = () => {
   infoChangeFlag.value = true
