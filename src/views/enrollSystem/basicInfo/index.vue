@@ -550,7 +550,7 @@ const handleNextStep = async () => {
   }
   console.log('11111', baseForm.value, baseFormRef.value)
   if (couldEdit.value) {
-    if (!checkRequiredParams()) return
+    if (!checkRequiredParams(true)) return
     const data = await baseFormRef.value?.validate()
     console.log('handleNextStep -> data', data)
   }
@@ -636,10 +636,14 @@ const buildSaveParams = () => {
 }
 
 // 检验 userInfo 里面的必填项是否有值
-const checkRequiredParams = () => {
+const checkRequiredParams = (ExcludePicAndFile = false) => {
   if (baseForm.value.userInfo) {
     const result = baseForm.value.userInfo.find((item: any) => {
-      return !item.unnecessary && (Array.isArray(item.value) ? !item.value.length : !item.value)
+      const bol = !item.unnecessary && (Array.isArray(item.value) ? !item.value.length : !item.value)
+      if (ExcludePicAndFile) {
+        return !['图片', '文件'].includes(item.desc) && bol
+      }
+      return bol
     })
     console.log(' hj ~ file: index.vue:1024 ~ result ~ result:', result)
     if (result) {

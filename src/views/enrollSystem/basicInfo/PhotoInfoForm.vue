@@ -1,8 +1,5 @@
 <!--
- * @Author: HuZhangjie
- * @Date: 2020-07-02 16:06:49
- * @LastEditors: huangjin
- * @LastEditTime: 2023-07-26 18:22:23
+ * @Author: huangjin
  * @Description: 照片信息表单
 -->
 <template>
