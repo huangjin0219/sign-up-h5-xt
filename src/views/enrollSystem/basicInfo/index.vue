@@ -19,197 +19,204 @@
     <Stepbar v-show="!isOnlyOneStep" :info-type="!showBasisStep"></Stepbar>
     <!-- 基础信息表单 -->
     <van-form v-show="showBasisStep" ref="baseFormRef" class="basis-form" scroll-to-error>
-      <template v-if="onlyOneTemplateList && onlyOneTemplateList.length">
-        <!-- 手机号 -->
-        <TempMobile
-          v-if="showOnlyOnceFormItem('报名手机号')"
-          v-model:value="baseForm.signUpMobile"
-          :template-item="showOnlyOnceFormItem('报名手机号')"
-          :could-edit="couldEdit && !isJixuJiaoyu"
-          :disabled="isJixuJiaoyu || isOrderMobile"
-        ></TempMobile>
-        <!-- 身份证号 -->
-        <TempCardNo
-          v-if="showOnlyOnceFormItem('身份证号')"
-          v-model:value="baseForm.cardNo"
-          :template-item="showOnlyOnceFormItem('身份证号')"
-          :could-edit="couldEdit"
-          :disabled="isOrderCardNo"
-        ></TempCardNo>
-        <TempAllAreaAsync
-          v-if="showOnlyOnceFormItem('省/市/区')"
-          :value="baseForm"
-          :could-edit="isSevenType ? false : couldEdit"
-          :education-type="educationType"
-          :template-item="showOnlyOnceFormItem('省/市/区')"
-          @update:value="setAreaInfo"
-        ></TempAllAreaAsync>
-        <TempAllAreaAsync
-          v-if="showOnlyOnceFormItem('省/市')"
-          :value="{
-            provinceId: baseForm.provinceId,
-            provinceName: baseForm.provinceName,
-            cityId: baseForm.cityId,
-            cityName: baseForm.cityName
-          }"
-          :level="2"
-          :could-edit="isSevenType ? false : couldEdit"
-          :education-type="educationType"
-          :template-item="showOnlyOnceFormItem('省/市')"
-          @update:value="setAreaInfo"
-        ></TempAllAreaAsync>
-        <TempAllAreaAsync
-          v-if="showOnlyOnceFormItem('省份')"
-          :value="{
-            provinceId: baseForm.provinceId,
-            provinceName: baseForm.provinceName
-          }"
-          :level="1"
-          :could-edit="isSevenType ? false : couldEdit"
-          :education-type="educationType"
-          :template-item="showOnlyOnceFormItem('省份')"
-          @update:value="(value:any) => (baseForm = { ...baseForm, ...value })"
-        ></TempAllAreaAsync>
-      </template>
       <template v-for="item in baseForm.userInfo">
-        <!-- 性别 -->
-        <TempGender
-          v-if="['性别'].includes(item.desc)"
-          :key="item.ident"
-          v-model:value="item.value"
-          :template-item="item"
-          :could-edit="couldEdit"
-        ></TempGender>
+        <template v-if="item.itemType === 'once' && onlyOneTemplateList && onlyOneTemplateList.length">
+          <!-- 手机号 -->
+          <TempMobile
+            v-if="['报名手机号'].includes(item.desc)"
+            :key="item.ident"
+            v-model:value="baseForm.signUpMobile"
+            :template-item="item"
+            :could-edit="couldEdit && !isJixuJiaoyu"
+            :disabled="isJixuJiaoyu || isOrderMobile"
+          ></TempMobile>
+          <!-- 身份证号 -->
+          <TempCardNo
+            v-if="['身份证号'].includes(item.desc)"
+            :key="item.ident"
+            v-model:value="baseForm.cardNo"
+            :template-item="item"
+            :could-edit="couldEdit"
+            :disabled="isOrderCardNo"
+          ></TempCardNo>
+          <TempAllAreaAsync
+            v-if="['省/市/区'].includes(item.desc)"
+            :key="item.ident"
+            :value="baseForm"
+            :could-edit="isSevenType ? false : couldEdit"
+            :education-type="educationType"
+            :template-item="item"
+            @update:value="setAreaInfo"
+          ></TempAllAreaAsync>
+          <TempAllAreaAsync
+            v-if="['省/市'].includes(item.desc)"
+            :key="item.ident"
+            :value="{
+              provinceId: baseForm.provinceId,
+              provinceName: baseForm.provinceName,
+              cityId: baseForm.cityId,
+              cityName: baseForm.cityName
+            }"
+            :level="2"
+            :could-edit="isSevenType ? false : couldEdit"
+            :education-type="educationType"
+            :template-item="item"
+            @update:value="setAreaInfo"
+          ></TempAllAreaAsync>
+          <TempAllAreaAsync
+            v-if="['省'].includes(item.desc)"
+            :key="item.ident"
+            :value="{
+              provinceId: baseForm.provinceId,
+              provinceName: baseForm.provinceName
+            }"
+            :level="1"
+            :could-edit="isSevenType ? false : couldEdit"
+            :education-type="educationType"
+            :template-item="item"
+            @update:value="(value:any) => (baseForm = { ...baseForm, ...value })"
+          ></TempAllAreaAsync>
+        </template>
+        <template v-if="item.itemType === 'normal'">
+          <!-- 性别 -->
+          <TempGender
+            v-if="['性别'].includes(item.desc)"
+            :key="item.ident"
+            v-model:value="item.value"
+            :template-item="item"
+            :could-edit="couldEdit"
+          ></TempGender>
 
-        <!-- 民族 -->
-        <TempNation
-          v-if="['民族'].includes(item.desc)"
-          :key="item.ident"
-          v-model:value="item.value"
-          :template-item="item"
-          :could-edit="couldEdit"
-        ></TempNation>
+          <!-- 民族 -->
+          <TempNation
+            v-if="['民族'].includes(item.desc)"
+            :key="item.ident"
+            v-model:value="item.value"
+            :template-item="item"
+            :could-edit="couldEdit"
+          ></TempNation>
 
-        <!-- 身份证号 -->
-        <TempCardNo
-          v-if="['身份证号'].includes(item.desc)"
-          :key="item.ident"
-          v-model:value="item.value"
-          :template-item="item"
-          :could-edit="couldEdit"
-        ></TempCardNo>
+          <!-- 身份证号 -->
+          <TempCardNo
+            v-if="['身份证号'].includes(item.desc)"
+            :key="item.ident"
+            v-model:value="item.value"
+            :template-item="item"
+            :could-edit="couldEdit"
+          ></TempCardNo>
 
-        <!-- 手机号 -->
-        <TempMobile
-          v-if="['手机号'].includes(item.desc)"
-          :key="item.ident"
-          v-model:value="item.value"
-          :template-item="item"
-          :could-edit="couldEdit"
-          :disabled="isJixuJiaoyu"
-        ></TempMobile>
+          <!-- 手机号 -->
+          <TempMobile
+            v-if="['手机号'].includes(item.desc)"
+            :key="item.ident"
+            v-model:value="item.value"
+            :template-item="item"
+            :could-edit="couldEdit"
+            :disabled="isJixuJiaoyu"
+          ></TempMobile>
 
-        <!-- 通讯地址 -->
-        <TempAddress
-          v-if="['详细地址'].includes(item.desc)"
-          :key="item.ident"
-          v-model:value="item.value"
-          :template-item="item"
-          :could-edit="couldEdit"
-        ></TempAddress>
+          <!-- 通讯地址 -->
+          <TempAddress
+            v-if="['详细地址'].includes(item.desc)"
+            :key="item.ident"
+            v-model:value="item.value"
+            :template-item="item"
+            :could-edit="couldEdit"
+          ></TempAddress>
 
-        <!-- 选择年月 -->
-        <TempSelectYearMonth
-          v-if="['出生年月'].includes(item.desc)"
-          :key="item.ident"
-          v-model:value="item.value"
-          :template-item="item"
-          :could-edit="couldEdit"
-        ></TempSelectYearMonth>
+          <!-- 选择年月 -->
+          <TempSelectYearMonth
+            v-if="['出生年月'].includes(item.desc)"
+            :key="item.ident"
+            v-model:value="item.value"
+            :template-item="item"
+            :could-edit="couldEdit"
+          ></TempSelectYearMonth>
 
-        <!-- 选择日期 -->
-        <TempSelectDate
-          v-if="['日期'].includes(item.desc)"
-          :key="item.ident"
-          v-model:value="item.value"
-          :template-item="item"
-          :could-edit="couldEdit"
-        ></TempSelectDate>
+          <!-- 选择日期 -->
+          <TempSelectDate
+            v-if="['日期'].includes(item.desc)"
+            :key="item.ident"
+            v-model:value="item.value"
+            :template-item="item"
+            :could-edit="couldEdit"
+          ></TempSelectDate>
 
-        <!-- 邮箱 -->
-        <TempEmail
-          v-if="['邮箱'].includes(item.desc)"
-          :key="item.ident"
-          v-model:value="item.value"
-          :template-item="item"
-          :could-edit="couldEdit"
-        ></TempEmail>
+          <!-- 邮箱 -->
+          <TempEmail
+            v-if="['邮箱'].includes(item.desc)"
+            :key="item.ident"
+            v-model:value="item.value"
+            :template-item="item"
+            :could-edit="couldEdit"
+          ></TempEmail>
 
-        <!-- 选择学历 list选择 -->
-        <TempListEducation
-          v-if="['学历'].includes(item.desc)"
-          :key="item.ident"
-          v-model:value="item.value"
-          :template-item="item"
-          :could-edit="couldEdit"
-          :education-type="educationType"
-        ></TempListEducation>
+          <!-- 选择学历 list选择 -->
+          <TempListEducation
+            v-if="['学历'].includes(item.desc)"
+            :key="item.ident"
+            v-model:value="item.value"
+            :template-item="item"
+            :could-edit="couldEdit"
+            :education-type="educationType"
+          ></TempListEducation>
 
-        <!-- 输入框 -->
-        <TempInputExtField
-          v-if="['输入框', '文本', '文本域', '数字'].includes(item.desc)"
-          :key="item.ident"
-          v-model:value="item.value"
-          :template-item="item"
-          :could-edit="couldEdit"
-        ></TempInputExtField>
+          <!-- 输入框 -->
+          <TempInputExtField
+            v-if="['输入框', '文本', '文本域', '数字'].includes(item.desc)"
+            :key="item.ident"
+            v-model:value="item.value"
+            :template-item="item"
+            :could-edit="couldEdit"
+          ></TempInputExtField>
 
-        <TempAllAreaAsync
-          v-if="['省/市/区'].includes(item.desc)"
-          :key="item.ident"
-          v-model:value="item.value"
-          :could-edit="isSevenType ? false : couldEdit"
-          :education-type="educationType"
-          :template-item="item"
-        ></TempAllAreaAsync>
-        <TempAllAreaAsync
-          v-if="['省/市'].includes(item.desc)"
-          :key="item.ident"
-          v-model:value="item.value"
-          :level="2"
-          :could-edit="isSevenType ? false : couldEdit"
-          :education-type="educationType"
-          :template-item="item"
-        ></TempAllAreaAsync>
-        <TempAllAreaAsync
-          v-if="['省份'].includes(item.desc)"
-          :key="item.ident"
-          v-model:value="item.value"
-          :level="1"
-          :could-edit="isSevenType ? false : couldEdit"
-          :education-type="educationType"
-          :template-item="item"
-        ></TempAllAreaAsync>
+          <TempAllAreaAsync
+            v-if="['省/市/区'].includes(item.desc)"
+            :key="item.ident"
+            v-model:value="item.value"
+            :could-edit="isSevenType ? false : couldEdit"
+            :education-type="educationType"
+            :template-item="item"
+          ></TempAllAreaAsync>
+          <TempAllAreaAsync
+            v-if="['省/市'].includes(item.desc)"
+            :key="item.ident"
+            v-model:value="item.value"
+            :level="2"
+            :could-edit="isSevenType ? false : couldEdit"
+            :education-type="educationType"
+            :template-item="item"
+          ></TempAllAreaAsync>
+          <TempAllAreaAsync
+            v-if="['省份'].includes(item.desc)"
+            :key="item.ident"
+            v-model:value="item.value"
+            :level="1"
+            :could-edit="isSevenType ? false : couldEdit"
+            :education-type="educationType"
+            :template-item="item"
+          ></TempAllAreaAsync>
 
-        <!-- 单选 -->
-        <TempListextField
-          v-if="['单选项'].includes(item.desc)"
-          :key="item.key"
-          v-model:value="item.value"
-          :template-item="item"
-          :could-edit="couldEdit"
-          :education-type="educationType"
-        ></TempListextField>
-        <!-- 多选 -->
-        <TempListextField
-          v-if="['多选项'].includes(item.desc)"
-          :key="item.key"
-          v-model:value="item.value"
-          :template-item="item"
-          :could-edit="couldEdit"
-          :education-type="educationType"
-          multiple
-        ></TempListextField>
+          <!-- 单选 -->
+          <TempListextField
+            v-if="['单选项'].includes(item.desc)"
+            :key="item.key"
+            v-model:value="item.value"
+            :template-item="item"
+            :could-edit="couldEdit"
+            :education-type="educationType"
+          ></TempListextField>
+          <!-- 多选 -->
+          <TempListextField
+            v-if="['多选项'].includes(item.desc)"
+            :key="item.key"
+            v-model:value="item.value"
+            :template-item="item"
+            :could-edit="couldEdit"
+            :education-type="educationType"
+            multiple
+          ></TempListextField>
+        </template>
       </template>
     </van-form>
 
@@ -407,7 +414,7 @@ const getTemplateList = async () => {
 
   onlyOneTemplateList.value = templateList.value.filter((i) => i.itemType === 'once')
   otherInfoTemplateList.value = templateList.value.filter((i) => i.itemType !== 'once').sort((a, b) => a.sort - b.sort)
-  baseForm.value.userInfo = otherInfoTemplateList.value
+  baseForm.value.userInfo = templateList.value
 
   extfieldList.value = templateList.value.filter((tem) => {
     return /EXTFIELD/.test(tem.key)
@@ -447,15 +454,15 @@ const getCustomerInfo = async () => {
   const data = await queryCustomerInfo({ signUpRecordId: queryInfo.value.signUpRecordId })
   const infoFromOrder = await queryInfoFromOrder({ signUpRecordId: queryInfo.value.signUpRecordId })
   /**
-   * 处理 userInfo ：userInfo = userInfo + otherInfoTemplateList
-   * 若请求回来的数据中的 userInfo 有值，则将这些值的 value 分别赋值给 otherInfoTemplateList
+   * 处理 userInfo ：userInfo = userInfo + templateList
+   * 若请求回来的数据中的 userInfo 有值，则将这些值的 value 分别赋值给 templateList
    *  得到的新的值再赋值给 userInfo
-   *  这样做的目的是规则可能会调整（新增规则）导致 userInfo 和 otherInfoTemplateList（只会多不会少） 不一致
-   * 没值的话 直接取 otherInfoTemplateList
+   *  这样做的目的是规则可能会调整（新增规则）导致 userInfo 和 templateList （只会多不会少） 不一致
+   * 没值的话 直接取 templateList
    */
   const queryedUserInfo = data.userInfo && JSON.parse(data.userInfo)
   console.log(' hj ~ file: index.vue:606 ~ getCustomerInfo ~ queryedUserInfo:', queryedUserInfo)
-  const userInfo = otherInfoTemplateList.value.map((otherInfoTemplateItem: TEMPLATE_ITEM) => {
+  const userInfo = templateList.value.map((otherInfoTemplateItem: TEMPLATE_ITEM) => {
     if (queryedUserInfo && queryedUserInfo.length > 0) {
       const index = queryedUserInfo.findIndex((item: any) => item.ident === otherInfoTemplateItem.ident)
       if (index !== -1) {
@@ -504,10 +511,6 @@ const setAreaInfo = (value: any) => {
   console.log('handleChangeArea -> ', baseForm.value)
 }
 
-// 判断是否展示对应的输入项
-const showOnlyOnceFormItem = (desc: any) => {
-  return onlyOneTemplateList.value.find((i) => i.desc === desc)
-}
 // 重新填写
 const handleReWrite = () => {
   console.log('handleReWrite -> auditForm.value', auditForm.value.isOutDate)
@@ -639,7 +642,10 @@ const buildSaveParams = () => {
 const checkRequiredParams = (ExcludePicAndFile = false) => {
   if (baseForm.value.userInfo) {
     const result = baseForm.value.userInfo.find((item: any) => {
-      const bol = !item.unnecessary && (Array.isArray(item.value) ? !item.value.length : !item.value)
+      const bol =
+        item.itemType === 'normal' &&
+        !item.unnecessary &&
+        (Array.isArray(item.value) ? !item.value.length : !item.value)
       if (ExcludePicAndFile) {
         return !['图片', '文件'].includes(item.desc) && bol
       }
