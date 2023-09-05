@@ -22,6 +22,7 @@
             </van-uploader>
           </div>
         </div>
+
         <!-- 上传文件的模板 -->
         <div v-if="['文件'].includes(item.desc!)" :key="item.ident" class="form-item">
           <Title :label="item.aliasLabelName" :tip-title="item.tips" />
